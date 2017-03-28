@@ -148,7 +148,7 @@
 
 /* Begin PBXFileReference section */
 		288240803301CBF785FCC9B0 /* Pods-iNear.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iNear.debug.xcconfig"; path = "Pods/Target Support Files/Pods-iNear/Pods-iNear.debug.xcconfig"; sourceTree = "<group>"; };
-		2C1747581DDB872A0018AEAB /* iNear.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iNear.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		2C1747581DDB872A0018AEAB /* v-Space.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "v-Space.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2C17475B1DDB872A0018AEAB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2C1747621DDB872A0018AEAB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		2C1747641DDB872A0018AEAB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = iNear/Assets.xcassets; sourceTree = "<group>"; };
@@ -176,7 +176,7 @@
 		2C87D31B1DDEF3C200F05528 /* UIColorExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIColorExtensions.swift; path = Extensions/UIColorExtensions.swift; sourceTree = "<group>"; };
 		2C87D31D1DDEF3F000F05528 /* UIViewExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIViewExtensions.swift; path = Extensions/UIViewExtensions.swift; sourceTree = "<group>"; };
 		2C87D31F1DDF026300F05528 /* UIViewControllerExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIViewControllerExtensions.swift; path = Extensions/UIViewControllerExtensions.swift; sourceTree = "<group>"; };
-		2C87D3231DDF1A5B00F05528 /* iNear-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "iNear-Bridging-Header.h"; sourceTree = "<group>"; };
+		2C87D3231DDF1A5B00F05528 /* vSpace-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "vSpace-Bridging-Header.h"; sourceTree = "<group>"; };
 		2C87D3241DDF1A5C00F05528 /* LGAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LGAlertView.h; path = iNear/Vendor/LGAlertSheet/LGAlertView.h; sourceTree = "<group>"; };
 		2C87D3251DDF1A5C00F05528 /* LGAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LGAlertView.m; path = iNear/Vendor/LGAlertSheet/LGAlertView.m; sourceTree = "<group>"; };
 		2C87D3261DDF1A5C00F05528 /* LGAlertView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = LGAlertView.xib; path = iNear/Vendor/LGAlertSheet/LGAlertView.xib; sourceTree = "<group>"; };
@@ -291,7 +291,7 @@
 		2C17474F1DDB872A0018AEAB = {
 			isa = PBXGroup;
 			children = (
-				2C87D3231DDF1A5B00F05528 /* iNear-Bridging-Header.h */,
+				2C87D3231DDF1A5B00F05528 /* vSpace-Bridging-Header.h */,
 				2C87D3211DDF1A2100F05528 /* Vendor */,
 				2C17475A1DDB872A0018AEAB /* iNear */,
 				2CB65ED01DFD5CA7002A9D29 /* Watch */,
@@ -305,7 +305,7 @@
 		2C1747591DDB872A0018AEAB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				2C1747581DDB872A0018AEAB /* iNear.app */,
+				2C1747581DDB872A0018AEAB /* v-Space.app */,
 				2CB65ECF1DFD5CA7002A9D29 /* Watch.app */,
 				2CB65EDB1DFD5CA8002A9D29 /* Watch Extension.appex */,
 				2CE2689D1E66E15600FE8219 /* Today.appex */,
@@ -489,9 +489,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		2C1747571DDB872A0018AEAB /* iNear */ = {
+		2C1747571DDB872A0018AEAB /* v-Space */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 2C17476C1DDB872A0018AEAB /* Build configuration list for PBXNativeTarget "iNear" */;
+			buildConfigurationList = 2C17476C1DDB872A0018AEAB /* Build configuration list for PBXNativeTarget "v-Space" */;
 			buildPhases = (
 				A29F79EBF056859403169AEB /* [CP] Check Pods Manifest.lock */,
 				2C1747541DDB872A0018AEAB /* Sources */,
@@ -508,9 +508,9 @@
 				2CB65EE81DFD5CA8002A9D29 /* PBXTargetDependency */,
 				2CE268A81E66E15600FE8219 /* PBXTargetDependency */,
 			);
-			name = iNear;
+			name = "v-Space";
 			productName = iNear;
-			productReference = 2C1747581DDB872A0018AEAB /* iNear.app */;
+			productReference = 2C1747581DDB872A0018AEAB /* v-Space.app */;
 			productType = "com.apple.product-type.application";
 		};
 		2CB65ECE1DFD5CA7002A9D29 /* Watch */ = {
@@ -630,7 +630,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 2C1747531DDB872A0018AEAB /* Build configuration list for PBXProject "iNear" */;
+			buildConfigurationList = 2C1747531DDB872A0018AEAB /* Build configuration list for PBXProject "v-Space" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -643,7 +643,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				2C1747571DDB872A0018AEAB /* iNear */,
+				2C1747571DDB872A0018AEAB /* v-Space */,
 				2CB65ECE1DFD5CA7002A9D29 /* Watch */,
 				2CB65EDA1DFD5CA8002A9D29 /* Watch Extension */,
 				2CE2689C1E66E15600FE8219 /* Today */,
@@ -995,7 +995,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "0e446ee0-5846-4e87-a754-097d4230e1b8";
 				PROVISIONING_PROFILE_SPECIFIER = "iNear Development";
-				SWIFT_OBJC_BRIDGING_HEADER = "iNear-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "vSpace-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 				VALID_ARCHS = "arm64 armv7";
@@ -1023,7 +1023,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "fa9dff0d-d297-4113-b0ef-01ad068be185";
 				PROVISIONING_PROFILE_SPECIFIER = "iNear AppStore";
-				SWIFT_OBJC_BRIDGING_HEADER = "iNear-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "vSpace-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 				VALID_ARCHS = "arm64 armv7";
 			};
@@ -1155,7 +1155,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		2C1747531DDB872A0018AEAB /* Build configuration list for PBXProject "iNear" */ = {
+		2C1747531DDB872A0018AEAB /* Build configuration list for PBXProject "v-Space" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				2C17476A1DDB872A0018AEAB /* Debug */,
@@ -1164,7 +1164,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		2C17476C1DDB872A0018AEAB /* Build configuration list for PBXNativeTarget "iNear" */ = {
+		2C17476C1DDB872A0018AEAB /* Build configuration list for PBXNativeTarget "v-Space" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				2C17476D1DDB872A0018AEAB /* Debug */,

@@ -8,7 +8,7 @@ platform :ios, '9.0'
 inhibit_all_warnings!
 use_frameworks!
 
-target 'iNear' do
+target 'v-Space' do
     pod 'Firebase/Core'
     pod 'Firebase/Storage'
     pod 'Firebase/Auth'
