@@ -9,7 +9,6 @@
 import Foundation
 import CoreData
 import SDWebImage
-import CoreLocation
 import Firebase
 
 enum SocialType:Int16 {

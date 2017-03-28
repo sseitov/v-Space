@@ -13,13 +13,10 @@ target 'v-Space' do
     pod 'Firebase/Storage'
     pod 'Firebase/Auth'
     pod 'Firebase/Database'
-    pod 'Firebase/Messaging'
     pod 'Google/SignIn'
+    pod 'GoogleMaps'
     
-    pod 'AFNetworking'
-    pod 'JSQMessagesViewController'
     pod 'SDWebImage'
     pod 'SVProgressHUD'
     pod 'IQKeyboardManager'
-    pod 'GoogleMaps'
 end
