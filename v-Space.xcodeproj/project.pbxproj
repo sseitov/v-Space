@@ -934,8 +934,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.vchannel.iNearby;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "0e446ee0-5846-4e87-a754-097d4230e1b8";
-				PROVISIONING_PROFILE_SPECIFIER = "iNear Development";
+				PROVISIONING_PROFILE = "97869b6b-f614-49bf-aa2c-4a8228a7895e";
+				PROVISIONING_PROFILE_SPECIFIER = "v-Space Development";
 				SWIFT_OBJC_BRIDGING_HEADER = "vSpace-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
@@ -980,8 +980,8 @@
 				INFOPLIST_FILE = Watch/Info.plist;
 				PRODUCT_BUNDLE_IDENTIFIER = com.vchannel.iNearby.watchkitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "8b8c2925-03cf-4fef-b23a-6fb0ea1389bd";
-				PROVISIONING_PROFILE_SPECIFIER = "iNear WatchKit Developer";
+				PROVISIONING_PROFILE = "40e143b4-1882-452c-bf83-9e84cc589683";
+				PROVISIONING_PROFILE_SPECIFIER = "v-Space WatchKit Developer";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 3.0;
@@ -1023,8 +1023,8 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.vchannel.iNearby.watchkitapp.watchkitextension;
 				PRODUCT_NAME = "${TARGET_NAME}";
-				PROVISIONING_PROFILE = "c1950adb-0c2f-443b-8915-82298de651dd";
-				PROVISIONING_PROFILE_SPECIFIER = "iNear WatchKit Extension Developer";
+				PROVISIONING_PROFILE = "32ae293a-2fb2-445c-b652-3d3716a793e4";
+				PROVISIONING_PROFILE_SPECIFIER = "v-Space WatchKit Extension Developer";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 3.0;
@@ -1066,8 +1066,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.vchannel.iNearby.Today;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "9ea5f112-06aa-4a50-9e06-4bee002f2309";
-				PROVISIONING_PROFILE_SPECIFIER = "iNear Today Development";
+				PROVISIONING_PROFILE = "773471ad-4f76-416a-b460-33361039b9a3";
+				PROVISIONING_PROFILE_SPECIFIER = "v-Space Today Development";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 3.0;
 				VALID_ARCHS = arm64;
