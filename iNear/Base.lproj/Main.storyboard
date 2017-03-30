@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="H1p-Uh-vWS">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12118" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="H1p-Uh-vWS">
     <device id="retina4_0" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12086"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -37,7 +37,7 @@
                 </splitViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cZU-Oi-B1e" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1211" y="174"/>
+            <point key="canvasLocation" x="-1206" y="431"/>
         </scene>
         <!--Track List Controller-->
         <scene sceneID="ooj-Ku-Sck">
@@ -86,128 +86,11 @@
                     <navigationItem key="navigationItem" id="q7a-X7-vIZ"/>
                     <connections>
                         <segue destination="vC3-pB-5Vb" kind="showDetail" identifier="showDetail" id="7g7-Mu-uwC"/>
-                        <segue destination="vii-vg-7g7" kind="presentation" identifier="login" modalTransitionStyle="flipHorizontal" id="hoo-bL-EVi"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fDD-b9-JHu" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="529" y="-334"/>
-        </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="SaU-sD-v7L">
-            <objects>
-                <navigationController id="vii-vg-7g7" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="AVj-Fh-ZXv">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                        <color key="barTintColor" red="0.10980392160000001" green="0.30980392159999998" blue="0.50980392159999999" alpha="1" colorSpace="calibratedRGB"/>
-                    </navigationBar>
-                    <connections>
-                        <segue destination="So6-RL-QyF" kind="relationship" relationship="rootViewController" id="pXe-OY-5Jf"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="qwu-zO-12C" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1335" y="-333"/>
-        </scene>
-        <!--Login Controller-->
-        <scene sceneID="wEa-Le-UcM">
-            <objects>
-                <viewController id="So6-RL-QyF" customClass="LoginController" customModule="v_Space" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="Jet-Xq-Zb0"/>
-                        <viewControllerLayoutGuide type="bottom" id="OmE-wu-SP4"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="RhZ-iP-w8g">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo" translatesAutoresizingMaskIntoConstraints="NO" id="p5j-F7-21A">
-                                <rect key="frame" x="30" y="80" width="260" height="260"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="260" id="Jqx-yG-Y8L"/>
-                                    <constraint firstAttribute="height" constant="260" id="utc-aJ-WPB"/>
-                                </constraints>
-                            </imageView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PIN-jL-erS">
-                                <rect key="frame" x="30" y="340" width="260" height="200"/>
-                                <subviews>
-                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9lr-fN-AYL" customClass="TextFieldContainer" customModule="v_Space" customModuleProvider="target">
-                                        <rect key="frame" x="10" y="0.0" width="240" height="36"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                    </view>
-                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2fK-Te-5dN" customClass="TextFieldContainer" customModule="v_Space" customModuleProvider="target">
-                                        <rect key="frame" x="10" y="50" width="240" height="36"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                    </view>
-                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7NG-iZ-Cte">
-                                        <rect key="frame" x="10" y="90" width="240" height="17"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <subviews>
-                                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cp6-mT-kap">
-                                                <rect key="frame" x="0.0" y="8" width="100" height="1"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <color key="backgroundColor" red="0.10980392160000001" green="0.30980392159999998" blue="0.50980392159999999" alpha="1" colorSpace="calibratedRGB"/>
-                                            </view>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="or" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kM6-yC-ou3">
-                                                <rect key="frame" x="100" y="0.0" width="40" height="17"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <fontDescription key="fontDescription" name="HelveticaNeue-CondensedBold" family="Helvetica Neue" pointSize="15"/>
-                                                <color key="textColor" red="0.10980392160000001" green="0.30980392159999998" blue="0.50980392159999999" alpha="1" colorSpace="calibratedRGB"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qEm-EF-kpk">
-                                                <rect key="frame" x="140" y="8" width="100" height="1"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <color key="backgroundColor" red="0.10980392160000001" green="0.30980392159999998" blue="0.50980392159999999" alpha="1" colorSpace="calibratedRGB"/>
-                                            </view>
-                                        </subviews>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                    </view>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5Gn-t4-RJM">
-                                        <rect key="frame" x="0.0" y="110" width="260" height="40"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <state key="normal" title="Button" image="button-Google"/>
-                                        <connections>
-                                            <action selector="googleSitnIn:" destination="So6-RL-QyF" eventType="touchUpInside" id="Xgt-Be-HPY"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Vex-LL-4zu">
-                                        <rect key="frame" x="0.0" y="160" width="260" height="40"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <state key="normal" image="button-Facebook"/>
-                                        <connections>
-                                            <action selector="facebookSignIn:" destination="So6-RL-QyF" eventType="touchUpInside" id="yoO-W4-8YX"/>
-                                        </connections>
-                                    </button>
-                                </subviews>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="260" id="7Va-a0-AN5"/>
-                                    <constraint firstAttribute="height" constant="200" id="fIT-hh-o3X"/>
-                                </constraints>
-                            </view>
-                        </subviews>
-                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
-                        <constraints>
-                            <constraint firstItem="PIN-jL-erS" firstAttribute="centerX" secondItem="RhZ-iP-w8g" secondAttribute="centerX" id="KNU-St-r3T"/>
-                            <constraint firstItem="p5j-F7-21A" firstAttribute="top" secondItem="Jet-Xq-Zb0" secondAttribute="bottom" constant="16" id="aJO-XP-a2S"/>
-                            <constraint firstItem="p5j-F7-21A" firstAttribute="centerX" secondItem="RhZ-iP-w8g" secondAttribute="centerX" id="b79-pB-dCy"/>
-                            <constraint firstItem="PIN-jL-erS" firstAttribute="top" secondItem="p5j-F7-21A" secondAttribute="bottom" id="utO-eh-HNo"/>
-                        </constraints>
-                    </view>
-                    <navigationItem key="navigationItem" id="Xp1-Yf-KJO"/>
-                    <connections>
-                        <outlet property="authView" destination="PIN-jL-erS" id="vFk-PX-BfQ"/>
-                        <outlet property="pwdField" destination="2fK-Te-5dN" id="O1o-H6-yFP"/>
-                        <outlet property="usrField" destination="9lr-fN-AYL" id="LZN-LN-x0M"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Vfl-AC-NaZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2198" y="-332"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="r7l-gg-dq7">
@@ -224,7 +107,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SLD-UC-DBI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-261" y="412"/>
+            <point key="canvasLocation" x="529" y="431"/>
         </scene>
         <!--Track Controller-->
         <scene sceneID="D4e-I6-BNN">
@@ -243,15 +126,10 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Wo5-Uv-eVI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="529" y="413"/>
+            <point key="canvasLocation" x="1356" y="431"/>
         </scene>
     </scenes>
-    <resources>
-        <image name="button-Facebook" width="260" height="40"/>
-        <image name="button-Google" width="260" height="40"/>
-        <image name="logo" width="340" height="340"/>
-    </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="7g7-Mu-uwC"/>
+        <segue reference="Tll-UG-LXB"/>
     </inferredMetricsTieBreakers>
 </document>

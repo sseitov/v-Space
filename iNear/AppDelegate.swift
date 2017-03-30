@@ -8,14 +8,9 @@
 
 import UIKit
 import IQKeyboardManager
-import Firebase
 import GoogleMaps
 import SVProgressHUD
 import WatchConnectivity
-
-func IS_PAD() -> Bool {
-    return UIDevice.current.userInterfaceIdiom == .pad
-}
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDelegate {
@@ -24,13 +19,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
     var watchSession:WCSession?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        
-        // Use Firebase library to configure APIs
-        FIRApp.configure()
-        
-        // Facebook SDK init
-        
-        FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
         
         // UI settings
 
@@ -79,12 +67,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
                 self.window!.rootViewController?.present(nav, animated: true, completion: nil)
             }
             return true
-        } else if url.scheme! == FACEBOOK_SCHEME {
-            return FBSDKApplicationDelegate.sharedInstance().application(app, open: url, options: options)
         } else {
-            return GIDSignIn.sharedInstance().handle(url,
-                                                     sourceApplication: options[.sourceApplication] as! String!,
-                                                     annotation: options[.annotation])
+            return false
         }
     }
     
@@ -98,7 +82,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
-        FBSDKAppEvents.activateApp()
     }
 
     func applicationWillTerminate(_ application: UIApplication) {

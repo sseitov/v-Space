@@ -13,17 +13,11 @@ class TrackController: UIViewController {
 
     @IBOutlet weak var map: GMSMapView!
     
-    var user:User?
     var track:String?
     var fromRoot = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        if user == nil {
-            setupTitle("My Track")
-        } else {
-            setupTitle("\(user!.shortName) track for last day")
-        }
         setupBackButton()
         
         var path:GMSPath?

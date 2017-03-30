@@ -13,9 +13,6 @@ class TrackListController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTitle("My Tracks")
-        if currentUser() == nil {
-            performSegue(withIdentifier: "login", sender: nil)
-        }
     }
     
     // MARK: - Table view data source
