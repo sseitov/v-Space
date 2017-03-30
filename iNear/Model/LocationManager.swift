@@ -10,6 +10,29 @@ import UIKit
 import CoreLocation
 import CoreData
 
+// MARK: - Date formatter
+
+func dateFormatter() -> DateFormatter {
+    let formatter = DateFormatter()
+    formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+    return formatter
+}
+
+func textDateFormatter() -> DateFormatter {
+    let formatter = DateFormatter()
+    formatter.dateStyle = .short
+    formatter.timeStyle = .short
+    formatter.doesRelativeDateFormatting = true
+    return formatter
+}
+
+func textYearFormatter() -> DateFormatter {
+    let formatter = DateFormatter()
+    formatter.dateStyle = .long
+    formatter.timeStyle = .none
+    return formatter
+}
+
 class LocationManager: NSObject {
     
     static let shared = LocationManager()
@@ -114,7 +137,7 @@ class LocationManager: NSObject {
         saveContext()
     }
 
-    func myLocation() -> CLLocationCoordinate2D {
+    func lastLocation() -> CLLocationCoordinate2D {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Location")
         let sortDescriptor = NSSortDescriptor(key: "date", ascending: false)
         fetchRequest.sortDescriptors = [sortDescriptor]
@@ -126,8 +149,9 @@ class LocationManager: NSObject {
         }
     }
     
-    func myLastLocationDate() -> Date? {
+    func lastLocationDate() -> Date? {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Location")
+        fetchRequest.predicate = NSPredicate(format: "track == nil")
         let sortDescriptor = NSSortDescriptor(key: "date", ascending: false)
         fetchRequest.sortDescriptors = [sortDescriptor]
         fetchRequest.fetchLimit = 1
@@ -138,43 +162,64 @@ class LocationManager: NSObject {
         }
     }
 
-    func myTrack(_ size:Int = 0) -> [Location]? {
+    func lastTrack() -> [Location]? {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Location")
+        fetchRequest.predicate = NSPredicate(format: "track == nil")
         let sortDescriptor = NSSortDescriptor(key: "date", ascending: false)
         fetchRequest.sortDescriptors = [sortDescriptor]
-        if size > 0 {
-            fetchRequest.fetchLimit = size
-        }
         return try? managedObjectContext.fetch(fetchRequest) as! [Location]
     }
     
-    func myTrackPointsForLastDay() -> [Location]? {
+    func clearLastTrack() {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Location")
-        let calendar = Calendar.current
-        let startDate = calendar.date(byAdding: .day, value: -1, to: Date())
-        fetchRequest.predicate = NSPredicate(format: "date >= %f", startDate!.timeIntervalSince1970)
-        let sortDescriptor = NSSortDescriptor(key: "date", ascending: false)
-        fetchRequest.sortDescriptors = [sortDescriptor]
-        if let all = try? managedObjectContext.fetch(fetchRequest) as! [Location], all.count > 1 {
-            return all
-        } else {
-            return nil
-        }
-    }
-    
-    func clearTrack() {
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Location")
+        fetchRequest.predicate = NSPredicate(format: "track == nil")
         let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
         _ = try? persistentStoreCoordinator.execute(deleteRequest, with: managedObjectContext)
     }
     
-    func trackSize() -> Int {
+    func lastTrackSize(_ uid:String? = nil) -> Int {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Location")
+        fetchRequest.predicate = NSPredicate(format: "track == nil")
         if let count = try? managedObjectContext.count(for: fetchRequest) {
             return count
         } else {
             return 0
         }
+    }
+    
+    func createTrack(_ name:String) -> Track {
+        let track = NSEntityDescription.insertNewObject(forEntityName: "Track", into: managedObjectContext) as! Track
+        track.uid = UUID().uuidString
+        track.place = name
+        if let points = lastTrack() {
+            for point in points {
+                point.track = track
+                track.addToPoints(point)
+            }
+        }
+        saveContext()
+        return track
+    }
+    
+    func allTracks() -> [Track] {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Track")
+        if let all = try? managedObjectContext.fetch(fetchRequest) as! [Track] {
+            return all.sorted(by: {track1, track2 in
+                return track1.trackDate() > track2.trackDate()
+            })
+        } else {
+            return []
+        }
+    }
+    
+    func deleteTrack(_ track:Track) {
+        if let all = track.points?.allObjects as? [Location] {
+            for point in all {
+                managedObjectContext.delete(point)
+            }
+        }
+        managedObjectContext.delete(track)
+        saveContext()
     }
 }
 

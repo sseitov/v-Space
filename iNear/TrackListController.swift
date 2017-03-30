@@ -8,78 +8,105 @@
 
 import UIKit
 
-class TrackListController: UITableViewController {
+class TrackListController: UITableViewController, LastTrackCellDelegate {
 
+    var tracks:[Track] = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTitle("My Tracks")
+        self.tracks = LocationManager.shared.allTracks()
     }
     
+    @IBAction func refresh(_ sender: UIRefreshControl) {
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5, execute: {
+            self.tracks = LocationManager.shared.allTracks()
+            self.tableView.reloadData()
+            sender.endRefreshing()
+        })
+    }
+    
+    func saveLastTrack() {
+        let ask = TextInput.create(cancelHandler: {
+            LocationManager.shared.clearLastTrack()
+        }, acceptHandler: { name in
+            self.tableView.beginUpdates()
+            self.tracks.insert(LocationManager.shared.createTrack(name), at: 0)
+            self.tableView.insertRows(at: [IndexPath(row: 0, section: 1)], with: .bottom)
+            self.tableView.endUpdates()
+        })
+        ask?.show()
+    }
+
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 0
+        return 2
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return 0
+        return section == 0 ? 1 : tracks.count
     }
 
-    /*
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return indexPath.section == 0 ? 60 : 80
+    }
+
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return section == 0 ? "current track" : "saved tracks"
+    }
+
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 40
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return 1
+    }
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
-
-        // Configure the cell...
-
-        return cell
+        if indexPath.section == 0 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "lastTrack", for: indexPath) as! LastTrackCell
+            cell.delegate = self
+            return cell
+        } else {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "savedTrack", for: indexPath) as! SavedTrackCell
+            cell.track = tracks[indexPath.row]
+            return cell
+        }
     }
-    */
 
-    /*
-    // Override to support conditional editing of the table view.
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
+        return (indexPath.section > 0)
     }
-    */
 
-    /*
-    // Override to support editing the table view.
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
+            tableView.beginUpdates()
+            let track = tracks[indexPath.row]
+            LocationManager.shared.deleteTrack(track)
+            tracks.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .top)
+            tableView.endUpdates()
+        }
     }
-    */
 
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if indexPath.section == 0  {
+            if LocationManager.shared.lastTrackSize() > 1 {
+                performSegue(withIdentifier: "showDetail", sender: nil)
+            }
+        } else {
+            performSegue(withIdentifier: "showDetail", sender: tracks[indexPath.row])
+        }
     }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    /*
+    
     // MARK: - Navigation
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+        let nav = segue.destination as! UINavigationController
+        let controller = nav.topViewController as! TrackController
+        controller.track = sender as? Track
     }
-    */
 
 }

@@ -45,7 +45,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
     }
     
     @IBAction func refresh() {
-        if let date = LocationManager.shared.myLastLocationDate() {
+        if let date = LocationManager.shared.lastLocationDate() {
             dateButton.setTitle("LAST POINT: \(formattedDate(date))", for: .normal)
         } else {
             dateButton.setTitle("REFRESH STATUS", for: .normal)
@@ -55,7 +55,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         } else {
             recordButton.setImage(UIImage(named: "location"), for: .normal)
         }
-        enableTrackerButtons(LocationManager.shared.trackSize())
+        enableTrackerButtons(LocationManager.shared.lastTrackSize())
     }
     
     @IBAction func startTracker(_ sender: UIButton) {
@@ -69,9 +69,9 @@ class TodayViewController: UIViewController, NCWidgetProviding {
     }
     
     @IBAction func clearTracker(_ sender: Any) {
-        LocationManager.shared.clearTrack()
+        LocationManager.shared.clearLastTrack()
         dateButton.setTitle("REFRESH STATUS", for: .normal)
-        enableTrackerButtons(LocationManager.shared.trackSize())
+        enableTrackerButtons(LocationManager.shared.lastTrackSize())
     }
     
     @IBAction func openApp(_ sender: Any) {

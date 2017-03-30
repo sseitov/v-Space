@@ -58,6 +58,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
     
     func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
         if url.scheme! == "iNearby" {
+/*
+            let splitViewController = self.window!.rootViewController as! UISplitViewController
+            let navigationController = splitViewController.viewControllers[0] as! UINavigationController
+            navigationController.popToRootViewController(animated: false)
+            if let controller = navigationController.topViewController as? TrackListController {
+                controller.performSegue(withIdentifier: "showDetail", sender: nil)
+            }
+ */
             let main = UIStoryboard(name: "Main", bundle: nil)
             if let nav = main.instantiateViewController(withIdentifier: "MyTrack") as? UINavigationController {
                 if let controller = nav.topViewController as? TrackController {
@@ -66,6 +74,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
                 nav.modalTransitionStyle = .flipHorizontal
                 self.window!.rootViewController?.present(nav, animated: true, completion: nil)
             }
+
             return true
         } else {
             return false
@@ -149,12 +158,12 @@ extension AppDelegate : WCSessionDelegate {
  
     func trackerStatus() -> [String:Any] {
         var status:[String:Any] = ["isRunning" : LocationManager.shared.isRunning()]
-        if let date = LocationManager.shared.myLastLocationDate() {
+        if let date = LocationManager.shared.lastLocationDate() {
             status["lastDate"] = date
         }
-        status["lastLocation"] = ["latitude": LocationManager.shared.myLocation().latitude,
-                                  "longitude": LocationManager.shared.myLocation().longitude]
-        status["trackSize"] = LocationManager.shared.trackSize()
+        status["lastLocation"] = ["latitude": LocationManager.shared.lastLocation().latitude,
+                                  "longitude": LocationManager.shared.lastLocation().longitude]
+        status["trackSize"] = LocationManager.shared.lastTrackSize()
         
         return status
     }
@@ -170,7 +179,7 @@ extension AppDelegate : WCSessionDelegate {
                 LocationManager.shared.stop()
                 replyHandler(["result": LocationManager.shared.isRunning()])
             } else if command == "clear" {
-                LocationManager.shared.clearTrack()
+                LocationManager.shared.clearLastTrack()
                 replyHandler([:])
             }
         }
