@@ -9,6 +9,10 @@
 import UIKit
 import GoogleMaps
 
+class PhotoMarker : GMSMarker {
+    var photo:Photo?
+}
+
 class TrackController: UIViewController {
 
     @IBOutlet weak var map: GMSMapView!
@@ -20,15 +24,17 @@ class TrackController: UIViewController {
         super.viewDidLoad()
         setupBackButton()
         
+        map.delegate = self
+        
         let all = track == nil ? LocationManager.shared.lastTrack() : track!.trackPoints()
         let path = GMSMutablePath()
         for pt in all! {
             path.add(CLLocationCoordinate2D(latitude: pt.latitude, longitude: pt.longitude))
         }
         if track == nil {
-            setupTitle("Current track", promptText: textDateFormatter().string(from: LocationManager.shared.lastLocationDate()!))
+            setupTitle(textDateFormatter().string(from: LocationManager.shared.lastLocationDate()!))
         } else {
-            setupTitle(track!.place!, promptText: textDateFormatter().string(from: track!.trackDate()))
+            setupTitle("\(track!.place!)\n\(textDateFormatter().string(from: track!.trackDate()))")
         }
         
         let userTrack = GMSPolyline(path: path)
@@ -48,6 +54,16 @@ class TrackController: UIViewController {
         startMarker.groundAnchor = CGPoint(x: 0.5, y: 0.5)
         startMarker.map = map
         
+        if let photos = track?.photos?.allObjects as? [Photo] {
+            for photo in photos {
+                let marker = PhotoMarker(position: CLLocationCoordinate2D(latitude: photo.latitude, longitude: photo.longitude))
+                marker.photo = photo
+                marker.icon = UIImage(named: "photo")
+                marker.groundAnchor = CGPoint(x: 0.5, y: 0.5)
+                marker.map = map
+            }
+        }
+        
         var bounds = GMSCoordinateBounds()
         for i in 0..<path.count() {
             let pt = path.coordinate(at: i)
@@ -65,5 +81,25 @@ class TrackController: UIViewController {
             super.goBack()
         }
     }
+    
+    // MARK: - Navigation
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "showPhoto" {
+            let next = segue.destination as! PhotoController
+            next.photo = sender as? Photo
+        }
+    }
 
+}
+
+extension TrackController : GMSMapViewDelegate {
+    func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
+        if let photoMarker = marker as? PhotoMarker {
+            performSegue(withIdentifier: "showPhoto", sender: photoMarker.photo)
+            return true
+        } else {
+            return false
+        }
+    }
 }

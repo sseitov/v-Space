@@ -9,6 +9,7 @@
 import UIKit
 import CoreLocation
 import CoreData
+import Photos
 
 // MARK: - Date formatter
 
@@ -187,6 +188,8 @@ class LocationManager: NSObject {
         }
     }
     
+    // MARK: - Track table
+    
     func createTrack(_ name:String) -> Track {
         let track = NSEntityDescription.insertNewObject(forEntityName: "Track", into: managedObjectContext) as! Track
         track.uid = UUID().uuidString
@@ -219,6 +222,42 @@ class LocationManager: NSObject {
             }
         }
         managedObjectContext.delete(track)
+        saveContext()
+    }
+    
+    // MARK: - Photo table
+
+    func getPhoto(_ uid:String) -> Photo? {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Photo")
+        let predicate = NSPredicate(format: "uid = %@", uid)
+        fetchRequest.predicate = predicate
+        do {
+            return try managedObjectContext.fetch(fetchRequest).first as? Photo
+        } catch {
+            return nil
+        }
+    }
+    
+    func createPhoto(_ asset:PHAsset) -> Photo {
+        var photo = getPhoto(asset.localIdentifier)
+        if photo == nil {
+            photo = NSEntityDescription.insertNewObject(forEntityName: "Photo", into: managedObjectContext) as? Photo
+            photo?.uid = asset.localIdentifier
+        }
+        photo?.creationDate = asset.creationDate! as NSDate
+        photo?.latitude = asset.location!.coordinate.latitude
+        photo?.longitude = asset.location!.coordinate.longitude
+        return photo!
+    }
+    
+    func addPhotos(_ assets:[PHAsset], into:Track?) {
+        for asset in assets {
+            if asset.location != nil && asset.creationDate != nil {
+                let photo = createPhoto(asset)
+                photo.track = into
+                into?.addToPhotos(photo)
+            }
+        }
         saveContext()
     }
 }

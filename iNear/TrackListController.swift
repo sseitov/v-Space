@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Photos
 
 class TrackListController: UITableViewController, LastTrackCellDelegate {
 
@@ -15,29 +16,87 @@ class TrackListController: UITableViewController, LastTrackCellDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTitle("My Tracks")
-        self.tracks = LocationManager.shared.allTracks()
+        tracks = LocationManager.shared.allTracks()
     }
     
     @IBAction func refresh(_ sender: UIRefreshControl) {
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5, execute: {
-            self.tracks = LocationManager.shared.allTracks()
-            self.tableView.reloadData()
-            sender.endRefreshing()
-        })
+        self.tracks = LocationManager.shared.allTracks()
+        let nextConfition = NSCondition()
+        DispatchQueue.global().async {
+            for track in self.tracks {
+                DispatchQueue.main.async {
+                    self.putPhotoOnTrack(track, success: { success in
+                        nextConfition.lock()
+                        nextConfition.signal()
+                        nextConfition.unlock()
+                    })
+                }
+                nextConfition.lock()
+                nextConfition.wait()
+                nextConfition.unlock()
+            }
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+                sender.endRefreshing()
+            }
+        }
+        
+//        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5, execute: {
+//        })
     }
     
     func saveLastTrack() {
         let ask = TextInput.create(cancelHandler: {
             LocationManager.shared.clearLastTrack()
         }, acceptHandler: { name in
-            self.tableView.beginUpdates()
-            self.tracks.insert(LocationManager.shared.createTrack(name), at: 0)
-            self.tableView.insertRows(at: [IndexPath(row: 0, section: 1)], with: .bottom)
-            self.tableView.endUpdates()
+            let track = LocationManager.shared.createTrack(name)
+            self.putPhotoOnTrack(track, success: { success in
+                self.tableView.beginUpdates()
+                self.tracks.insert(track, at: 0)
+                self.tableView.insertRows(at: [IndexPath(row: 0, section: 1)], with: .bottom)
+                self.tableView.endUpdates()
+            })
         })
         ask?.show()
     }
 
+    func putPhotoOnTrack(_ track:Track?, success:@escaping (Bool) -> ()) {
+        if PHPhotoLibrary.authorizationStatus() != .authorized {
+            PHPhotoLibrary.requestAuthorization({ status in
+                DispatchQueue.main.async {
+                    if status == .authorized {
+                        self.scanCameraRollForTrack(track)
+                        success(true)
+                    } else {
+                        success(false)
+                    }
+                }
+            })
+        } else {
+            self.scanCameraRollForTrack(track)
+            success(true)
+        }
+    }
+    
+    func scanCameraRollForTrack(_ track:Track?) {
+        let syncedResult = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .smartAlbumUserLibrary, options: nil)
+        if syncedResult.count > 0 {
+            let collection = syncedResult.object(at: 0)
+            let options = PHFetchOptions()
+            options.sortDescriptors = [ NSSortDescriptor(key: "creationDate", ascending: false) ]
+            let startDate = track!.trackDate(false)
+            let finishDate = track!.trackDate(true)
+            options.predicate = NSPredicate(format: "creationDate > %@ AND creationDate < %@",
+                                            startDate as CVarArg, finishDate as CVarArg)
+            let fetchResult = PHAsset.fetchAssets(in: collection, options: options)
+            var assets:[PHAsset] = []
+            fetchResult.enumerateObjects({ asset, index, _ in
+                assets.append(asset)
+            })
+            LocationManager.shared.addPhotos(assets, into: track)
+        }
+    }
+    
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {

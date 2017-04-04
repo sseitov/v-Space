@@ -1,5 +1,5 @@
 //
-//  Location+CoreDataProperties.swift
+//  Photo+CoreDataProperties.swift
 //  v-Space
 //
 //  Created by Сергей Сейтов on 03.04.17.
@@ -10,13 +10,14 @@ import Foundation
 import CoreData
 
 
-extension Location {
+extension Photo {
 
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<Location> {
-        return NSFetchRequest<Location>(entityName: "Location")
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<Photo> {
+        return NSFetchRequest<Photo>(entityName: "Photo")
     }
 
-    @NSManaged public var date: Double
+    @NSManaged public var creationDate: NSDate?
+    @NSManaged public var uid: String?
     @NSManaged public var latitude: Double
     @NSManaged public var longitude: Double
     @NSManaged public var track: Track?

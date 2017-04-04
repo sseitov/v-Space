@@ -21,12 +21,16 @@ public class Track: NSManagedObject {
         }
     }
     
-    func trackDate() -> Date {
+    func trackDate(_ last:Bool = true) -> Date {
         if let all = points?.allObjects as? [Location] {
             let sorted = all.sorted(by: { loc1, loc2 in
                 return loc1.date < loc2.date
             })
-            return Date(timeIntervalSince1970: sorted.last!.date)
+            if last {
+                return Date(timeIntervalSince1970: sorted.last!.date)
+            } else {
+                return Date(timeIntervalSince1970: sorted.first!.date)
+            }
         } else {
             return Date()
         }

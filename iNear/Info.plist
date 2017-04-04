@@ -37,16 +37,16 @@
 		<true/>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>v-Space needs your camera for take pictures and share it.</string>
-    <key>NSPhotoLibraryUsageDescription</key>
-	<string>v-Space needs your photo library for share photos.</string>
-    <key>NSLocationAlwaysUsageDescription</key>
-    <string>v-Space will be collect your location point into track.</string>
+	<string>v-Space needs your camera for take photos and put their on your tracks.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>v-Space needs your photo library for put photos on your tracks.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>v-Space will be collect your location point into track.</string>
 	<key>UIBackgroundModes</key>
-    <array>
-        <string>location</string>
-    </array>
-    <key>UILaunchStoryboardName</key>
+	<array>
+		<string>location</string>
+	</array>
+	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
