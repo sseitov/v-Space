@@ -30,3 +30,4 @@ Pods/
 Podfile.lock
 
 Credentials.swift
+GoogleService-Info.plist
