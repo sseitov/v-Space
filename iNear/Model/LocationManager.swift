@@ -189,6 +189,26 @@ class LocationManager: NSObject {
     }
     
     // MARK: - Track table
+
+    func getTrack(_ uid:String) -> Track? {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Track")
+        fetchRequest.predicate = NSPredicate(format: "uid = %@", uid)
+        do {
+            return try managedObjectContext.fetch(fetchRequest).first as? Track
+        } catch {
+            return nil
+        }
+    }
+    
+    func createTrack(_ uid:String, name:String, path:String, date:Double) -> Track {
+        let track = NSEntityDescription.insertNewObject(forEntityName: "Track", into: managedObjectContext) as! Track
+        track.uid = uid
+        track.place = name
+        track.path = path
+        track.date = NSDate(timeIntervalSince1970: date)
+        saveContext()
+        return track
+    }
     
     func createTrack(_ name:String) -> Track {
         let track = NSEntityDescription.insertNewObject(forEntityName: "Track", into: managedObjectContext) as! Track
@@ -229,33 +249,49 @@ class LocationManager: NSObject {
 
     func getPhoto(_ uid:String) -> Photo? {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Photo")
-        let predicate = NSPredicate(format: "uid = %@", uid)
-        fetchRequest.predicate = predicate
+        fetchRequest.predicate = NSPredicate(format: "uid = %@", uid)
         do {
             return try managedObjectContext.fetch(fetchRequest).first as? Photo
         } catch {
             return nil
         }
     }
-    
-    func createPhoto(_ asset:PHAsset) -> Photo {
+  
+    func createPhoto(_ asset:PHAsset) -> Photo? {
         var photo = getPhoto(asset.localIdentifier)
         if photo == nil {
             photo = NSEntityDescription.insertNewObject(forEntityName: "Photo", into: managedObjectContext) as? Photo
             photo?.uid = asset.localIdentifier
+            photo?.creationDate = asset.creationDate! as NSDate
+            photo?.latitude = asset.location!.coordinate.latitude
+            photo?.longitude = asset.location!.coordinate.longitude
+            return photo!
+        } else {
+            return nil
         }
-        photo?.creationDate = asset.creationDate! as NSDate
-        photo?.latitude = asset.location!.coordinate.latitude
-        photo?.longitude = asset.location!.coordinate.longitude
-        return photo!
+    }
+    
+    func addPhotoIntoTrack(_ track:Track, uid:String, date:Double, latitude:Double, longitude:Double) {
+        var photo = getPhoto(uid)
+        if photo == nil {
+            photo = NSEntityDescription.insertNewObject(forEntityName: "Photo", into: managedObjectContext) as? Photo
+            photo!.uid = uid
+            photo!.creationDate = NSDate(timeIntervalSince1970: date)
+            photo!.latitude = latitude
+            photo!.longitude = longitude
+            photo!.track = track
+            track.addToPhotos(photo!)
+            saveContext()
+        }
     }
     
     func addPhotos(_ assets:[PHAsset], into:Track?) {
         for asset in assets {
             if asset.location != nil && asset.creationDate != nil {
-                let photo = createPhoto(asset)
-                photo.track = into
-                into?.addToPhotos(photo)
+                if let photo = createPhoto(asset) {
+                    photo.track = into
+                    into?.addToPhotos(photo)
+                }
             }
         }
         saveContext()

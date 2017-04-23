@@ -1,0 +1,11 @@
+/* 
+  Localizable.strings
+  v-Space
+
+  Created by Сергей Сейтов on 23.04.17.
+  Copyright © 2017 Сергей Сейтов. All rights reserved.
+*/
+
+"photoLibrary" = "You must grant access to photo library for cloud synchronization.";
+"photoStream" = "You must turn on Photo Stream in Photo settings for cloud synchronization.";
+"photoCount" = "You have  no any photos in your photo stream yet.";

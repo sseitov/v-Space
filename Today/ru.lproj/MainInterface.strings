@@ -1,0 +1,15 @@
+
+/* Class = "UILabel"; text = "SHOW TRACK"; ObjectID = "4g5-zq-fZM"; */
+"4g5-zq-fZM.text" = "SHOW TRACK";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "JYq-dB-naf"; */
+"JYq-dB-naf.normalTitle" = "Button";
+
+/* Class = "UILabel"; text = "CLEAR TRACK"; ObjectID = "dlX-dc-yfn"; */
+"dlX-dc-yfn.text" = "CLEAR TRACK";
+
+/* Class = "UILabel"; text = "TRACK ON/OFF"; ObjectID = "g5c-kw-LkZ"; */
+"g5c-kw-LkZ.text" = "TRACK ON/OFF";
+
+/* Class = "UIButton"; normalTitle = "REFRESH LOCATION"; ObjectID = "oeX-iw-t7F"; */
+"oeX-iw-t7F.normalTitle" = "REFRESH LOCATION";
