@@ -18,6 +18,10 @@ class TrackListController: UITableViewController, LastTrackCellDelegate {
         return UIDevice.current.userInterfaceIdiom == .pad
     }
 
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTitle("My Tracks")
@@ -29,6 +33,13 @@ class TrackListController: UITableViewController, LastTrackCellDelegate {
                 performSegue(withIdentifier: "showDetail", sender: nil)
             }
         }
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(self.refreshCurrentTrack), name: newPointNotification, object: nil)
+    }
+    
+    func refreshCurrentTrack() {
+        let indexPath = IndexPath(row: 0, section: 0)
+        tableView.reloadRows(at: [indexPath], with: .fade)
     }
     
     @IBAction func refresh() {

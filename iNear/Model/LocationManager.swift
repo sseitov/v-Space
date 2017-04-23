@@ -34,6 +34,8 @@ func textYearFormatter() -> DateFormatter {
     return formatter
 }
 
+let newPointNotification = Notification.Name("NEW_POINT")
+
 class LocationManager: NSObject {
     
     static let shared = LocationManager()
@@ -135,6 +137,7 @@ class LocationManager: NSObject {
         point.date = at
         point.latitude = coordinate.latitude
         point.longitude = coordinate.longitude
+        NotificationCenter.default.post(name: newPointNotification, object: nil)
         saveContext()
     }
 
