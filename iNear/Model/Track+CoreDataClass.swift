@@ -10,7 +10,7 @@ import Foundation
 import CoreData
 
 public class Track: NSManagedObject {
-
+/*
     func trackPoints() -> [Location] {
         if let all = points?.allObjects as? [Location] {
             return all.sorted(by: { loc1, loc2 in
@@ -39,4 +39,5 @@ public class Track: NSManagedObject {
             }
         }
     }
+ */
 }

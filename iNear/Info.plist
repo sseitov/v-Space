@@ -28,7 +28,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>2</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -38,10 +38,10 @@
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>v-Space needs your camera for take photos and put their on your tracks.</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>v-Space needs your photo library for put photos on your tracks.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>v-Space will be collect your location point into track.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>v-Space needs your photo library for put photos on your tracks.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>location</string>

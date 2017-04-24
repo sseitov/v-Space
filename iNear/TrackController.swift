@@ -29,7 +29,7 @@ class TrackController: UIViewController {
         if track == nil {
             setupTitle("v-Space")
         } else {
-            setupTitle("\(track!.place!)\n\(textDateFormatter().string(from: track!.trackDate()))")
+            setupTitle("\(track!.place!)\n\(textDateFormatter().string(from: (track!.finishDate! as Date)))")
         }
         
         var path:GMSMutablePath?
@@ -45,15 +45,7 @@ class TrackController: UIViewController {
                 return
             }
         } else {
-            if track!.path != nil {
-                path = GMSMutablePath(fromEncodedPath: track!.path!)
-            } else {
-                path = GMSMutablePath()
-                let all = track!.trackPoints()
-                for pt in all {
-                    path?.add(CLLocationCoordinate2D(latitude: pt.latitude, longitude: pt.longitude))
-                }
-            }
+            path = GMSMutablePath(fromEncodedPath: track!.path!)
         }
         
         let userTrack = GMSPolyline(path: path)

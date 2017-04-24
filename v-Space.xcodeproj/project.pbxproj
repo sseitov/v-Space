@@ -36,7 +36,6 @@
 		2C87D3361DDF1A5C00F05528 /* NSPointerArray+AbstractionHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C87D32E1DDF1A5C00F05528 /* NSPointerArray+AbstractionHelpers.m */; };
 		2C91E0641EAC809C0067286B /* Cloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C91E0631EAC809C0067286B /* Cloud.swift */; };
 		2C91E06B1EAC88370067286B /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2C91E06D1EAC88370067286B /* Localizable.strings */; };
-		2C91E0701EAC8F870067286B /* UserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C91E06F1EAC8F870067286B /* UserInfo.swift */; };
 		2C91E0741EACBB680067286B /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C91E0731EACBB680067286B /* CloudKit.framework */; };
 		2C9423B31DFC6708003C4075 /* UIImageExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C9423B21DFC6708003C4075 /* UIImageExtensions.swift */; };
 		2CB65ED31DFD5CA7002A9D29 /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2CB65ED11DFD5CA7002A9D29 /* Interface.storyboard */; };
@@ -147,6 +146,7 @@
 		2C1EB4EA1DFEC1E200DBB257 /* MapController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapController.swift; sourceTree = "<group>"; };
 		2C2B3FBB1E3BB6AD003FE095 /* TrackController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackController.swift; sourceTree = "<group>"; };
 		2C3F368C1E6C132900021B10 /* Credentials.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Credentials.swift; sourceTree = SOURCE_ROOT; };
+		2C4E00AD1EADACB000BB935F /* LocationModel 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "LocationModel 4.xcdatamodel"; sourceTree = "<group>"; };
 		2C54EB791E8ADC49009C4A27 /* TrackListController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackListController.swift; sourceTree = "<group>"; };
 		2C79D49D1E92C5CA00EF4954 /* Photo+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Photo+CoreDataClass.swift"; path = "Model/Photo+CoreDataClass.swift"; sourceTree = "<group>"; };
 		2C79D49E1E92C5CA00EF4954 /* Photo+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Photo+CoreDataProperties.swift"; path = "Model/Photo+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -176,7 +176,6 @@
 		2C91E06A1EAC88240067286B /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/MainInterface.strings; sourceTree = "<group>"; };
 		2C91E06C1EAC88370067286B /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
 		2C91E06E1EAC883C0067286B /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
-		2C91E06F1EAC8F870067286B /* UserInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserInfo.swift; sourceTree = "<group>"; };
 		2C91E0731EACBB680067286B /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		2C91E0751EACCA0D0067286B /* LocationModel 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "LocationModel 3.xcdatamodel"; sourceTree = "<group>"; };
 		2C9423B21DFC6708003C4075 /* UIImageExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIImageExtensions.swift; path = Extensions/UIImageExtensions.swift; sourceTree = "<group>"; };
@@ -298,7 +297,6 @@
 				2C87D3181DDEF36800F05528 /* CustomViews */,
 				2C17475B1DDB872A0018AEAB /* AppDelegate.swift */,
 				2C91E0631EAC809C0067286B /* Cloud.swift */,
-				2C91E06F1EAC8F870067286B /* UserInfo.swift */,
 				2C54EB791E8ADC49009C4A27 /* TrackListController.swift */,
 				2CBE20161E8D6151002EF13C /* LastTrackCell.swift */,
 				2CBE20181E8D61AF002EF13C /* SavedTrackCell.swift */,
@@ -712,7 +710,6 @@
 				2C87D31C1DDEF3C200F05528 /* UIColorExtensions.swift in Sources */,
 				2C87D31E1DDEF3F000F05528 /* UIViewExtensions.swift in Sources */,
 				2C79D49F1E92C5CA00EF4954 /* Photo+CoreDataClass.swift in Sources */,
-				2C91E0701EAC8F870067286B /* UserInfo.swift in Sources */,
 				2CDFA7FE1E6ACC13007D9FF0 /* MKMapRectExtension.swift in Sources */,
 				2C87D3361DDF1A5C00F05528 /* NSPointerArray+AbstractionHelpers.m in Sources */,
 				2CE268BC1E6716BE00FE8219 /* Location+CoreDataClass.swift in Sources */,
@@ -1168,11 +1165,12 @@
 		2CE268B51E67156400FE8219 /* LocationModel.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				2C4E00AD1EADACB000BB935F /* LocationModel 4.xcdatamodel */,
 				2C91E0751EACCA0D0067286B /* LocationModel 3.xcdatamodel */,
 				2CBE20221E8D955B002EF13C /* LocationModel 2.xcdatamodel */,
 				2CE268B61E67156400FE8219 /* LocationModel.xcdatamodel */,
 			);
-			currentVersion = 2C91E0751EACCA0D0067286B /* LocationModel 3.xcdatamodel */;
+			currentVersion = 2C4E00AD1EADACB000BB935F /* LocationModel 4.xcdatamodel */;
 			name = LocationModel.xcdatamodeld;
 			path = Model/LocationModel.xcdatamodeld;
 			sourceTree = "<group>";

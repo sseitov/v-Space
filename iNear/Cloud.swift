@@ -19,7 +19,6 @@ func cloudError(_ text:String) -> NSError {
     
     static let shared = Cloud()
     
-    var userInfo: UserInfo?
     var cloudDB: CKDatabase?
     
     private override init() {
@@ -27,7 +26,6 @@ func cloudError(_ text:String) -> NSError {
         
         let container = CKContainer.default()
         cloudDB = container.privateCloudDatabase
-        userInfo = UserInfo(container: container)
     }
     
     private func getTracks(_ tracks:@escaping ([Track], NSError?) -> ()) {
@@ -122,7 +120,8 @@ func cloudError(_ text:String) -> NSError {
                     DispatchQueue.main.async {
                         for old in oldTracks {
                             if !tracks.contains(old) {
-                                LocationManager.shared.deleteTrack(old)
+                                LocationManager.shared.managedObjectContext.delete(old)
+                                LocationManager.shared.saveContext()
                             }
                         }
                         error(nil)
@@ -161,11 +160,11 @@ func cloudError(_ text:String) -> NSError {
         }
     }
     
-    private func saveTrack(_ track:Track, path:String) {
+    private func saveTrack(_ track:Track) {
         let record = CKRecord(recordType: "Track")
-        record.setValue(path, forKey: "track")
+        record.setValue(track.path!, forKey: "track")
         record.setValue(track.place!, forKey: "place")
-        record.setValue(track.trackDate().timeIntervalSince1970, forKey: "date")
+        record.setValue(track.finishDate!.timeIntervalSince1970, forKey: "date")
         record.setValue(track.uid!, forKey: "uid")
         self.cloudDB!.save(record, completionHandler: { record, error in
             if error != nil {
@@ -175,22 +174,80 @@ func cloudError(_ text:String) -> NSError {
     }
     
     func putTrack(_ track:Track) {
-        if let points = track.points?.allObjects as? [Location] {
-            let sorted = points.sorted(by: {loc1, loc2 in
-                return loc1.date > loc2.date
+        if let photos = track.photos?.allObjects as? [Photo] {
+            self.savePhotos(photos, complete: {
+                self.saveTrack(track)
             })
-            let path = GMSMutablePath()
-            for pt in sorted {
-                path.add(CLLocationCoordinate2D(latitude: pt.latitude, longitude: pt.longitude))
+        } else {
+            self.saveTrack(track)
+        }
+    }
+    
+    private func deletePhotos(_ track:Track, complete:@escaping () -> ()) {
+        let next = NSCondition()
+        let predicate = NSPredicate(format: "trackID = %@", track.uid!)
+        let query = CKQuery(recordType: "Photo", predicate: predicate)
+        cloudDB!.perform(query, inZoneWith: nil) { results, error in
+            guard error == nil else {
+                DispatchQueue.main.async {
+                    print(error!.localizedDescription)
+                    complete()
+                }
+                return
             }
-
-            if let photos = track.photos?.allObjects as? [Photo] {
-                self.savePhotos(photos, complete: {
-                    self.saveTrack(track, path: path.encodedPath())
+            
+            for record in results! {
+                self.cloudDB?.delete(withRecordID: record.recordID, completionHandler: { _, error in
+                    DispatchQueue.main.async {
+                        if error != nil {
+                            print(error!.localizedDescription)
+                        }
+                        next.lock()
+                        next.signal()
+                        next.unlock()
+                    }
                 })
-            } else {
-                self.saveTrack(track, path: path.encodedPath())
+                next.lock()
+                next.wait()
+                next.unlock()
+            }
+            DispatchQueue.main.async {
+                complete()
             }
         }
+    }
+
+    func deleteTrack(_ track:Track, complete:@escaping () -> ()) {
+        deletePhotos(track, complete: {
+            let predicate = NSPredicate(format: "uid = %@", track.uid!)
+            let query = CKQuery(recordType: "Track", predicate: predicate)
+            self.cloudDB!.perform(query, inZoneWith: nil) { results, error in
+                guard error == nil else {
+                    DispatchQueue.main.async {
+                        print(error!.localizedDescription)
+                        complete()
+                    }
+                    return
+                }
+                if let record = results!.first {
+                    self.cloudDB?.delete(withRecordID: record.recordID, completionHandler: { _, error in
+                        DispatchQueue.main.async {
+                            if error != nil {
+                                print(error!.localizedDescription)
+                            }
+                            LocationManager.shared.managedObjectContext.delete(track)
+                            LocationManager.shared.saveContext()
+                            complete()
+                        }
+                    })
+                } else {
+                    DispatchQueue.main.async {
+                        LocationManager.shared.managedObjectContext.delete(track)
+                        LocationManager.shared.saveContext()
+                        complete()
+                    }
+                }
+            }
+        })
     }
 }

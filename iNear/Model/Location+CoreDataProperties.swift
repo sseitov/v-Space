@@ -2,7 +2,7 @@
 //  Location+CoreDataProperties.swift
 //  v-Space
 //
-//  Created by Сергей Сейтов on 03.04.17.
+//  Created by Сергей Сейтов on 24.04.17.
 //  Copyright © 2017 Сергей Сейтов. All rights reserved.
 //
 
@@ -19,6 +19,5 @@ extension Location {
     @NSManaged public var date: Double
     @NSManaged public var latitude: Double
     @NSManaged public var longitude: Double
-    @NSManaged public var track: Track?
 
 }

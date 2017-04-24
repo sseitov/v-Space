@@ -17,7 +17,7 @@ class SavedTrackCell: UITableViewCell {
     var track:Track? {
         didSet {
             placeLabel.text = track!.place
-            dateLabel.text = textDateFormatter().string(from: track!.trackDate())
+            dateLabel.text = textDateFormatter().string(from: (track!.finishDate! as Date))
             lastPhoto.image = UIImage(named: "logo")
         }
     }

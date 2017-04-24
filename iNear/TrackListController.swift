@@ -9,6 +9,7 @@
 import UIKit
 import Photos
 import SVProgressHUD
+import GoogleMaps
 
 class TrackListController: UITableViewController, LastTrackCellDelegate {
 
@@ -112,23 +113,35 @@ class TrackListController: UITableViewController, LastTrackCellDelegate {
     }
     
     func saveLastTrack() {
-        let ask = TextInput.create(cancelHandler: {
-            LocationManager.shared.clearLastTrack()
-        }, acceptHandler: { name in
-            let track = LocationManager.shared.createTrack(name)
-            self.putPhotoOnTrack(track, success: { success in
-                if success {
-                    Cloud.shared.putTrack(track)
-                    self.tableView.beginUpdates()
-                    self.tracks.insert(track, at: 0)
-                    self.tableView.insertRows(at: [IndexPath(row: 0, section: 1)], with: .bottom)
-                    self.tableView.endUpdates()
-                } else {
-                    self.showMessage(NSLocalizedString("photoLibrary", comment: ""), messageType: .error)
-                }
+        if let points = LocationManager.shared.lastTrack() {
+            if points.count < 2 {
+                LocationManager.shared.clearLastTrack()
+                return
+            }
+            let path = GMSMutablePath()
+            for pt in points {
+                path.add(CLLocationCoordinate2D(latitude: pt.latitude, longitude: pt.longitude))
+            }
+            let ask = TextInput.create(cancelHandler: {
+                LocationManager.shared.clearLastTrack()
+            }, acceptHandler: { name in
+                let track = LocationManager.shared.createTrack(name, path: path.encodedPath(), start: points.last!.date, finish: points.first!.date)
+                LocationManager.shared.clearLastTrack()
+                self.putPhotoOnTrack(track, success: { success in
+                    if success {
+                        Cloud.shared.putTrack(track)
+                        self.tableView.beginUpdates()
+                        self.tracks.insert(track, at: 0)
+                        self.tableView.insertRows(at: [IndexPath(row: 0, section: 1)], with: .bottom)
+                        self.tableView.endUpdates()
+                    } else {
+                        self.showMessage(NSLocalizedString("photoLibrary", comment: ""), messageType: .error)
+                    }
+                })
             })
-        })
-        ask?.show()
+            ask?.show()
+        }
+
     }
 
     func putPhotoOnTrack(_ track:Track?, success:@escaping (Bool) -> ()) {
@@ -155,8 +168,8 @@ class TrackListController: UITableViewController, LastTrackCellDelegate {
             let collection = syncedResult.object(at: 0)
             let options = PHFetchOptions()
             options.sortDescriptors = [ NSSortDescriptor(key: "creationDate", ascending: false) ]
-            let startDate = track!.trackDate(false)
-            let finishDate = track!.trackDate(true)
+            let startDate = track!.startDate! as Date
+            let finishDate = track!.finishDate! as Date
             options.predicate = NSPredicate(format: "creationDate > %@ AND creationDate < %@",
                                             startDate as CVarArg, finishDate as CVarArg)
             let fetchResult = PHAsset.fetchAssets(in: collection, options: options)
@@ -212,12 +225,15 @@ class TrackListController: UITableViewController, LastTrackCellDelegate {
 
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            tableView.beginUpdates()
             let track = tracks[indexPath.row]
-            LocationManager.shared.deleteTrack(track)
-            tracks.remove(at: indexPath.row)
-            tableView.deleteRows(at: [indexPath], with: .top)
-            tableView.endUpdates()
+            SVProgressHUD.show(withStatus: "Delete...")
+            Cloud.shared.deleteTrack(track, complete: {
+                SVProgressHUD.dismiss()
+                self.tableView.beginUpdates()
+                self.tracks.remove(at: indexPath.row)
+                self.tableView.deleteRows(at: [indexPath], with: .top)
+                self.tableView.endUpdates()
+            })
         }
     }
 
