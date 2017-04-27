@@ -9,7 +9,12 @@ inhibit_all_warnings!
 use_frameworks!
 
 target 'v-Space' do
-    pod 'GoogleMaps'    
+    pod 'GoogleMaps'
+    pod 'GooglePlaces'
+    pod 'GooglePlacePicker'
+    
+    pod 'AFNetworking'
+
     pod 'SDWebImage'
     pod 'SVProgressHUD'
     pod 'IQKeyboardManager'

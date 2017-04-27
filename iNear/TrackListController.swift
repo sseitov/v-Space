@@ -10,6 +10,8 @@ import UIKit
 import Photos
 import SVProgressHUD
 import GoogleMaps
+import GooglePlaces
+import GooglePlacePicker
 
 class TrackListController: UITableViewController, LastTrackCellDelegate {
 
@@ -181,6 +183,34 @@ class TrackListController: UITableViewController, LastTrackCellDelegate {
         }
     }
     
+    @IBAction func nearByMe(_ sender: Any) {
+        SVProgressHUD.show(withStatus: "Get location...")
+        LocationManager.shared.getCurrentLocation({ location in
+            SVProgressHUD.dismiss()
+            if location != nil {
+                let center = location!.coordinate
+                let northEast = CLLocationCoordinate2D(latitude: center.latitude + 0.1, longitude: center.longitude + 0.1)
+                let southWest = CLLocationCoordinate2D(latitude: center.latitude - 0.1, longitude: center.longitude - 0.1)
+                let viewport = GMSCoordinateBounds(coordinate: northEast, coordinate: southWest)
+                let config = GMSPlacePickerConfig(viewport: viewport)
+                let placePicker = GMSPlacePicker(config: config)
+                
+                placePicker.pickPlace(callback: {(place, error) -> Void in
+                    if let error = error {
+                        print("Pick Place error: \(error.localizedDescription)")
+                        return
+                    }
+                    
+                    if let place = place {
+                        self.performSegue(withIdentifier: "placeInfo", sender: place)
+                    }
+                })
+            } else {
+                self.showMessage("Can not get current location", messageType: .error)
+            }
+        })
+    }
+    
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -250,9 +280,15 @@ class TrackListController: UITableViewController, LastTrackCellDelegate {
     // MARK: - Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let nav = segue.destination as! UINavigationController
-        let controller = nav.topViewController as! TrackController
-        controller.track = sender as? Track
+        if segue.identifier == "showDetail" {
+            let nav = segue.destination as! UINavigationController
+            let controller = nav.topViewController as! TrackController
+            controller.track = sender as? Track
+        } else if segue.identifier == "placeInfo" {
+            let controller = segue.destination as! PlaceInfoController
+            controller.place = sender as? GMSPlace
+            controller.myCoordinate = LocationManager.shared.currentLocation?.coordinate
+        }
     }
 
 }

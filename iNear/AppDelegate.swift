@@ -8,9 +8,10 @@
 
 import UIKit
 import IQKeyboardManager
-import GoogleMaps
 import SVProgressHUD
 import WatchConnectivity
+import GoogleMaps
+import GooglePlaces
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDelegate {
@@ -20,8 +21,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
+        // Initialize Google Maps
+        GMSServices.provideAPIKey(GoolgleMapAPIKey)
+        GMSPlacesClient.provideAPIKey(GoolglePlacesAPIKey)
+        
+        // Location manager
+        
+        LocationManager.shared.register()
+        
+        // connect iWatch
+        
+        if WCSession.isSupported() {
+            watchSession = WCSession.default()
+            watchSession!.delegate = self
+            watchSession!.activate()
+        }
+        
         // UI settings
-
+        
         let splitViewController = self.window!.rootViewController as! UISplitViewController
         let navigationController = splitViewController.viewControllers[splitViewController.viewControllers.count-1] as! UINavigationController
         navigationController.topViewController!.navigationItem.leftBarButtonItem = splitViewController.displayModeButtonItem
@@ -37,19 +54,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
             SVProgressHUD.setFont(font)
         }
         IQKeyboardManager.shared().isEnableAutoToolbar = false
-        
-        // connect iWatch
-        if WCSession.isSupported() {
-            watchSession = WCSession.default()
-            watchSession!.delegate = self
-            watchSession!.activate()
-        }
-
-        // Initialize Google Maps
-        GMSServices.provideAPIKey(GoolgleMapAPIKey)
-        
-        // Location manager
-        LocationManager.shared.register()
         
         return true
     }

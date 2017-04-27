@@ -41,7 +41,10 @@ class LocationManager: NSObject {
     static let shared = LocationManager()
     
     let locationManager = CLLocationManager()
-   
+    
+    var locationCondition:NSCondition?
+    var currentLocation:CLLocation?
+
     private override init() {
         super.init()
         locationManager.delegate = self
@@ -50,6 +53,30 @@ class LocationManager: NSObject {
         locationManager.headingFilter = 5.0
 //        locationManager.activityType = .automotiveNavigation
         locationManager.pausesLocationUpdatesAutomatically = false
+    }
+    
+    func getCurrentLocation(_ location: @escaping(CLLocation?) -> ()) {
+        if CLLocationManager.locationServicesEnabled() {
+            if CLLocationManager.authorizationStatus() != .authorizedAlways {
+                self.locationManager.requestWhenInUseAuthorization()
+                location(nil)
+            } else {
+                currentLocation = nil
+                locationCondition = NSCondition()
+                self.locationManager.startUpdatingLocation()
+                DispatchQueue.global().async {
+                    self.locationCondition?.lock()
+                    self.locationCondition?.wait()
+                    self.locationCondition?.unlock()
+                    DispatchQueue.main.async {
+                        self.locationCondition = nil
+                        location(self.currentLocation)
+                    }
+                }
+            }
+        } else {
+            location(nil)
+        }
     }
 
     func register() {
@@ -289,7 +316,15 @@ extension LocationManager : CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if let location = locations.last {
             if location.horizontalAccuracy <= 10.0 {
-                addCoordinate(location.coordinate, at:NSDate().timeIntervalSince1970)
+                if self.locationCondition != nil {
+                    locationManager.stopUpdatingLocation()
+                    self.locationCondition?.lock()
+                    self.currentLocation = location
+                    self.locationCondition?.signal()
+                    self.locationCondition?.unlock()
+                } else {
+                    addCoordinate(location.coordinate, at:NSDate().timeIntervalSince1970)
+                }
             }
         }
     }
