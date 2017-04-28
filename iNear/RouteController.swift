@@ -31,6 +31,7 @@ class RouteController: UIViewController {
         placeMarker = GMSMarker(position: place!.coordinate)
         placeMarker!.icon = UIImage(named: "near")
         placeMarker!.title = place!.name
+        placeMarker!.groundAnchor = CGPoint(x: 0.5, y: 0.5)
         placeMarker!.map = map
     }
     
@@ -54,7 +55,7 @@ class RouteController: UIViewController {
     }
     
     func createDirection(from:CLLocationCoordinate2D, to:CLLocationCoordinate2D, completion: @escaping(Int) -> ()) {
-        let urlStr = String(format: "https://maps.googleapis.com/maps/api/directions/json?origin=%f,%f&destination=%f,%f&key=%@", from.latitude, from.longitude, to.latitude, to.longitude, GoolgleMapAPIKey)
+        let urlStr = String(format: "https://maps.googleapis.com/maps/api/directions/json?origin=%f,%f&destination=%f,%f&key=%@", from.latitude, from.longitude, to.latitude, to.longitude, GoolgleDirectionsAPIKey)
         let manager = AFHTTPSessionManager()
         manager.requestSerializer = AFHTTPRequestSerializer()
         manager.responseSerializer = AFJSONResponseSerializer()
@@ -68,7 +69,7 @@ class RouteController: UIViewController {
                                     if path.count() > 2 {
                                         let polyline = GMSPolyline(path: path)
                                         polyline.strokeColor = UIColor.color(28, 79, 130, 0.7)
-                                        polyline.strokeWidth = 7
+                                        polyline.strokeWidth = 5
                                         polyline.map = self.map
                                         completion(1)
                                     } else {
