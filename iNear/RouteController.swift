@@ -27,7 +27,6 @@ class RouteController: UIViewController {
         setupTitle(placeName)
         setupBackButton()
         
-        print("latitude \(placeCoordinate.latitude), longitude \(placeCoordinate.longitude)")
         map.camera = GMSCameraPosition.camera(withTarget: placeCoordinate, zoom: 6)
         map.isMyLocationEnabled = true
         placeMarker = GMSMarker(position: placeCoordinate)
