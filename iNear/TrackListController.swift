@@ -16,10 +16,6 @@ import GooglePlacePicker
 class TrackListController: UITableViewController, LastTrackCellDelegate {
 
     var tracks:[Track] = []
-    
-    private func IS_PAD() -> Bool {
-        return UIDevice.current.userInterfaceIdiom == .pad
-    }
 
     deinit {
         NotificationCenter.default.removeObserver(self)
@@ -263,6 +259,13 @@ class TrackListController: UITableViewController, LastTrackCellDelegate {
                 self.tracks.remove(at: indexPath.row)
                 self.tableView.deleteRows(at: [indexPath], with: .top)
                 self.tableView.endUpdates()
+                if IS_PAD() {
+                    if self.tracks.count > 0 {
+                        self.performSegue(withIdentifier: "showDetail", sender: self.tracks[0])
+                    } else {
+                        self.performSegue(withIdentifier: "showDetail", sender: nil)
+                    }
+                }
             })
         }
     }
@@ -285,7 +288,8 @@ class TrackListController: UITableViewController, LastTrackCellDelegate {
             let controller = nav.topViewController as! TrackController
             controller.track = sender as? Track
         } else if segue.identifier == "placeInfo" {
-            let controller = segue.destination as! PlaceInfoController
+            let nav = segue.destination as! UINavigationController
+            let controller = nav.topViewController as! PlaceInfoController
             controller.place = sender as? GMSPlace
             controller.myCoordinate = LocationManager.shared.currentLocation?.coordinate
         }

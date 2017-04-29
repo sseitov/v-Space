@@ -34,6 +34,10 @@ func textYearFormatter() -> DateFormatter {
     return formatter
 }
 
+func IS_PAD() -> Bool {
+    return UIDevice.current.userInterfaceIdiom == .pad
+}
+
 let newPointNotification = Notification.Name("NEW_POINT")
 
 class LocationManager: NSObject {
@@ -313,18 +317,24 @@ class LocationManager: NSObject {
 
 extension LocationManager : CLLocationManagerDelegate {
     
+    private func checkAccurancy(_ location:CLLocation) -> Bool {
+        if IS_PAD() {
+            return true
+        } else {
+            return location.horizontalAccuracy <= 10.0
+        }
+    }
+    
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        if let location = locations.last {
-            if location.horizontalAccuracy <= 10.0 {
-                if self.locationCondition != nil {
-                    locationManager.stopUpdatingLocation()
-                    self.locationCondition?.lock()
-                    self.currentLocation = location
-                    self.locationCondition?.signal()
-                    self.locationCondition?.unlock()
-                } else {
-                    addCoordinate(location.coordinate, at:NSDate().timeIntervalSince1970)
-                }
+        if let location = locations.last, checkAccurancy(location) {
+            if self.locationCondition != nil {
+                locationManager.stopUpdatingLocation()
+                self.locationCondition?.lock()
+                self.currentLocation = location
+                self.locationCondition?.signal()
+                self.locationCondition?.unlock()
+            } else {
+                addCoordinate(location.coordinate, at:NSDate().timeIntervalSince1970)
             }
         }
     }

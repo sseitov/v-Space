@@ -61,6 +61,7 @@
 		2CC50C361DECC8D900D27456 /* ActionSheet.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2CC50C331DECC8D900D27456 /* ActionSheet.xib */; };
 		2CC50C371DECC8D900D27456 /* ActionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CC50C341DECC8D900D27456 /* ActionSheet.swift */; };
 		2CDFA7FE1E6ACC13007D9FF0 /* MKMapRectExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CDFA7FD1E6ACC13007D9FF0 /* MKMapRectExtension.swift */; };
+		2CE15FC21EB470AE0085915E /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2CE15FC11EB470AE0085915E /* CoreTelephony.framework */; };
 		2CE268A21E66E15600FE8219 /* TodayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CE268A11E66E15600FE8219 /* TodayViewController.swift */; };
 		2CE268A51E66E15600FE8219 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2CE268A31E66E15600FE8219 /* MainInterface.storyboard */; };
 		2CE268A91E66E15600FE8219 /* Today.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 2CE2689D1E66E15600FE8219 /* Today.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -209,6 +210,7 @@
 		2CC50C341DECC8D900D27456 /* ActionSheet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ActionSheet.swift; path = CustomViews/ActionSheet.swift; sourceTree = "<group>"; };
 		2CDFA7F91E6AAC72007D9FF0 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		2CDFA7FD1E6ACC13007D9FF0 /* MKMapRectExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MKMapRectExtension.swift; path = Extensions/MKMapRectExtension.swift; sourceTree = "<group>"; };
+		2CE15FC11EB470AE0085915E /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		2CE2689D1E66E15600FE8219 /* Today.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = Today.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		2CE268A11E66E15600FE8219 /* TodayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayViewController.swift; sourceTree = "<group>"; };
 		2CE268A41E66E15600FE8219 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
@@ -227,6 +229,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2CE15FC21EB470AE0085915E /* CoreTelephony.framework in Frameworks */,
 				2C91E0741EACBB680067286B /* CloudKit.framework in Frameworks */,
 				2CBE20211E8D8ACA002EF13C /* CoreLocation.framework in Frameworks */,
 				46811E5591FD9B65000FCF47 /* Pods_v_Space.framework in Frameworks */,
@@ -261,6 +264,7 @@
 		12915D74E6089C1BDDF892C9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				2CE15FC11EB470AE0085915E /* CoreTelephony.framework */,
 				2C91E0731EACBB680067286B /* CloudKit.framework */,
 				2CBE20201E8D8ACA002EF13C /* CoreLocation.framework */,
 				2CBE20131E8D5EBB002EF13C /* NotificationCenter.framework */,
@@ -301,16 +305,11 @@
 				2C8B18A61DFB1E8A00769A12 /* Model */,
 				2C87D3151DDEE4A800F05528 /* Extensions */,
 				2C87D3181DDEF36800F05528 /* CustomViews */,
+				2CE15FBE1EB466A60085915E /* Track */,
+				2CE15FC01EB46CAA0085915E /* Place */,
 				2C17475B1DDB872A0018AEAB /* AppDelegate.swift */,
+				2CE268C11E672F7C00FE8219 /* LocationManager.swift */,
 				2C91E0631EAC809C0067286B /* Cloud.swift */,
-				2C54EB791E8ADC49009C4A27 /* TrackListController.swift */,
-				2CBE20161E8D6151002EF13C /* LastTrackCell.swift */,
-				2CBE20181E8D61AF002EF13C /* SavedTrackCell.swift */,
-				2C2B3FBB1E3BB6AD003FE095 /* TrackController.swift */,
-				2C79D4A31E92DE9F00EF4954 /* PhotoController.swift */,
-				2C3ED20E1EB1F0E300463199 /* PlaceInfoController.swift */,
-				2C3ED2101EB1FB2900463199 /* WebController.swift */,
-				2C3ED2121EB2046200463199 /* RouteController.swift */,
 				2C3F368C1E6C132900021B10 /* Credentials.swift */,
 				2C17476F1DDB93660018AEAB /* Resources */,
 			);
@@ -393,7 +392,6 @@
 				2CBE20281E8D9799002EF13C /* Track+CoreDataProperties.swift */,
 				2CE268BA1E6716BE00FE8219 /* Location+CoreDataClass.swift */,
 				2CE268BB1E6716BE00FE8219 /* Location+CoreDataProperties.swift */,
-				2CE268C11E672F7C00FE8219 /* LocationManager.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -422,6 +420,28 @@
 			);
 			path = "Watch Extension";
 			sourceTree = SOURCE_ROOT;
+		};
+		2CE15FBE1EB466A60085915E /* Track */ = {
+			isa = PBXGroup;
+			children = (
+				2C54EB791E8ADC49009C4A27 /* TrackListController.swift */,
+				2CBE20161E8D6151002EF13C /* LastTrackCell.swift */,
+				2CBE20181E8D61AF002EF13C /* SavedTrackCell.swift */,
+				2C2B3FBB1E3BB6AD003FE095 /* TrackController.swift */,
+				2C79D4A31E92DE9F00EF4954 /* PhotoController.swift */,
+			);
+			name = Track;
+			sourceTree = "<group>";
+		};
+		2CE15FC01EB46CAA0085915E /* Place */ = {
+			isa = PBXGroup;
+			children = (
+				2C3ED20E1EB1F0E300463199 /* PlaceInfoController.swift */,
+				2C3ED2101EB1FB2900463199 /* WebController.swift */,
+				2C3ED2121EB2046200463199 /* RouteController.swift */,
+			);
+			name = Place;
+			sourceTree = "<group>";
 		};
 		2CE268A01E66E15600FE8219 /* Today */ = {
 			isa = PBXGroup;

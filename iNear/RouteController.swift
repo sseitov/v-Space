@@ -68,8 +68,8 @@ class RouteController: UIViewController {
                                 if let path = GMSPath(fromEncodedPath: points) {
                                     if path.count() > 2 {
                                         let polyline = GMSPolyline(path: path)
-                                        polyline.strokeColor = UIColor.color(28, 79, 130, 0.7)
-                                        polyline.strokeWidth = 5
+                                        polyline.strokeColor = UIColor.traceColor()
+                                        polyline.strokeWidth = 4
                                         polyline.map = self.map
                                         completion(1)
                                     } else {

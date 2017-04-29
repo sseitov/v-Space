@@ -22,29 +22,35 @@ class TrackController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupBackButton()
+        
+        if IS_PAD() {
+            navigationItem.leftBarButtonItem = nil
+            navigationItem.hidesBackButton = true
+        } else {
+            setupBackButton()
+        }
         
         map.delegate = self
         
-        if track == nil {
-            setupTitle("v-Space")
-        } else {
-            setupTitle("\(track!.place!)\n\(textDateFormatter().string(from: (track!.finishDate! as Date)))")
-        }
-        
         var path:GMSMutablePath?
-        if track == nil {
-            if let date = LocationManager.shared.lastLocationDate() {
+        
+        if track == nil {            
+            if let date = LocationManager.shared.lastLocationDate(),
+                let all = LocationManager.shared.lastTrack(), all.count > 1
+            {
                 setupTitle(textDateFormatter().string(from: date))
-                let all = LocationManager.shared.lastTrack()
+                
                 path = GMSMutablePath()
-                for pt in all! {
+                for pt in all {
                     path!.add(CLLocationCoordinate2D(latitude: pt.latitude, longitude: pt.longitude))
                 }
             } else {
+                setupTitle("v-Space")
+                map.isHidden = true
                 return
             }
         } else {
+            setupTitle("\(track!.place!)\n\(textDateFormatter().string(from: (track!.finishDate! as Date)))")
             path = GMSMutablePath(fromEncodedPath: track!.path!)
         }
         

@@ -38,7 +38,7 @@ extension UIColor {
     }
     
     class func traceColor() -> UIColor {
-        return color(72, 160, 205, 1)
+        return color(72, 160, 205, 0.7)
     }
     
     func imageFromColor(_ size:CGSize, cornerRadius:CGFloat) -> UIImage {

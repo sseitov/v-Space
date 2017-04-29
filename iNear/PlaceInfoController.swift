@@ -8,6 +8,7 @@
 
 import UIKit
 import GooglePlaces
+import CoreTelephony
 
 class PlaceInfoController: UITableViewController {
 
@@ -17,7 +18,12 @@ class PlaceInfoController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTitle(place!.name)
-        setupBackButton()
+        if IS_PAD() {
+            navigationItem.leftBarButtonItem = nil
+            navigationItem.hidesBackButton = true
+        } else {
+            setupBackButton()
+        }
     }
 
     // MARK: - Table view data source
@@ -70,16 +76,32 @@ class PlaceInfoController: UITableViewController {
         return cell
     }
 
+    private func canMakePhoneCall() -> Bool {
+        guard let url = URL(string: "tel://") else {
+            return false
+        }
+        
+        let mobileNetworkCode = CTTelephonyNetworkInfo().subscriberCellularProvider?.mobileNetworkCode
+        
+        let isInvalidNetworkCode = mobileNetworkCode == nil
+            || mobileNetworkCode?.characters.count == 0
+            || mobileNetworkCode == "65535"
+        
+        return UIApplication.shared.canOpenURL(url) && !isInvalidNetworkCode
+    }
+    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
         switch indexPath.row {
         case 0:
             if place?.phoneNumber != nil {
-                let number = "tel://\(place!.phoneNumber!)".replacingOccurrences(of: " ", with: "")
-                if let url = URL(string: number) {
-                    if UIApplication.shared.canOpenURL(url) {
+                if canMakePhoneCall() {
+                    let number = "tel://\(place!.phoneNumber!)".replacingOccurrences(of: " ", with: "")
+                    if let url = URL(string: number) {
                         UIApplication.shared.open(url, options: [:], completionHandler: nil)
                     }
+                } else {
+                    self.showMessage("Your device can not make phone call.", messageType: .error)
                 }
             }
         case 1:
