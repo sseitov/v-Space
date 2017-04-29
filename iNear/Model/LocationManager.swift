@@ -262,6 +262,47 @@ class LocationManager: NSObject {
         }
     }
     
+    // MARK: - Place table
+    
+    func getPlace(_ uid:String) -> Place? {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Place")
+        fetchRequest.predicate = NSPredicate(format: "placeID = %@", uid)
+        do {
+            return try managedObjectContext.fetch(fetchRequest).first as? Place
+        } catch {
+            return nil
+        }
+    }
+    
+    func createPlace(_ placeID:String, name:String, coordinate:CLLocationCoordinate2D, phone:String?, address:String?, website:URL?) -> Place? {
+        var place = getPlace(placeID)
+        if place == nil {
+            place = NSEntityDescription.insertNewObject(forEntityName: "Place", into: managedObjectContext) as? Place
+            place?.placeID = placeID
+            place?.name = name
+            place?.latitude = coordinate.latitude
+            place?.longitude = coordinate.longitude
+            place?.phone = phone
+            place?.address = address
+            if website != nil {
+                place?.website = website!.absoluteString
+            }
+            saveContext()
+        }
+        return place
+    }
+    
+    func allPlaces() -> [Place] {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Place")
+        let sortDescriptor = NSSortDescriptor(key: "name", ascending: true)
+        fetchRequest.sortDescriptors = [sortDescriptor]
+        if let all = try? managedObjectContext.fetch(fetchRequest) as! [Place] {
+            return all
+        } else {
+            return []
+        }
+    }
+
     // MARK: - Photo table
 
     func getPhoto(_ uid:String) -> Photo? {

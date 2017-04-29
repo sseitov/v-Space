@@ -7,20 +7,20 @@
 //
 
 import UIKit
-import GooglePlaces
 import SVProgressHUD
 
 class WebController: UIViewController, UIWebViewDelegate {
 
     @IBOutlet weak var webView: UIWebView!
-    var place:GMSPlace?
+    var placeName:String = ""
+    var placeWebSite:URL?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupTitle(place!.name)
+        setupTitle(placeName)
         setupBackButton()
         
-        webView.loadRequest(URLRequest(url: place!.website!))
+        webView.loadRequest(URLRequest(url: placeWebSite!))
     }
 
     override func goBack() {

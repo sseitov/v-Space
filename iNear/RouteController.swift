@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import GooglePlaces
 import GoogleMaps
 import AFNetworking
 import SVProgressHUD
@@ -17,20 +16,23 @@ class RouteController: UIViewController {
     @IBOutlet weak var map: GMSMapView!
     
     var myCoordinate:CLLocationCoordinate2D?
-    var place:GMSPlace?
+    var placeCoordinate:CLLocationCoordinate2D = CLLocationCoordinate2D()
+    var placeName:String = ""
+    
     private var placeMarker:GMSMarker?
 
     override func viewDidLoad() {
         super.viewDidLoad()
         super.viewDidLoad()
-        setupTitle(place!.name)
+        setupTitle(placeName)
         setupBackButton()
         
-        map.camera = GMSCameraPosition.camera(withTarget: place!.coordinate, zoom: 6)
+        print("latitude \(placeCoordinate.latitude), longitude \(placeCoordinate.longitude)")
+        map.camera = GMSCameraPosition.camera(withTarget: placeCoordinate, zoom: 6)
         map.isMyLocationEnabled = true
-        placeMarker = GMSMarker(position: place!.coordinate)
+        placeMarker = GMSMarker(position: placeCoordinate)
         placeMarker!.icon = UIImage(named: "near")
-        placeMarker!.title = place!.name
+        placeMarker!.title = placeName
         placeMarker!.groundAnchor = CGPoint(x: 0.5, y: 0.5)
         placeMarker!.map = map
     }
@@ -38,16 +40,16 @@ class RouteController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        let bounds = GMSCoordinateBounds(coordinate: myCoordinate!, coordinate: place!.coordinate)
+        let bounds = GMSCoordinateBounds(coordinate: myCoordinate!, coordinate: placeCoordinate)
         let update = GMSCameraUpdate.fit(bounds, withPadding: 100)
         map.moveCamera(update)
         
         SVProgressHUD.show(withStatus: "Create route...")
         
-        createDirection(from: myCoordinate!, to: place!.coordinate, completion: { result in
+        createDirection(from: myCoordinate!, to: placeCoordinate, completion: { result in
             SVProgressHUD.dismiss()
             if result == -1 {
-                self.showMessage("Can not create route to \(self.place!.name)", messageType: .error)
+                self.showMessage("Can not create route to \(self.placeName)", messageType: .error)
             } else if result == 0 {
                 self.showMessage("You are in the same place.", messageType: .information)
             }

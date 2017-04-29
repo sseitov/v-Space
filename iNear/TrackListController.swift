@@ -16,6 +16,7 @@ import GooglePlacePicker
 class TrackListController: UITableViewController, LastTrackCellDelegate {
 
     var tracks:[Track] = []
+    var places:[Place] = []
 
     deinit {
         NotificationCenter.default.removeObserver(self)
@@ -24,7 +25,7 @@ class TrackListController: UITableViewController, LastTrackCellDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTitle("My Tracks")
-        tracks = LocationManager.shared.allTracks()
+        
         if IS_PAD() {
             if tracks.count > 0 {
                 performSegue(withIdentifier: "showDetail", sender: tracks[0])
@@ -34,6 +35,13 @@ class TrackListController: UITableViewController, LastTrackCellDelegate {
         }
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.refreshCurrentTrack), name: newPointNotification, object: nil)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        tracks = LocationManager.shared.allTracks()
+        places = LocationManager.shared.allPlaces()
+        tableView.reloadData()
     }
     
     func refreshCurrentTrack() {
@@ -75,6 +83,7 @@ class TrackListController: UITableViewController, LastTrackCellDelegate {
 
     func finishSync() {
         tracks = LocationManager.shared.allTracks()
+        places = LocationManager.shared.allPlaces()
         tableView.reloadData()
         if IS_PAD() {
             if tracks.count > 0 {
@@ -101,7 +110,13 @@ class TrackListController: UITableViewController, LastTrackCellDelegate {
                     error(cloudError(NSLocalizedString("photoCount", comment: "")))
                 } else {
                     Cloud.shared.syncTracks(assets, error: { err in
-                        error(err)
+                        if err != nil {
+                            error(err)
+                        } else {
+                            Cloud.shared.syncPlaces({ placesErr in
+                                error(placesErr)
+                            })
+                        }
                     })
                 }
             }
@@ -210,19 +225,33 @@ class TrackListController: UITableViewController, LastTrackCellDelegate {
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        return 3
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return section == 0 ? 1 : tracks.count
+        switch section {
+        case 1:
+            return tracks.count
+        case 2:
+            return places.count
+        default:
+            return 1
+        }
     }
 
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return indexPath.section == 0 ? 60 : 80
+        return indexPath.section == 1 ? 80 : 60
     }
 
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return section == 0 ? "current track" : "saved tracks"
+        switch section {
+        case 1:
+            return "saved tracks"
+        case 2:
+            return "interested places"
+        default:
+            return "current track"
+        }
     }
 
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -238,9 +267,15 @@ class TrackListController: UITableViewController, LastTrackCellDelegate {
             let cell = tableView.dequeueReusableCell(withIdentifier: "lastTrack", for: indexPath) as! LastTrackCell
             cell.delegate = self
             return cell
-        } else {
+        } else if indexPath.section == 1 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "savedTrack", for: indexPath) as! SavedTrackCell
             cell.track = tracks[indexPath.row]
+            return cell
+        } else {
+            let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
+            cell.textLabel?.text = places[indexPath.row].name
+            cell.textLabel?.font = UIFont.condensedFont()
+            cell.textLabel?.textColor = UIColor.mainColor()
             return cell
         }
     }
@@ -251,22 +286,41 @@ class TrackListController: UITableViewController, LastTrackCellDelegate {
 
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            let track = tracks[indexPath.row]
-            SVProgressHUD.show(withStatus: "Delete...")
-            Cloud.shared.deleteTrack(track, complete: {
-                SVProgressHUD.dismiss()
-                self.tableView.beginUpdates()
-                self.tracks.remove(at: indexPath.row)
-                self.tableView.deleteRows(at: [indexPath], with: .top)
-                self.tableView.endUpdates()
-                if IS_PAD() {
-                    if self.tracks.count > 0 {
-                        self.performSegue(withIdentifier: "showDetail", sender: self.tracks[0])
-                    } else {
-                        self.performSegue(withIdentifier: "showDetail", sender: nil)
+            if indexPath.section == 1 {
+                let track = tracks[indexPath.row]
+                SVProgressHUD.show(withStatus: "Delete...")
+                Cloud.shared.deleteTrack(track, complete: {
+                    SVProgressHUD.dismiss()
+                    self.tableView.beginUpdates()
+                    self.tracks.remove(at: indexPath.row)
+                    self.tableView.deleteRows(at: [indexPath], with: .top)
+                    self.tableView.endUpdates()
+                    if IS_PAD() {
+                        if self.tracks.count > 0 {
+                            self.performSegue(withIdentifier: "showDetail", sender: self.tracks[0])
+                        } else {
+                            self.performSegue(withIdentifier: "showDetail", sender: nil)
+                        }
                     }
-                }
-            })
+                })
+            } else {
+                let place = places[indexPath.row]
+                SVProgressHUD.show(withStatus: "Delete...")
+                Cloud.shared.deletePlace(place, complete: {
+                    SVProgressHUD.dismiss()
+                    self.tableView.beginUpdates()
+                    self.places.remove(at: indexPath.row)
+                    self.tableView.deleteRows(at: [indexPath], with: .top)
+                    self.tableView.endUpdates()
+                    if IS_PAD() {
+                        if self.tracks.count > 0 {
+                            self.performSegue(withIdentifier: "showDetail", sender: self.tracks[0])
+                        } else {
+                            self.performSegue(withIdentifier: "showDetail", sender: nil)
+                        }
+                    }
+                })
+            }
         }
     }
 
@@ -275,8 +329,11 @@ class TrackListController: UITableViewController, LastTrackCellDelegate {
             if LocationManager.shared.lastTrackSize() > 1 {
                 performSegue(withIdentifier: "showDetail", sender: nil)
             }
-        } else {
+        } else if indexPath.section == 1 {
             performSegue(withIdentifier: "showDetail", sender: tracks[indexPath.row])
+        } else {
+            tableView.deselectRow(at: indexPath, animated: false)
+            performSegue(withIdentifier: "placeInfo", sender: places[indexPath.row])
         }
     }
     
@@ -290,7 +347,8 @@ class TrackListController: UITableViewController, LastTrackCellDelegate {
         } else if segue.identifier == "placeInfo" {
             let nav = segue.destination as! UINavigationController
             let controller = nav.topViewController as! PlaceInfoController
-            controller.place = sender as? GMSPlace
+            controller.gmsPlace = sender as? GMSPlace
+            controller.place = sender as? Place
             controller.myCoordinate = LocationManager.shared.currentLocation?.coordinate
         }
     }

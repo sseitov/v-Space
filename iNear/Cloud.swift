@@ -10,6 +10,7 @@ import UIKit
 import CloudKit
 import Photos
 import GoogleMaps
+import GooglePlaces
 
 func cloudError(_ text:String) -> NSError {
     return NSError(domain: "com.vchannel.iNearby", code: -1, userInfo: [NSLocalizedDescriptionKey:text])
@@ -35,7 +36,6 @@ func cloudError(_ text:String) -> NSError {
         cloudDB!.perform(query, inZoneWith: nil) { results, error in
             guard error == nil else {
                 DispatchQueue.main.async {
-                    print("Cloud Query Error - Refresh: \(error!.localizedDescription)")
                     tracks([], error as NSError?)
                 }
                 return
@@ -77,7 +77,6 @@ func cloudError(_ text:String) -> NSError {
         cloudDB!.perform(query, inZoneWith: nil) { results, error in
             guard error == nil else {
                 DispatchQueue.main.async {
-                    print("Cloud Query Error - Refresh: \(error!.localizedDescription)")
                     complete()
                 }
                 return
@@ -131,6 +130,52 @@ func cloudError(_ text:String) -> NSError {
         })
     }
     
+    func syncPlaces(_ result:@escaping (NSError?) -> ()) {
+        let predicate = NSPredicate(value: true)
+        let query = CKQuery(recordType: "Place", predicate: predicate)
+        let oldPlaces = LocationManager.shared.allPlaces()
+
+        cloudDB!.perform(query, inZoneWith: nil) { results, error in
+            guard error == nil else {
+                DispatchQueue.main.async {
+                    result(error as NSError?)
+                }
+                return
+            }
+            
+            DispatchQueue.main.async {
+                var newPlaces:[Place] = []
+                for record in results! {
+                    if let placeID = record.value(forKey: "placeID") as? String,
+                        let name = record.value(forKey: "name") as? String,
+                        let latitude = record.value(forKey: "latitude") as? Double,
+                        let longitude = record.value(forKey: "longitude") as? Double
+                    {
+                        let coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+                        let phone = record.value(forKey: "phone") as? String
+                        let address = record.value(forKey: "address") as? String
+                        let website = record.value(forKey: "website") as? String
+                        let url = website != nil ? URL(string: website!) : nil
+                        let place = LocationManager.shared.createPlace(placeID,
+                                                           name: name,
+                                                           coordinate: coordinate,
+                                                           phone: phone,
+                                                           address: address,
+                                                           website: url)
+                        newPlaces.append(place!)
+                    }
+                }
+                for old in oldPlaces {
+                    if !newPlaces.contains(old) {
+                        LocationManager.shared.managedObjectContext.delete(old)
+                        LocationManager.shared.saveContext()
+                    }
+                }
+                result(nil)
+            }
+        }
+    }
+    
     private func savePhotos(_ photos:[Photo], complete:@escaping () -> ()) {
         let next = NSCondition()
         DispatchQueue.global().async {
@@ -180,6 +225,42 @@ func cloudError(_ text:String) -> NSError {
             })
         } else {
             self.saveTrack(track)
+        }
+    }
+    
+    func savePlace(_ place:GMSPlace, result:@escaping (Error?) -> ()) {
+        if LocationManager.shared.getPlace(place.placeID) == nil {
+            _ = LocationManager.shared.createPlace(place.placeID,
+                                               name: place.name,
+                                               coordinate: place.coordinate,
+                                               phone: place.phoneNumber,
+                                               address: place.formattedAddress,
+                                               website: place.website)
+            let record = CKRecord(recordType: "Place")
+            record.setValue(place.placeID, forKey: "placeID")
+            record.setValue(place.name, forKey: "name")
+            record.setValue(place.coordinate.latitude, forKey: "latitude")
+            record.setValue(place.coordinate.longitude, forKey: "longitude")
+            if place.phoneNumber != nil {
+                record.setValue(place.phoneNumber!, forKey: "phone")
+            }
+            if place.formattedAddress != nil {
+                record.setValue(place.formattedAddress!, forKey: "address")
+            }
+            if place.website != nil {
+                record.setValue(place.website!.absoluteString, forKey: "website")
+            }
+            self.cloudDB!.save(record, completionHandler: { record, error in
+                DispatchQueue.main.async {
+                    if let error = error {
+                        result(error)
+                    } else {
+                        result(nil)
+                    }
+                }
+            })
+        } else {
+            result(cloudError("Place already synced."))
         }
     }
     
@@ -249,5 +330,37 @@ func cloudError(_ text:String) -> NSError {
                 }
             }
         })
+    }
+    
+    func deletePlace(_ place:Place, complete:@escaping () -> ()) {
+        let predicate = NSPredicate(format: "placeID = %@", place.placeID!)
+        let query = CKQuery(recordType: "Place", predicate: predicate)
+        self.cloudDB!.perform(query, inZoneWith: nil) { results, error in
+            guard error == nil else {
+                DispatchQueue.main.async {
+                    print(error!.localizedDescription)
+                    complete()
+                }
+                return
+            }
+            if let record = results!.first {
+                self.cloudDB?.delete(withRecordID: record.recordID, completionHandler: { _, error in
+                    DispatchQueue.main.async {
+                        if error != nil {
+                            print(error!.localizedDescription)
+                        }
+                        LocationManager.shared.managedObjectContext.delete(place)
+                        LocationManager.shared.saveContext()
+                        complete()
+                    }
+                })
+            } else {
+                DispatchQueue.main.async {
+                    LocationManager.shared.managedObjectContext.delete(place)
+                    LocationManager.shared.saveContext()
+                    complete()
+                }
+            }
+        }
     }
 }

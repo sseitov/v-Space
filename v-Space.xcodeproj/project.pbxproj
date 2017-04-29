@@ -12,6 +12,10 @@
 		2C1747681DDB872A0018AEAB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2C1747661DDB872A0018AEAB /* LaunchScreen.storyboard */; };
 		2C1EB4EB1DFEC1E200DBB257 /* MapController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C1EB4EA1DFEC1E200DBB257 /* MapController.swift */; };
 		2C2B3FBC1E3BB6AD003FE095 /* TrackController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C2B3FBB1E3BB6AD003FE095 /* TrackController.swift */; };
+		2C362BDA1EB495C500749C46 /* Place+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C362BD81EB495C500749C46 /* Place+CoreDataClass.swift */; };
+		2C362BDB1EB495C500749C46 /* Place+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C362BD91EB495C500749C46 /* Place+CoreDataProperties.swift */; };
+		2C362BE01EB4999300749C46 /* Place+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C362BD81EB495C500749C46 /* Place+CoreDataClass.swift */; };
+		2C362BE11EB4999300749C46 /* Place+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C362BD91EB495C500749C46 /* Place+CoreDataProperties.swift */; };
 		2C3ED20F1EB1F0E300463199 /* PlaceInfoController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C3ED20E1EB1F0E300463199 /* PlaceInfoController.swift */; };
 		2C3ED2111EB1FB2900463199 /* WebController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C3ED2101EB1FB2900463199 /* WebController.swift */; };
 		2C3ED2131EB2046200463199 /* RouteController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C3ED2121EB2046200463199 /* RouteController.swift */; };
@@ -149,6 +153,9 @@
 		2C1747691DDB872A0018AEAB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = iNear/Info.plist; sourceTree = "<group>"; };
 		2C1EB4EA1DFEC1E200DBB257 /* MapController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapController.swift; sourceTree = "<group>"; };
 		2C2B3FBB1E3BB6AD003FE095 /* TrackController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackController.swift; sourceTree = "<group>"; };
+		2C362BD71EB4947000749C46 /* LocationModel 5.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "LocationModel 5.xcdatamodel"; sourceTree = "<group>"; };
+		2C362BD81EB495C500749C46 /* Place+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Place+CoreDataClass.swift"; path = "Model/Place+CoreDataClass.swift"; sourceTree = "<group>"; };
+		2C362BD91EB495C500749C46 /* Place+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Place+CoreDataProperties.swift"; path = "Model/Place+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		2C3ED20E1EB1F0E300463199 /* PlaceInfoController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaceInfoController.swift; sourceTree = "<group>"; };
 		2C3ED2101EB1FB2900463199 /* WebController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebController.swift; sourceTree = "<group>"; };
 		2C3ED2121EB2046200463199 /* RouteController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RouteController.swift; sourceTree = "<group>"; };
@@ -386,6 +393,8 @@
 			isa = PBXGroup;
 			children = (
 				2CE268B51E67156400FE8219 /* LocationModel.xcdatamodeld */,
+				2C362BD81EB495C500749C46 /* Place+CoreDataClass.swift */,
+				2C362BD91EB495C500749C46 /* Place+CoreDataProperties.swift */,
 				2C79D49D1E92C5CA00EF4954 /* Photo+CoreDataClass.swift */,
 				2C79D49E1E92C5CA00EF4954 /* Photo+CoreDataProperties.swift */,
 				2CBE20271E8D9799002EF13C /* Track+CoreDataClass.swift */,
@@ -748,6 +757,7 @@
 				2C87D31A1DDEF37900F05528 /* TextFieldContainer.swift in Sources */,
 				2CE268BE1E6716BE00FE8219 /* Location+CoreDataProperties.swift in Sources */,
 				2C87D3201DDF026300F05528 /* UIViewControllerExtensions.swift in Sources */,
+				2C362BDB1EB495C500749C46 /* Place+CoreDataProperties.swift in Sources */,
 				2CE268B71E67156400FE8219 /* LocationModel.xcdatamodeld in Sources */,
 				2C79D4A01E92C5CA00EF4954 /* Photo+CoreDataProperties.swift in Sources */,
 				2CBE202F1E8DA170002EF13C /* TextInput.swift in Sources */,
@@ -761,6 +771,7 @@
 				2C3F368D1E6C132900021B10 /* Credentials.swift in Sources */,
 				2CBE20191E8D61AF002EF13C /* SavedTrackCell.swift in Sources */,
 				2C91E0641EAC809C0067286B /* Cloud.swift in Sources */,
+				2C362BDA1EB495C500749C46 /* Place+CoreDataClass.swift in Sources */,
 				2C17475C1DDB872A0018AEAB /* AppDelegate.swift in Sources */,
 				2CC50C371DECC8D900D27456 /* ActionSheet.swift in Sources */,
 			);
@@ -786,8 +797,10 @@
 				2CE268B81E67156400FE8219 /* LocationModel.xcdatamodeld in Sources */,
 				2CBE202C1E8D9829002EF13C /* Track+CoreDataProperties.swift in Sources */,
 				2C8060771E689B45001B9409 /* UIViewExtensions.swift in Sources */,
+				2C362BE01EB4999300749C46 /* Place+CoreDataClass.swift in Sources */,
 				2CE268C31E672F9C00FE8219 /* LocationManager.swift in Sources */,
 				2CE268C41E6758C200FE8219 /* UIColorExtensions.swift in Sources */,
+				2C362BE11EB4999300749C46 /* Place+CoreDataProperties.swift in Sources */,
 				2CBE202B1E8D9821002EF13C /* Track+CoreDataClass.swift in Sources */,
 				2C79D4A21E92C73400EF4954 /* Photo+CoreDataProperties.swift in Sources */,
 				2CE268A21E66E15600FE8219 /* TodayViewController.swift in Sources */,
@@ -1197,12 +1210,13 @@
 		2CE268B51E67156400FE8219 /* LocationModel.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				2C362BD71EB4947000749C46 /* LocationModel 5.xcdatamodel */,
 				2C4E00AD1EADACB000BB935F /* LocationModel 4.xcdatamodel */,
 				2C91E0751EACCA0D0067286B /* LocationModel 3.xcdatamodel */,
 				2CBE20221E8D955B002EF13C /* LocationModel 2.xcdatamodel */,
 				2CE268B61E67156400FE8219 /* LocationModel.xcdatamodel */,
 			);
-			currentVersion = 2C4E00AD1EADACB000BB935F /* LocationModel 4.xcdatamodel */;
+			currentVersion = 2C362BD71EB4947000749C46 /* LocationModel 5.xcdatamodel */;
 			name = LocationModel.xcdatamodeld;
 			path = Model/LocationModel.xcdatamodeld;
 			sourceTree = "<group>";

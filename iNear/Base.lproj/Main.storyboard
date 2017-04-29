@@ -187,6 +187,12 @@
                         <barButtonItem key="leftBarButtonItem" image="backButton" id="eJI-Dm-vUx">
                             <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" systemItem="bookmarks" id="4XO-Ay-go0">
+                            <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <connections>
+                                <action selector="savePlace:" destination="KbQ-j4-COI" id="U4K-mY-XDe"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <segue destination="EwU-PZ-1xt" kind="show" identifier="webPage" id="pfp-eE-w36"/>

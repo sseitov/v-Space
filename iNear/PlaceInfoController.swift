@@ -9,23 +9,50 @@
 import UIKit
 import GooglePlaces
 import CoreTelephony
+import SVProgressHUD
 
 class PlaceInfoController: UITableViewController {
 
-    var place:GMSPlace?
+    var gmsPlace:GMSPlace?
+    var place:Place?
     var myCoordinate:CLLocationCoordinate2D?
  
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupTitle(place!.name)
+        setupTitle(gmsPlace != nil ? gmsPlace!.name : place!.name!)
         if IS_PAD() {
             navigationItem.leftBarButtonItem = nil
             navigationItem.hidesBackButton = true
         } else {
             setupBackButton()
         }
+        if gmsPlace == nil {
+            navigationItem.rightBarButtonItem = nil
+        }
+        
+        if myCoordinate == nil {
+            SVProgressHUD.show(withStatus: "Get location...")
+            LocationManager.shared.getCurrentLocation({ location in
+                SVProgressHUD.dismiss()
+                if location != nil {
+                    self.myCoordinate = location!.coordinate
+                } else {
+                    self.showMessage("Can not get current location.", messageType: .error)
+                }
+            })
+        }
     }
 
+    @IBAction func savePlace(_ sender: Any) {
+        SVProgressHUD.show(withStatus: "Save...")
+        Cloud.shared.savePlace(gmsPlace!, result: { error in
+            SVProgressHUD.dismiss()
+            if error != nil {
+                self.showMessage(error!.localizedDescription, messageType: .error)
+            }
+        })
+    }
+    
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -33,7 +60,8 @@ class PlaceInfoController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return place?.website == nil ? 2 : 3
+        let isWebSite = gmsPlace != nil ? (gmsPlace?.website != nil) : (place?.website != nil)
+        return isWebSite ? 3 : 2
     }
 
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -64,9 +92,9 @@ class PlaceInfoController: UITableViewController {
         switch indexPath.row {
         case 0:
             cell.textLabel?.text = "PHONE"
-            cell.detailTextLabel?.text = place?.phoneNumber
+            cell.detailTextLabel?.text = gmsPlace != nil ? gmsPlace?.phoneNumber : place?.phone
         case 1:
-            cell.detailTextLabel?.text = place?.formattedAddress
+            cell.detailTextLabel?.text = gmsPlace != nil ? gmsPlace?.formattedAddress : place?.address
         case 2:
             cell.textLabel?.text = "WEB SITE"
             cell.detailTextLabel?.text = "Open"
@@ -94,9 +122,10 @@ class PlaceInfoController: UITableViewController {
         tableView.deselectRow(at: indexPath, animated: false)
         switch indexPath.row {
         case 0:
-            if place?.phoneNumber != nil {
+            let phoneNumber = gmsPlace != nil ? gmsPlace?.phoneNumber : place?.phone
+            if phoneNumber != nil {
                 if canMakePhoneCall() {
-                    let number = "tel://\(place!.phoneNumber!)".replacingOccurrences(of: " ", with: "")
+                    let number = "tel://\(phoneNumber!)".replacingOccurrences(of: " ", with: "")
                     if let url = URL(string: number) {
                         UIApplication.shared.open(url, options: [:], completionHandler: nil)
                     }
@@ -120,11 +149,19 @@ class PlaceInfoController: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "webPage" {
             let next = segue.destination as! WebController
-            next.place = place
+            next.placeName = gmsPlace != nil ? gmsPlace!.name : place!.name!
+            if gmsPlace != nil {
+                next.placeWebSite = gmsPlace!.website
+            } else {
+                if place!.website != nil {
+                    next.placeWebSite = URL(string: place!.website!)
+                }
+            }
         } else if segue.identifier == "route" {
             let next = segue.destination as! RouteController
-            next.place = place
             next.myCoordinate = myCoordinate
+            next.placeName = gmsPlace != nil ? gmsPlace!.name : place!.name!
+            next.placeCoordinate = gmsPlace != nil ? gmsPlace!.coordinate : CLLocationCoordinate2D(latitude: place!.latitude, longitude: place!.longitude)
         }
     }
 
