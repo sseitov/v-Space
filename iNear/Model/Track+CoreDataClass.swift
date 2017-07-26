@@ -10,34 +10,14 @@ import Foundation
 import CoreData
 
 public class Track: NSManagedObject {
-/*
-    func trackPoints() -> [Location] {
-        if let all = points?.allObjects as? [Location] {
-            return all.sorted(by: { loc1, loc2 in
-                return loc1.date > loc2.date
-            })
+    
+    func speed() -> Double {
+        if distance > 0 && startDate != nil && finishDate != nil {
+            let timeSec = finishDate!.timeIntervalSince1970 - startDate!.timeIntervalSince1970
+            return distance / ( timeSec * 60 * 60 )
         } else {
-            return []
+            return 0
         }
     }
     
-    func trackDate(_ last:Bool = true) -> Date {
-        if date != nil {
-            return date! as Date
-        } else {
-            if let all = points?.allObjects as? [Location] {
-                let sorted = all.sorted(by: { loc1, loc2 in
-                    return loc1.date < loc2.date
-                })
-                if last {
-                    return Date(timeIntervalSince1970: sorted.last!.date)
-                } else {
-                    return Date(timeIntervalSince1970: sorted.first!.date)
-                }
-            } else {
-                return Date()
-            }
-        }
-    }
- */
 }

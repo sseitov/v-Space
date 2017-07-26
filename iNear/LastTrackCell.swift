@@ -27,11 +27,11 @@ class LastTrackCell: UITableViewCell {
             } else {
                 let count = LocationManager.shared.lastTrackSize()
                 if count < 2 {
-                    statusLabel.text = "Current track has \(count) point"
+                    statusLabel.text = "Tracker started"
                     statusLabel.textColor = UIColor.lightGray
                     accessoryType = .none
                 } else {
-                    statusLabel.text = "Current track has \(count) points"
+                    statusLabel.text = String(format: "Distance\t%.1f km\nSpeed\t\t%d km/h", LocationManager.shared.lastTrackDistance(), Int(LocationManager.shared.lastTrackSpeed()))
                     statusLabel.textColor = UIColor.mainColor()
                     accessoryType = .disclosureIndicator
                 }

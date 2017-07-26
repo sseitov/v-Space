@@ -138,7 +138,7 @@ class TrackListController: UITableViewController, LastTrackCellDelegate {
             let ask = TextInput.create(cancelHandler: {
                 LocationManager.shared.clearLastTrack()
             }, acceptHandler: { name in
-                let track = LocationManager.shared.createTrack(name, path: path.encodedPath(), start: points.last!.date, finish: points.first!.date)
+                let track = LocationManager.shared.createTrack(name, path: path.encodedPath(), start: points.last!.date, finish: points.first!.date, distance: LocationManager.shared.lastTrackDistance())
                 LocationManager.shared.clearLastTrack()
                 self.putPhotoOnTrack(track, success: { success in
                     if success {

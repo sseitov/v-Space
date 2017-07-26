@@ -10,6 +10,7 @@ import UIKit
 import CoreLocation
 import CoreData
 import Photos
+import MapKit
 
 // MARK: - Date formatter
 
@@ -202,6 +203,32 @@ class LocationManager: NSObject {
         fetchRequest.sortDescriptors = [sortDescriptor]
         return try? managedObjectContext.fetch(fetchRequest) as! [Location]
     }
+
+    func lastTrackDistance() -> Double {
+        if let track = lastTrack(), track.count > 1 {
+            var distance:Double = 0
+            for i in 1..<track.count {
+                let prev = track[i-1]
+                let curr = track[i]
+  
+                let pt1 = MKMapPointForCoordinate(CLLocationCoordinate2D(latitude: prev.latitude, longitude: prev.longitude))
+                let pt2 = MKMapPointForCoordinate(CLLocationCoordinate2D(latitude: curr.latitude, longitude: curr.longitude))
+                distance += MKMetersBetweenMapPoints(pt1, pt2)
+            }
+            return distance / 1000.0
+        } else {
+            return 0
+        }
+    }
+    
+    func lastTrackSpeed() -> Double {
+        if let track = lastTrack(), track.count > 1, let last = track.first, let first = track.last {
+            let time = (last.date - first.date) / (60*60)
+            return lastTrackDistance() / time
+        } else {
+            return 0
+        }
+    }
     
     func clearLastTrack() {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Location")
@@ -230,23 +257,25 @@ class LocationManager: NSObject {
         }
     }
     
-    func createTrack(_ uid:String, name:String, path:String, date:Double) -> Track {
+    func saveTrack(_ uid:String, name:String, path:String, start:Double, finish:Double, distance:Double) -> Track {
         let track = NSEntityDescription.insertNewObject(forEntityName: "Track", into: managedObjectContext) as! Track
         track.uid = uid
         track.place = name
         track.path = path
-        track.finishDate = NSDate(timeIntervalSince1970: date)
+        track.startDate = NSDate(timeIntervalSince1970: start)
+        track.finishDate = NSDate(timeIntervalSince1970: finish)
         saveContext()
         return track
     }
     
-    func createTrack(_ name:String, path:String, start:Double, finish:Double) -> Track {
+    func createTrack(_ name:String, path:String, start:Double, finish:Double, distance: Double) -> Track {
         let track = NSEntityDescription.insertNewObject(forEntityName: "Track", into: managedObjectContext) as! Track
         track.uid = UUID().uuidString
         track.place = name
         track.path = path
         track.startDate = NSDate(timeIntervalSince1970: start)
         track.finishDate = NSDate(timeIntervalSince1970: finish)
+        track.distance = distance
         saveContext()
         return track
     }

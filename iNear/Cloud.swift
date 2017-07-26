@@ -47,11 +47,13 @@ func cloudError(_ text:String) -> NSError {
                     if let uid = record.value(forKey: "uid") as? String,
                         let place = record.value(forKey: "place") as? String,
                         let path = record.value(forKey: "track") as? String,
-                        let date = record.value(forKey: "date") as? Double
+                        let date = record.value(forKey: "date") as? Double,
+                        let startDate = record.value(forKey: "startDate") as? Double,
+                        let distance = record.value(forKey: "distance") as? Double
                     {
                         var track = LocationManager.shared.getTrack(uid)
                         if track == nil {
-                            track = LocationManager.shared.createTrack(uid, name: place, path: path, date: date)
+                            track = LocationManager.shared.saveTrack(uid, name: place, path: path, start: startDate, finish:date, distance: distance)
                         }
                         newTracks.append(track!)
                     }
@@ -210,6 +212,8 @@ func cloudError(_ text:String) -> NSError {
         record.setValue(track.path!, forKey: "track")
         record.setValue(track.place!, forKey: "place")
         record.setValue(track.finishDate!.timeIntervalSince1970, forKey: "date")
+        record.setValue(track.startDate!.timeIntervalSince1970, forKey: "startDate")
+        record.setValue(track.distance, forKey: "distance")
         record.setValue(track.uid!, forKey: "uid")
         self.cloudDB!.save(record, completionHandler: { record, error in
             if error != nil {

@@ -2,7 +2,7 @@
 //  Track+CoreDataProperties.swift
 //  v-Space
 //
-//  Created by Сергей Сейтов on 24.04.17.
+//  Created by Sergey Seitov on 26.07.17.
 //  Copyright © 2017 Сергей Сейтов. All rights reserved.
 //
 
@@ -16,11 +16,12 @@ extension Track {
         return NSFetchRequest<Track>(entityName: "Track")
     }
 
-    @NSManaged public var startDate: NSDate?
+    @NSManaged public var finishDate: NSDate?
     @NSManaged public var path: String?
     @NSManaged public var place: String?
+    @NSManaged public var startDate: NSDate?
     @NSManaged public var uid: String?
-    @NSManaged public var finishDate: NSDate?
+    @NSManaged public var distance: Double
     @NSManaged public var photos: NSSet?
 
 }

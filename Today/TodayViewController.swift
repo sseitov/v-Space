@@ -14,13 +14,13 @@ class TodayViewController: UIViewController, NCWidgetProviding {
     @IBOutlet weak var recordButton: UIButton!
     @IBOutlet weak var trashButton: UIButton!
     @IBOutlet weak var observeButton: UIButton!
-    @IBOutlet weak var dateButton: UIButton!
+    @IBOutlet weak var distanceButton: UIButton!
     @IBOutlet weak var trackCounter: UILabel!
     @IBOutlet weak var observeLabel: UILabel!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        dateButton.setupBorder(UIColor.clear, radius: 15)
+        distanceButton.setupBorder(UIColor.clear, radius: 15)
         self.extensionContext?.widgetLargestAvailableDisplayMode = .compact
     }
     
@@ -45,14 +45,13 @@ class TodayViewController: UIViewController, NCWidgetProviding {
     }
     
     @IBAction func refresh() {
-        if let date = LocationManager.shared.lastLocationDate() {
-            dateButton.setTitle("LAST POINT: \(formattedDate(date))", for: .normal)
-        } else {
-            dateButton.setTitle("REFRESH STATUS", for: .normal)
-        }
         if LocationManager.shared.isRunning() {
             recordButton.setImage(UIImage(named: "stop"), for: .normal)
+            let text = String(format: "%.1f km / %d km/h", LocationManager.shared.lastTrackDistance(),
+                              Int(LocationManager.shared.lastTrackSpeed()))
+            distanceButton.setTitle(text, for: .normal)
         } else {
+            distanceButton.setTitle("TRACKER NOT RUNNING", for: .normal)
             recordButton.setImage(UIImage(named: "location"), for: .normal)
         }
         enableTrackerButtons(LocationManager.shared.lastTrackSize())
@@ -70,7 +69,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
     
     @IBAction func clearTracker(_ sender: Any) {
         LocationManager.shared.clearLastTrack()
-        dateButton.setTitle("REFRESH STATUS", for: .normal)
+        distanceButton.setTitle("TRACKER NOT RUNNING", for: .normal)
         enableTrackerButtons(LocationManager.shared.lastTrackSize())
     }
     
