@@ -11,32 +11,16 @@ import NotificationCenter
 
 class TodayViewController: UIViewController, NCWidgetProviding {
             
-    @IBOutlet weak var recordButton: UIButton!
-    @IBOutlet weak var trashButton: UIButton!
-    @IBOutlet weak var observeButton: UIButton!
-    @IBOutlet weak var distanceButton: UIButton!
-    @IBOutlet weak var trackCounter: UILabel!
-    @IBOutlet weak var observeLabel: UILabel!
+    @IBOutlet weak var nonActive: UILabel!
+    @IBOutlet weak var headerView: UIView!
+    @IBOutlet weak var distance: UILabel!
+    @IBOutlet weak var speed: UILabel!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        distanceButton.setupBorder(UIColor.clear, radius: 15)
+        let tap = UITapGestureRecognizer(target: self, action: #selector(self.openApp))
+        self.view.addGestureRecognizer(tap)
         self.extensionContext?.widgetLargestAvailableDisplayMode = .compact
-    }
-    
-    private func formattedDate(_ date:Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "d MMM HH:mm:ss"
-        return formatter.string(from: date).uppercased()
-    }
-
-    private func enableTrackerButtons(_ count:Int) {
-        trashButton.alpha = count > 1 ? 1 : 0.4
-        trashButton.isEnabled = count > 1
-        observeButton.alpha = count > 1 ? 1 : 0.4
-        observeButton.isEnabled = count > 1
-        trackCounter.text = count > 1 ? "CLEAR \(count)" : ""
-        observeLabel.text = count > 1 ? "SHOW TRACK" : ""
     }
     
     func widgetPerformUpdate(completionHandler: (@escaping (NCUpdateResult) -> Void)) {
@@ -46,34 +30,21 @@ class TodayViewController: UIViewController, NCWidgetProviding {
     
     @IBAction func refresh() {
         if LocationManager.shared.isRunning() {
-            recordButton.setImage(UIImage(named: "stop"), for: .normal)
-            let text = String(format: "%.1f km / %d km/h", LocationManager.shared.lastTrackDistance(),
-                              Int(LocationManager.shared.lastTrackSpeed()))
-            distanceButton.setTitle(text, for: .normal)
+            nonActive.isHidden = true
+            headerView.isHidden = false
+            distance.isHidden = false
+            speed.isHidden = false
+            distance.text = String(format: "%.2f", LocationManager.shared.lastTrackDistance())
+            speed.text = String(format: "%.1f", LocationManager.shared.lastTrackSpeed())
         } else {
-            distanceButton.setTitle("TRACKER NOT RUNNING", for: .normal)
-            recordButton.setImage(UIImage(named: "location"), for: .normal)
-        }
-        enableTrackerButtons(LocationManager.shared.lastTrackSize())
-    }
-    
-    @IBAction func startTracker(_ sender: UIButton) {
-        if LocationManager.shared.isRunning() {
-            LocationManager.shared.stop()
-            recordButton.setImage(UIImage(named: "location"), for: .normal)
-        } else {
-            LocationManager.shared.start()
-            recordButton.setImage(UIImage(named: "stop"), for: .normal)
+            nonActive.isHidden = false
+            headerView.isHidden = true
+            distance.isHidden = true
+            speed.isHidden = true
         }
     }
     
-    @IBAction func clearTracker(_ sender: Any) {
-        LocationManager.shared.clearLastTrack()
-        distanceButton.setTitle("TRACKER NOT RUNNING", for: .normal)
-        enableTrackerButtons(LocationManager.shared.lastTrackSize())
-    }
-    
-    @IBAction func openApp(_ sender: Any) {
+    func openApp() {
         extensionContext?.open(URL(string: "iNearby://")!, completionHandler: nil)
     }
 

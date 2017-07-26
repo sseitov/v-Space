@@ -132,6 +132,7 @@ class TrackListController: UITableViewController, LastTrackCellDelegate, PHPhoto
         if let points = LocationManager.shared.lastTrack() {
             if points.count < 2 {
                 LocationManager.shared.clearLastTrack()
+                self.assets.removeAll()
                 return
             }
             let path = GMSMutablePath()
@@ -140,6 +141,7 @@ class TrackListController: UITableViewController, LastTrackCellDelegate, PHPhoto
             }
             let ask = TextInput.create(cancelHandler: {
                 LocationManager.shared.clearLastTrack()
+                self.assets.removeAll()
             }, acceptHandler: { name in
                 let track = LocationManager.shared.createTrack(name, path: path.encodedPath(), start: points.last!.date, finish: points.first!.date, distance: LocationManager.shared.lastTrackDistance())
                 

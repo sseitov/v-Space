@@ -69,7 +69,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
             if let controller = navigationController.topViewController as? TrackListController {
                 controller.performSegue(withIdentifier: "showDetail", sender: nil)
             }
- */
+ 
             let main = UIStoryboard(name: "Main", bundle: nil)
             if let nav = main.instantiateViewController(withIdentifier: "MyTrack") as? UINavigationController {
                 if let controller = nav.topViewController as? TrackController {
@@ -78,7 +78,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
                 nav.modalTransitionStyle = .flipHorizontal
                 self.window!.rootViewController?.present(nav, animated: true, completion: nil)
             }
-
+*/
             return true
         } else {
             return false

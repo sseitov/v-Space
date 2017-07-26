@@ -92,17 +92,11 @@ class LocationManager: NSObject {
         }
     }
     
-    func start() {
+    func startInBackground() {
         if CLLocationManager.authorizationStatus() == .authorizedAlways {
             locationManager.startUpdatingLocation()
             sharedDefaults.set(true, forKey: "trackerRunning")
             sharedDefaults.synchronize()
-        }
-    }
-    
-    func startInBackground() {
-        if CLLocationManager.authorizationStatus() == .authorizedAlways {
-            start()
             locationManager.allowsBackgroundLocationUpdates = true
         }
     }
