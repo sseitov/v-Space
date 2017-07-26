@@ -217,8 +217,13 @@ class LocationManager: NSObject {
     
     func lastTrackSpeed() -> Double {
         if let track = lastTrack(), track.count > 1, let last = track.first, let first = track.last {
-            let time = (last.date - first.date) / (60*60)
-            return lastTrackDistance() / time
+            let distance = lastTrackDistance()
+            if distance < 0.01 {
+                return 0
+            } else {
+                let time = (last.date - first.date) / (60*60)
+                return distance / time
+            }
         } else {
             return 0
         }

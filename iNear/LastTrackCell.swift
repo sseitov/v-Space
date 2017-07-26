@@ -21,11 +21,11 @@ class LastTrackCell: UITableViewCell {
         didSet {
             statusSwitch.isOn = LocationManager.shared.isRunning()
             if !statusSwitch.isOn {
-                statusLabel.text = "Tracker not running".uppercased()
+                statusLabel.text = NSLocalizedString("Tracker not running", comment: "").uppercased()
                 statusLabel.textColor = UIColor.lightGray
                 accessoryType = .none
             } else {
-                statusLabel.text = String(format: "DISTANCE km\t%.2f\nSPEED km/h\t\t%.1f",
+                statusLabel.text = String(format: NSLocalizedString("trackFormat", comment: ""),
                                           LocationManager.shared.lastTrackDistance(),
                                           LocationManager.shared.lastTrackSpeed())
                 statusLabel.textColor = UIColor.mainColor()
@@ -42,19 +42,19 @@ class LastTrackCell: UITableViewCell {
     @IBAction func switchStatus(_ sender: UISwitch) {
         if sender.isOn {
             LocationManager.shared.startInBackground()
-            statusLabel.text = "Tracker starting".uppercased()
+            statusLabel.text = NSLocalizedString("Tracker starting", comment: "").uppercased()
         } else {
             LocationManager.shared.stop()
-            statusLabel.text = "Tracker not running".uppercased()
-            accessoryType = .none
+            statusLabel.text = NSLocalizedString("Tracker not running", comment: "").uppercased()
             delegate?.saveLastTrack()
         }
+        accessoryType = .none
         statusLabel.textColor = UIColor.lightGray
     }
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        statusLabel.text = "Tracker not running".uppercased()
+        statusLabel.text = NSLocalizedString("Tracker not running", comment: "").uppercased()
         accessoryType = .none
     }
 }

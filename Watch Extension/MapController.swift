@@ -16,8 +16,6 @@ class MapController: WKInterfaceController {
     
     override func awake(withContext context: Any?) {
         super.awake(withContext: context)
-        
-//        myLocation = CLLocationCoordinate2D(latitude: 55.764637, longitude:37.604888)
 
         if let point = context as? [String:Any], let lat = point["latitude"] as? Double, let lon = point["longitude"] as? Double {
             myLocation = CLLocationCoordinate2D(latitude: lat, longitude: lon)

@@ -21,7 +21,7 @@ class SavedTrackCell: UITableViewCell {
             placeLabel.text = track!.place
             startDateLabel.text = textDateFormatter().string(from: (track!.startDate! as Date))
             finishDateLabel.text = textDateFormatter().string(from: (track!.finishDate! as Date))
-            distanceLabel.text = String(format: "%.1f km", track!.distance)
+            distanceLabel.text = String(format: "%.2f km", track!.distance)
             lastPhoto.image = UIImage(named: "logo")
         }
     }

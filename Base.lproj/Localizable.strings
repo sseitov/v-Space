@@ -9,3 +9,10 @@
 "photoLibrary" = "You must grant access to photo library for cloud synchronization.";
 "photoStream" = "You must turn on Photo Stream in Photo settings for cloud synchronization.";
 "photoCount" = "You have  no any photos in your photo stream yet.";
+"Places nearby" = "Places nearby";
+"my tracks" = "my tracks";
+"bookmarks of interesing places" = "bookmarks of interesing places";
+"current track" = "current track";
+"Tracker starting" = "Tracker starting";
+"Tracker not running" = "Tracker not running";
+"trackFormat" = "DISTANCE km\t%.2f\nSPEED km/h\t\t%.1f";

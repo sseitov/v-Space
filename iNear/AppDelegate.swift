@@ -50,7 +50,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
 
         UIApplication.shared.statusBarStyle = .lightContent
         if let font = UIFont(name: "HelveticaNeue-CondensedBold", size: 17) {
-            UIBarButtonItem.appearance().setTitleTextAttributes([NSFontAttributeName : font], for: .normal)
+            UIBarButtonItem.appearance().setTitleTextAttributes([NSFontAttributeName : font, NSForegroundColorAttributeName: UIColor.white], for: .normal)
             SVProgressHUD.setFont(font)
         }
         IQKeyboardManager.shared().isEnableAutoToolbar = false
@@ -62,23 +62,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
     
     func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
         if url.scheme! == "iNearby" {
-/*
-            let splitViewController = self.window!.rootViewController as! UISplitViewController
-            let navigationController = splitViewController.viewControllers[0] as! UINavigationController
-            navigationController.popToRootViewController(animated: false)
-            if let controller = navigationController.topViewController as? TrackListController {
-                controller.performSegue(withIdentifier: "showDetail", sender: nil)
-            }
- 
-            let main = UIStoryboard(name: "Main", bundle: nil)
-            if let nav = main.instantiateViewController(withIdentifier: "MyTrack") as? UINavigationController {
-                if let controller = nav.topViewController as? TrackController {
-                    controller.fromRoot = true
-                }
-                nav.modalTransitionStyle = .flipHorizontal
-                self.window!.rootViewController?.present(nav, animated: true, completion: nil)
-            }
-*/
             return true
         } else {
             return false

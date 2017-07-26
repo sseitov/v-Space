@@ -13,6 +13,20 @@ import GoogleMaps
 import GooglePlaces
 import GooglePlacePicker
 
+class CustomGMSPlacePickerViewController : GMSPlacePickerViewController {
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupTitle(NSLocalizedString("Places nearby", comment: ""))
+        self.navigationItem.rightBarButtonItem?.tintColor = UIColor.white
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "backButton"), style: .plain, target: nil, action: nil)
+        self.navigationItem.leftBarButtonItem?.tintColor = UIColor.white
+        setupBackButton()
+        let searchBarTextAttributes = [NSForegroundColorAttributeName: UIColor.white]
+        UITextField.appearance(whenContainedInInstancesOf:[UISearchBar.self]).defaultTextAttributes = searchBarTextAttributes
+    }
+}
+
 class TrackListController: UITableViewController, LastTrackCellDelegate, PHPhotoLibraryChangeObserver, GMSPlacePickerViewControllerDelegate {
 
     var tracks:[Track] = []
@@ -26,7 +40,7 @@ class TrackListController: UITableViewController, LastTrackCellDelegate, PHPhoto
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupTitle("My Tracks")
+        setupTitle("v-Space")
         
         if IS_PAD() {
             if tracks.count > 0 {
@@ -218,9 +232,9 @@ class TrackListController: UITableViewController, LastTrackCellDelegate, PHPhoto
                 let southWest = CLLocationCoordinate2D(latitude: center.latitude - 0.1, longitude: center.longitude - 0.1)
                 let viewport = GMSCoordinateBounds(coordinate: northEast, coordinate: southWest)
                 let config = GMSPlacePickerConfig(viewport: viewport)
-                let placePicker = GMSPlacePickerViewController(config: config)
+                let placePicker = CustomGMSPlacePickerViewController(config: config)
                 placePicker.delegate = self
-                self.present(placePicker, animated: true, completion: nil)
+                self.navigationController?.pushViewController(placePicker, animated: true)
             } else {
                 self.showMessage("Can not get current location", messageType: .error)
             }
@@ -228,13 +242,7 @@ class TrackListController: UITableViewController, LastTrackCellDelegate, PHPhoto
     }
     
     func placePicker(_ viewController: GMSPlacePickerViewController, didPick place: GMSPlace) {
-        dismiss(animated: true, completion: {
-            self.performSegue(withIdentifier: "placeInfo", sender: place)
-        })
-    }
-    
-    func placePickerDidCancel(_ viewController: GMSPlacePickerViewController) {
-        dismiss(animated: true, completion: nil)
+        self.performSegue(withIdentifier: "placeInfo", sender: place)
     }
     
     // MARK: - Table view data source
@@ -261,11 +269,11 @@ class TrackListController: UITableViewController, LastTrackCellDelegate, PHPhoto
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         switch section {
         case 1:
-            return "saved tracks"
+            return NSLocalizedString("my tracks", comment: "")
         case 2:
-            return "interested places"
+            return NSLocalizedString("bookmarks of interesing places", comment: "")
         default:
-            return "current track"
+            return NSLocalizedString("current track", comment: "")
         }
     }
 
@@ -291,6 +299,7 @@ class TrackListController: UITableViewController, LastTrackCellDelegate, PHPhoto
             cell.textLabel?.text = places[indexPath.row].name
             cell.textLabel?.font = UIFont.condensedFont()
             cell.textLabel?.textColor = UIColor.mainColor()
+            cell.accessoryType = .disclosureIndicator
             return cell
         }
     }
