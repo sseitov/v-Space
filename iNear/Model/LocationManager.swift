@@ -185,9 +185,9 @@ class LocationManager: NSObject {
         }
     }
     
-    func lastLocationDate() -> Date? {
+    func lastLocationDate(first:Bool = false) -> Date? {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Location")
-        let sortDescriptor = NSSortDescriptor(key: "date", ascending: false)
+        let sortDescriptor = NSSortDescriptor(key: "date", ascending: first)
         fetchRequest.sortDescriptors = [sortDescriptor]
         fetchRequest.fetchLimit = 1
         if let all = try? managedObjectContext.fetch(fetchRequest) as! [Location], let location = all.first {
@@ -371,7 +371,7 @@ class LocationManager: NSObject {
             saveContext()
         }
     }
-    
+
     func addPhotos(_ assets:[PHAsset], into:Track?) {
         for asset in assets {
             if asset.location != nil && asset.creationDate != nil {
@@ -383,6 +383,7 @@ class LocationManager: NSObject {
         }
         saveContext()
     }
+ 
 }
 
 extension LocationManager : CLLocationManagerDelegate {

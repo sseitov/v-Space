@@ -13,13 +13,15 @@ import GoogleMaps
 import GooglePlaces
 import GooglePlacePicker
 
-class TrackListController: UITableViewController, LastTrackCellDelegate {
+class TrackListController: UITableViewController, LastTrackCellDelegate, PHPhotoLibraryChangeObserver, GMSPlacePickerViewControllerDelegate {
 
     var tracks:[Track] = []
     var places:[Place] = []
+    var assets:[PHAsset] = []
 
     deinit {
         NotificationCenter.default.removeObserver(self)
+        PHPhotoLibrary.shared().unregisterChangeObserver(self)
     }
     
     override func viewDidLoad() {
@@ -35,6 +37,7 @@ class TrackListController: UITableViewController, LastTrackCellDelegate {
         }
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.refreshCurrentTrack), name: newPointNotification, object: nil)
+        PHPhotoLibrary.shared().register(self)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -139,61 +142,70 @@ class TrackListController: UITableViewController, LastTrackCellDelegate {
                 LocationManager.shared.clearLastTrack()
             }, acceptHandler: { name in
                 let track = LocationManager.shared.createTrack(name, path: path.encodedPath(), start: points.last!.date, finish: points.first!.date, distance: LocationManager.shared.lastTrackDistance())
+                
                 LocationManager.shared.clearLastTrack()
-                self.putPhotoOnTrack(track, success: { success in
-                    if success {
-                        Cloud.shared.putTrack(track)
-                        self.tableView.beginUpdates()
-                        self.tracks.insert(track, at: 0)
-                        self.tableView.insertRows(at: [IndexPath(row: 0, section: 1)], with: .bottom)
-                        self.tableView.endUpdates()
-                    } else {
-                        self.showMessage(NSLocalizedString("photoLibrary", comment: ""), messageType: .error)
-                    }
-                })
+                LocationManager.shared.addPhotos(self.assets, into: track)
+                self.assets.removeAll()
+                
+                Cloud.shared.putTrack(track)
+                self.tableView.beginUpdates()
+                self.tracks.insert(track, at: 0)
+                self.tableView.insertRows(at: [IndexPath(row: 0, section: 1)], with: .bottom)
+                self.tableView.endUpdates()
+                
             })
             ask?.show()
         }
 
     }
+    
+    func photoLibraryDidChange(_ changeInstance: PHChange) {
+        DispatchQueue.main.sync {
+            if let date = LocationManager.shared.lastLocationDate(first: true) {
+                self.putPhotoOnTrack(date, result: { success in
+                    if !success {
+                        self.showMessage(NSLocalizedString("photoLibrary", comment: ""), messageType: .error)
+                    }
+                })
+            }
+        }
+    }
 
-    func putPhotoOnTrack(_ track:Track?, success:@escaping (Bool) -> ()) {
+    private func putPhotoOnTrack(_ date:Date, result:@escaping (Bool) -> ()) {
         if PHPhotoLibrary.authorizationStatus() != .authorized {
             PHPhotoLibrary.requestAuthorization({ status in
                 DispatchQueue.main.async {
                     if status == .authorized {
-                        self.scanCameraRollForTrack(track)
-                        success(true)
+                        self.scanCameraRollChanges(date)
+                        result(true)
                     } else {
-                        success(false)
+                        result(false)
                     }
                 }
             })
         } else {
-            self.scanCameraRollForTrack(track)
-            success(true)
+            self.scanCameraRollChanges(date)
+            result(true)
         }
     }
-    
-    func scanCameraRollForTrack(_ track:Track?) {
+ 
+    private func scanCameraRollChanges(_ date:Date) {
         let syncedResult = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .smartAlbumUserLibrary, options: nil)
         if syncedResult.count > 0 {
             let collection = syncedResult.object(at: 0)
             let options = PHFetchOptions()
             options.sortDescriptors = [ NSSortDescriptor(key: "creationDate", ascending: false) ]
-            let startDate = track!.startDate! as Date
-            let finishDate = track!.finishDate! as Date
-            options.predicate = NSPredicate(format: "creationDate > %@ AND creationDate < %@",
-                                            startDate as CVarArg, finishDate as CVarArg)
+            options.predicate = NSPredicate(format: "creationDate > %@", date as CVarArg)
             let fetchResult = PHAsset.fetchAssets(in: collection, options: options)
-            var assets:[PHAsset] = []
             fetchResult.enumerateObjects({ asset, index, _ in
-                assets.append(asset)
+                if !self.assets.contains(asset) {
+                    self.assets.append(asset)
+                }
             })
-            LocationManager.shared.addPhotos(assets, into: track)
+            print("\(self.assets.count)")
         }
     }
-    
+ 
     @IBAction func nearByMe(_ sender: Any) {
         SVProgressHUD.show(withStatus: "Get location...")
         LocationManager.shared.getCurrentLocation({ location in
@@ -204,22 +216,23 @@ class TrackListController: UITableViewController, LastTrackCellDelegate {
                 let southWest = CLLocationCoordinate2D(latitude: center.latitude - 0.1, longitude: center.longitude - 0.1)
                 let viewport = GMSCoordinateBounds(coordinate: northEast, coordinate: southWest)
                 let config = GMSPlacePickerConfig(viewport: viewport)
-                let placePicker = GMSPlacePicker(config: config)
-                
-                placePicker.pickPlace(callback: {(place, error) -> Void in
-                    if let error = error {
-                        print("Pick Place error: \(error.localizedDescription)")
-                        return
-                    }
-                    
-                    if let place = place {
-                        self.performSegue(withIdentifier: "placeInfo", sender: place)
-                    }
-                })
+                let placePicker = GMSPlacePickerViewController(config: config)
+                placePicker.delegate = self
+                self.present(placePicker, animated: true, completion: nil)
             } else {
                 self.showMessage("Can not get current location", messageType: .error)
             }
         })
+    }
+    
+    func placePicker(_ viewController: GMSPlacePickerViewController, didPick place: GMSPlace) {
+        dismiss(animated: true, completion: {
+            self.performSegue(withIdentifier: "placeInfo", sender: place)
+        })
+    }
+    
+    func placePickerDidCancel(_ viewController: GMSPlacePickerViewController) {
+        dismiss(animated: true, completion: nil)
     }
     
     // MARK: - Table view data source
