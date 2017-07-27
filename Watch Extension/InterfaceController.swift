@@ -13,7 +13,6 @@ import WatchConnectivity
 class InterfaceController: WKInterfaceController, WCSessionDelegate {
   
     @IBOutlet var speedSwitch: WKInterfaceSwitch!
-    @IBOutlet var refreshButton: WKInterfaceButton!
     @IBOutlet var controlButton: WKInterfaceButton!
     @IBOutlet var statusLabel: WKInterfaceLabel!
     
@@ -23,7 +22,7 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
     private var speedShow = false
     private var speed:Double = 0
     private var distance:Double = 0
-    private let statusFont = UIFont(name: "HelveticaNeue-Bold", size: 47)
+    private let statusFont = UIFont(name: "HelveticaNeue-CondensedBold", size: 44)
     
     override func awake(withContext context: Any?) {
         super.awake(withContext: context)
@@ -53,10 +52,6 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
             speedSwitch.setTitle("DISTANCE")
             setStatusDistance()
         }
-    }
-    
-    @IBAction func refreshStatus() {
-        refresh()
     }
     
     @IBAction func controlTracker() {
@@ -107,7 +102,6 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
     func updateUI() {
         if trackerRunning {
             controlButton.setBackgroundImageNamed("stopTrack")
-            refreshButton.setHidden(false)
             speedSwitch.setEnabled(true)
             if speedShow {
                 setStatusSpeed()
@@ -116,7 +110,6 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
             }
         } else {
             controlButton.setBackgroundImageNamed("startTrack")
-            refreshButton.setHidden(true)
             speedSwitch.setEnabled(false)
             setStatusOff()
         }

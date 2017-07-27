@@ -20,17 +20,7 @@
                                 <action selector="showSpeed:" destination="AgC-eL-Hgc" id="pVD-c8-C37"/>
                             </connections>
                         </switch>
-                        <group width="1" alignment="left" id="B8m-Gt-Nxu">
-                            <items>
-                                <label alignment="center" verticalAlignment="center" text="Label" id="nAU-Cq-mXz"/>
-                                <button width="20" height="20" alignment="right" verticalAlignment="center" backgroundImage="refreshTrack" id="i9b-O6-rUd">
-                                    <fontDescription key="font" style="UICTFontTextStyleHeadline"/>
-                                    <connections>
-                                        <action selector="refreshStatus" destination="AgC-eL-Hgc" id="8tI-Ye-aws"/>
-                                    </connections>
-                                </button>
-                            </items>
-                        </group>
+                        <label alignment="center" verticalAlignment="center" text="Label" id="nAU-Cq-mXz"/>
                         <button width="40" height="40" alignment="center" verticalAlignment="bottom" backgroundImage="startTrack" id="haQ-w7-Ux2">
                             <connections>
                                 <action selector="controlTracker" destination="AgC-eL-Hgc" id="cDW-cZ-M7I"/>
@@ -39,7 +29,6 @@
                     </items>
                     <connections>
                         <outlet property="controlButton" destination="haQ-w7-Ux2" id="JNC-Nt-iCE"/>
-                        <outlet property="refreshButton" destination="i9b-O6-rUd" id="rx6-Ui-HQn"/>
                         <outlet property="speedSwitch" destination="UQ8-fz-BQI" id="Y4e-XN-iur"/>
                         <outlet property="statusLabel" destination="nAU-Cq-mXz" id="Iro-7f-gTH"/>
                     </connections>
