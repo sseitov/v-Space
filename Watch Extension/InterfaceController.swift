@@ -12,16 +12,18 @@ import WatchConnectivity
 
 class InterfaceController: WKInterfaceController, WCSessionDelegate {
   
+    @IBOutlet var speedSwitch: WKInterfaceSwitch!
     @IBOutlet var refreshButton: WKInterfaceButton!
-    @IBOutlet var trackerButton: WKInterfaceButton!
-    @IBOutlet var clearButton: WKInterfaceButton!
-    @IBOutlet var showButton: WKInterfaceButton!
-    @IBOutlet var counter: WKInterfaceLabel!
+    @IBOutlet var controlButton: WKInterfaceButton!
+    @IBOutlet var statusLabel: WKInterfaceLabel!
     
     private var session:WCSession?
+    
     private var trackerRunning = false
-    private var lastLocation:[String:Any]?
-//    private var trackSize:Int = 0
+    private var speedShow = false
+    private var speed:Double = 0
+    private var distance:Double = 0
+    private let statusFont = UIFont(name: "HelveticaNeue-Bold", size: 47)
     
     override func awake(withContext context: Any?) {
         super.awake(withContext: context)
@@ -29,65 +31,32 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
             session = WCSession.default()
             session!.delegate = self
             session!.activate()
-            enableButtons(0)
         }
+        updateUI()
     }
     
     override func willActivate() {
         super.willActivate()
-        refreshStatus()
+        refresh()
     }
     
     override func didDeactivate() {
         super.didDeactivate()
     }
-
-    private func formattedDate(date:Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "d MMM HH:mm:ss"
-        return formatter.string(from: date).uppercased()
-    }
-
-    private func enableButtons(_ size:Int) {
-        clearButton.setEnabled(size > 1)
-        showButton.setEnabled(size > 1)
-        let text = size > 0 ? "\(size)" : ""
-        self.counter.setText(text)
-
+    
+    @IBAction func showSpeed(_ value: Bool) {
+        speedShow = value
+        if speedShow {
+            speedSwitch.setTitle("SPEED")
+            setStatusSpeed()
+        } else {
+            speedSwitch.setTitle("DISTANCE")
+            setStatusDistance()
+        }
     }
     
     @IBAction func refreshStatus() {
-        session!.sendMessage(["command" : "status"], replyHandler: { status in
-            DispatchQueue.main.async {
-                if let isRunning = status["isRunning"] as? Bool {
-                    self.trackerRunning = isRunning
-                } else {
-                    self.trackerRunning = false
-                }
-                if self.trackerRunning {
-                    self.trackerButton.setBackgroundImageNamed("stopTrack")
-                } else {
-                    self.trackerButton.setBackgroundImageNamed("startTrack")
-                }
-
-                if let date = status["lastDate"] as? Date {
-                    self.refreshButton.setTitle(self.formattedDate(date: date))
-                } else {
-                    self.refreshButton.setTitle("REFRESH")
-                }
-                
-                self.lastLocation = status["lastLocation"] as? [String:Any]
-                if let size = status["trackSize"] as? Int {
-                    self.enableButtons(size)
-                } else {
-                    self.enableButtons(0)
-                }
-            }
-        }, errorHandler: { error in
-            DispatchQueue.main.async {
-                self.presentAlert(withTitle: "", message: "User not published his location.", preferredStyle: .alert, actions: [])
-            }
-        })
+        refresh()
     }
     
     @IBAction func controlTracker() {
@@ -96,14 +65,10 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
             DispatchQueue.main.async {
                 if let isRunning = result["result"] as? Bool {
                     self.trackerRunning = isRunning
-                    if isRunning {
-                        self.trackerButton.setBackgroundImageNamed("stopTrack")
-                    } else {
-                        self.trackerButton.setBackgroundImageNamed("startTrack")
-                    }
                 } else {
-                    self.trackerButton.setBackgroundImageNamed("startTrack")
+                    self.trackerRunning = false
                 }
+                self.updateUI()
             }
         }, errorHandler: { error in
             DispatchQueue.main.async {
@@ -112,24 +77,69 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
         })
     }
     
-    @IBAction func clearTrack() {
-        session!.sendMessage(["command": "clear"], replyHandler: { result in
+    func refresh() {
+        session!.sendMessage(["command" : "status"], replyHandler: { status in
             DispatchQueue.main.async {
-                self.enableButtons(0)
+                if let distance = status["distance"] as? Double {
+                    self.distance = distance
+                } else {
+                    self.distance = 0
+                }
+                if let speed = status["speed"] as? Double {
+                    self.speed = speed
+                } else {
+                    self.distance = 0
+                }
+                if let isRunning = status["isRunning"] as? Bool {
+                    self.trackerRunning = isRunning
+                } else {
+                    self.trackerRunning = false
+                }
+                self.updateUI()
             }
         }, errorHandler: { error in
             DispatchQueue.main.async {
-                self.presentAlert(withTitle: "", message: "User not published his location.", preferredStyle: .alert, actions: [])
+                self.presentAlert(withTitle: "", message: "Connection Error.", preferredStyle: .alert, actions: [])
             }
         })
     }
     
-    override func contextForSegue(withIdentifier segueIdentifier: String) -> Any? {
-        if segueIdentifier == "showTrack" {
-            return lastLocation
+    func updateUI() {
+        if trackerRunning {
+            controlButton.setBackgroundImageNamed("stopTrack")
+            refreshButton.setHidden(false)
+            speedSwitch.setEnabled(true)
+            if speedShow {
+                setStatusSpeed()
+            } else {
+                setStatusDistance()
+            }
         } else {
-            return nil
+            controlButton.setBackgroundImageNamed("startTrack")
+            refreshButton.setHidden(true)
+            speedSwitch.setEnabled(false)
+            setStatusOff()
         }
+    }
+    
+    private func setStatusSpeed() {
+        let status = NSAttributedString(string: String(format: "%.1f", speed),
+                                        attributes: [NSFontAttributeName : statusFont!])
+        statusLabel.setAttributedText(status)
+        statusLabel.setTextColor(UIColor.color(0, 219, 123, 1))
+    }
+    
+    private func setStatusDistance() {
+        let status = NSAttributedString(string: String(format: "%.2f", distance),
+                                        attributes: [NSFontAttributeName : statusFont!])
+        statusLabel.setAttributedText(status)
+        statusLabel.setTextColor(UIColor.white)
+    }
+    
+    private func setStatusOff() {
+        let status = NSAttributedString(string: "OFF", attributes: [NSFontAttributeName : statusFont!])
+        statusLabel.setAttributedText(status)
+        statusLabel.setTextColor(UIColor.lightGray)
     }
 }
 
@@ -137,7 +147,7 @@ extension InterfaceController {
     
     @available(iOS 9.3, *)
     func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
-        refreshStatus()
+        refresh()
     }
     
     func sessionDidBecomeInactive(_ session: WCSession) {

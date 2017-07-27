@@ -1,15 +1,15 @@
 
-/* Class = "UILabel"; text = "SHOW TRACK"; ObjectID = "4g5-zq-fZM"; */
-"4g5-zq-fZM.text" = "SHOW TRACK";
+/* Class = "UILabel"; text = "TRACKER NOT RUNNING"; ObjectID = "5pE-Bx-RI6"; */
+"5pE-Bx-RI6.text" = "ТРЕКЕР НЕ ЗАПУЩЕН";
 
-/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "JYq-dB-naf"; */
-"JYq-dB-naf.normalTitle" = "Button";
+/* Class = "UILabel"; text = "DISTANCE, KM"; ObjectID = "8wd-Xb-T0c"; */
+"8wd-Xb-T0c.text" = "РАССТОЯНИЕ, КМ";
 
-/* Class = "UILabel"; text = "CLEAR TRACK"; ObjectID = "dlX-dc-yfn"; */
-"dlX-dc-yfn.text" = "CLEAR TRACK";
+/* Class = "UILabel"; text = "60"; ObjectID = "U78-cJ-WfW"; */
+"U78-cJ-WfW.text" = "60";
 
-/* Class = "UILabel"; text = "TRACK ON/OFF"; ObjectID = "g5c-kw-LkZ"; */
-"g5c-kw-LkZ.text" = "TRACK ON/OFF";
+/* Class = "UILabel"; text = "999.9"; ObjectID = "nu2-kV-dhx"; */
+"nu2-kV-dhx.text" = "999.9";
 
-/* Class = "UIButton"; normalTitle = "REFRESH LOCATION"; ObjectID = "oeX-iw-t7F"; */
-"oeX-iw-t7F.normalTitle" = "REFRESH LOCATION";
+/* Class = "UILabel"; text = "SPEED, KM/H"; ObjectID = "she-KO-z5e"; */
+"she-KO-z5e.text" = "СКОРОСТЬ, КМ/Ч";

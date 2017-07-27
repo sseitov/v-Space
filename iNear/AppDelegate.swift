@@ -144,14 +144,9 @@ extension AppDelegate : WCSessionDelegate {
     // MARK: - iWatch messages
  
     func trackerStatus() -> [String:Any] {
-        var status:[String:Any] = ["isRunning" : LocationManager.shared.isRunning()]
-        if let date = LocationManager.shared.lastLocationDate() {
-            status["lastDate"] = date
-        }
-        status["lastLocation"] = ["latitude": LocationManager.shared.lastLocation().latitude,
-                                  "longitude": LocationManager.shared.lastLocation().longitude]
-        status["trackSize"] = LocationManager.shared.lastTrackSize()
-        
+        let status:[String:Any] = ["isRunning" : LocationManager.shared.isRunning(),
+                                   "distance" : LocationManager.shared.lastTrackDistance(),
+                                   "speed" : LocationManager.shared.lastTrackSpeed()]
         return status
     }
     
