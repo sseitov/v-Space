@@ -17,13 +17,19 @@ class CustomGMSPlacePickerViewController : GMSPlacePickerViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupTitle(NSLocalizedString("Places nearby", comment: ""))
-        self.navigationItem.rightBarButtonItem?.tintColor = UIColor.white
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "backButton"), style: .plain, target: nil, action: nil)
-        self.navigationItem.leftBarButtonItem?.tintColor = UIColor.white
-        setupBackButton()
-        let searchBarTextAttributes = [NSForegroundColorAttributeName: UIColor.white]
-        UITextField.appearance(whenContainedInInstancesOf:[UISearchBar.self]).defaultTextAttributes = searchBarTextAttributes
+        if IS_PAD() {
+            setupTitle(NSLocalizedString("Places nearby", comment: ""), color: UIColor.mainColor())
+        } else {
+            setupTitle(NSLocalizedString("Places nearby", comment: ""))
+        }
+        if !IS_PAD() {
+            self.navigationItem.rightBarButtonItem?.tintColor = UIColor.white
+            self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "backButton"), style: .plain, target: nil, action: nil)
+            self.navigationItem.leftBarButtonItem?.tintColor = UIColor.white
+            setupBackButton()
+            let searchBarTextAttributes = [NSForegroundColorAttributeName: UIColor.white]
+            UITextField.appearance(whenContainedInInstancesOf:[UISearchBar.self]).defaultTextAttributes = searchBarTextAttributes
+        }
     }
 }
 
@@ -50,6 +56,7 @@ class TrackListController: UITableViewController, LastTrackCellDelegate, PHPhoto
             }
         }
         
+        NotificationCenter.default.addObserver(self, selector: #selector(self.refreshPlaces), name: newPlaceNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.refreshCurrentTrack), name: newPointNotification, object: nil)
         PHPhotoLibrary.shared().register(self)
     }
@@ -59,6 +66,11 @@ class TrackListController: UITableViewController, LastTrackCellDelegate, PHPhoto
         tracks = LocationManager.shared.allTracks()
         places = LocationManager.shared.allPlaces()
         tableView.reloadData()
+    }
+    
+    func refreshPlaces() {
+        places = LocationManager.shared.allPlaces()
+        self.tableView.reloadData()
     }
     
     func refreshCurrentTrack() {
@@ -75,7 +87,7 @@ class TrackListController: UITableViewController, LastTrackCellDelegate, PHPhoto
                         self.syncTracks({ error in
                             SVProgressHUD.dismiss()
                             if error != nil {
-                                self.showMessage(error!.localizedDescription, messageType: .error)
+                                self.showMessage(error!, messageType: .error)
                             } else {
                                 self.finishSync()
                             }
@@ -90,7 +102,7 @@ class TrackListController: UITableViewController, LastTrackCellDelegate, PHPhoto
             self.syncTracks({ error in
                 SVProgressHUD.dismiss()
                 if error != nil {
-                    self.showMessage(error!.localizedDescription, messageType: .error)
+                    self.showMessage(error!, messageType: .error)
                 } else {
                     self.finishSync()
                 }
@@ -111,7 +123,7 @@ class TrackListController: UITableViewController, LastTrackCellDelegate, PHPhoto
         }
     }
     
-    func syncTracks(_ error:@escaping (NSError?) -> ()) {
+    func syncTracks(_ error:@escaping (String?) -> ()) {
         let syncedResult = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .albumMyPhotoStream, options: nil)
         if syncedResult.count > 0 {
             let collection = syncedResult.object(at: 0)
@@ -124,7 +136,7 @@ class TrackListController: UITableViewController, LastTrackCellDelegate, PHPhoto
             })
             DispatchQueue.main.async {
                 if assets.count == 0 {
-                    error(cloudError(NSLocalizedString("photoCount", comment: "")))
+                    error(NSLocalizedString("photoCount", comment: ""))
                 } else {
                     Cloud.shared.syncTracks(assets, error: { err in
                         if err != nil {
@@ -138,7 +150,7 @@ class TrackListController: UITableViewController, LastTrackCellDelegate, PHPhoto
                 }
             }
         } else {
-            error(cloudError(NSLocalizedString("photoStream", comment: "")))
+            error(NSLocalizedString("photoStream", comment: ""))
         }
     }
     
@@ -234,7 +246,11 @@ class TrackListController: UITableViewController, LastTrackCellDelegate, PHPhoto
                 let config = GMSPlacePickerConfig(viewport: viewport)
                 let placePicker = CustomGMSPlacePickerViewController(config: config)
                 placePicker.delegate = self
-                self.navigationController?.pushViewController(placePicker, animated: true)
+                if IS_PAD() {
+                    self.present(placePicker, animated: true, completion: nil)
+                } else {
+                    self.navigationController?.pushViewController(placePicker, animated: true)
+                }
             } else {
                 self.showMessage("Can not get current location", messageType: .error)
             }
@@ -242,7 +258,17 @@ class TrackListController: UITableViewController, LastTrackCellDelegate, PHPhoto
     }
     
     func placePicker(_ viewController: GMSPlacePickerViewController, didPick place: GMSPlace) {
-        self.performSegue(withIdentifier: "placeInfo", sender: place)
+        if IS_PAD() {
+            dismiss(animated: true, completion: {
+                self.performSegue(withIdentifier: "placeInfo", sender: place)
+            })
+        } else {
+            self.performSegue(withIdentifier: "placeInfo", sender: place)
+        }
+    }
+    
+    func placePickerDidCancel(_ viewController: GMSPlacePickerViewController) {
+        dismiss(animated: true, completion: nil)
     }
     
     // MARK: - Table view data source

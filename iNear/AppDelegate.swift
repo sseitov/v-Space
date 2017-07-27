@@ -50,7 +50,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
 
         UIApplication.shared.statusBarStyle = .lightContent
         if let font = UIFont(name: "HelveticaNeue-CondensedBold", size: 17) {
-            UIBarButtonItem.appearance().setTitleTextAttributes([NSFontAttributeName : font, NSForegroundColorAttributeName: UIColor.white], for: .normal)
+            if IS_PAD() {
+                UIBarButtonItem.appearance().setTitleTextAttributes([NSFontAttributeName : font, NSForegroundColorAttributeName: UIColor.mainColor()], for: .normal)
+            } else {
+                UIBarButtonItem.appearance().setTitleTextAttributes([NSFontAttributeName : font, NSForegroundColorAttributeName: UIColor.white], for: .normal)
+            }
             SVProgressHUD.setFont(font)
         }
         IQKeyboardManager.shared().isEnableAutoToolbar = false
@@ -142,27 +146,20 @@ extension AppDelegate : WCSessionDelegate {
     }
     
     // MARK: - iWatch messages
- 
-    func trackerStatus() -> [String:Any] {
-        let status:[String:Any] = ["isRunning" : LocationManager.shared.isRunning(),
-                                   "distance" : LocationManager.shared.lastTrackDistance(),
-                                   "speed" : LocationManager.shared.lastTrackSpeed()]
-        return status
-    }
     
     func session(_ session: WCSession, didReceiveMessage message: [String : Any], replyHandler: @escaping ([String : Any]) -> Void) {
         if let command = message["command"] as? String {
             if command == "status" {
-                replyHandler(self.trackerStatus())
+                replyHandler(
+                    ["isRunning" : !LocationManager.shared.isPaused,
+                     "distance" : LocationManager.shared.lastTrackDistance(),
+                     "speed" : LocationManager.shared.lastTrackSpeed()])
             } else if command == "start" {
                 LocationManager.shared.startInBackground()
-                replyHandler(["result": LocationManager.shared.isRunning()])
+                replyHandler(["result": !LocationManager.shared.isPaused])
             } else if command == "stop" {
                 LocationManager.shared.stop()
-                replyHandler(["result": LocationManager.shared.isRunning()])
-            } else if command == "clear" {
-                LocationManager.shared.clearLastTrack()
-                replyHandler([:])
+                replyHandler(["result": !LocationManager.shared.isPaused])
             }
         }
     }

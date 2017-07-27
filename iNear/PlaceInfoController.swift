@@ -48,7 +48,9 @@ class PlaceInfoController: UITableViewController {
         Cloud.shared.savePlace(gmsPlace!, result: { error in
             SVProgressHUD.dismiss()
             if error != nil {
-                self.showMessage(error!.localizedDescription, messageType: .error)
+                self.showMessage(error!, messageType: .error)
+            } else {
+                NotificationCenter.default.post(name: newPlaceNotification, object: nil)
             }
         })
     }

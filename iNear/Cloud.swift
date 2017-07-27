@@ -12,10 +12,6 @@ import Photos
 import GoogleMaps
 import GooglePlaces
 
-func cloudError(_ text:String) -> NSError {
-    return NSError(domain: "com.vchannel.iNearby", code: -1, userInfo: [NSLocalizedDescriptionKey:text])
-}
-
 @objc class Cloud: NSObject {
     
     static let shared = Cloud()
@@ -29,14 +25,14 @@ func cloudError(_ text:String) -> NSError {
         cloudDB = container.privateCloudDatabase
     }
     
-    private func getTracks(_ tracks:@escaping ([Track], NSError?) -> ()) {
+    private func getTracks(_ tracks:@escaping ([Track], String?) -> ()) {
         let predicate = NSPredicate(value: true)
         let query = CKQuery(recordType: "Track", predicate: predicate)
         
         cloudDB!.perform(query, inZoneWith: nil) { results, error in
             guard error == nil else {
                 DispatchQueue.main.async {
-                    tracks([], error as NSError?)
+                    tracks([], "iCloud error: \(error!.localizedDescription)")
                 }
                 return
             }
@@ -100,7 +96,7 @@ func cloudError(_ text:String) -> NSError {
         }
     }
     
-    func syncTracks(_ photos:[PHAsset], error:@escaping (NSError?) -> ()) {
+    func syncTracks(_ photos:[PHAsset], error:@escaping (String?) -> ()) {
         let oldTracks = LocationManager.shared.allTracks()
         getTracks({ tracks, err in
             if err != nil {
@@ -132,7 +128,7 @@ func cloudError(_ text:String) -> NSError {
         })
     }
     
-    func syncPlaces(_ result:@escaping (NSError?) -> ()) {
+    func syncPlaces(_ result:@escaping (String?) -> ()) {
         let predicate = NSPredicate(value: true)
         let query = CKQuery(recordType: "Place", predicate: predicate)
         let oldPlaces = LocationManager.shared.allPlaces()
@@ -140,7 +136,7 @@ func cloudError(_ text:String) -> NSError {
         cloudDB!.perform(query, inZoneWith: nil) { results, error in
             guard error == nil else {
                 DispatchQueue.main.async {
-                    result(error as NSError?)
+                    result("iCloud error: \(error!.localizedDescription)")
                 }
                 return
             }
@@ -232,7 +228,7 @@ func cloudError(_ text:String) -> NSError {
         }
     }
     
-    func savePlace(_ place:GMSPlace, result:@escaping (Error?) -> ()) {
+    func savePlace(_ place:GMSPlace, result:@escaping (String?) -> ()) {
         if LocationManager.shared.getPlace(place.placeID) == nil {
             _ = LocationManager.shared.createPlace(place.placeID,
                                                name: place.name,
@@ -257,14 +253,14 @@ func cloudError(_ text:String) -> NSError {
             self.cloudDB!.save(record, completionHandler: { record, error in
                 DispatchQueue.main.async {
                     if let error = error {
-                        result(error)
+                        result("iCloud error: \(error.localizedDescription)")
                     } else {
                         result(nil)
                     }
                 }
             })
         } else {
-            result(cloudError("Place already synced."))
+            result("Place already synced.")
         }
     }
     

@@ -40,6 +40,7 @@ func IS_PAD() -> Bool {
 }
 
 let newPointNotification = Notification.Name("NEW_POINT")
+let newPlaceNotification = Notification.Name("NEW_PLACE")
 
 class LocationManager: NSObject {
     
@@ -49,14 +50,14 @@ class LocationManager: NSObject {
     
     var locationCondition:NSCondition?
     var currentLocation:CLLocation?
-
+    var isPaused:Bool = true
+    
     private override init() {
         super.init()
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.distanceFilter = 10.0
         locationManager.headingFilter = 5.0
-//        locationManager.activityType = .automotiveNavigation
         locationManager.pausesLocationUpdatesAutomatically = false
     }
     
@@ -95,24 +96,17 @@ class LocationManager: NSObject {
     func startInBackground() {
         if CLLocationManager.authorizationStatus() == .authorizedAlways {
             locationManager.startUpdatingLocation()
-            sharedDefaults.set(true, forKey: "trackerRunning")
             sharedDefaults.synchronize()
             locationManager.allowsBackgroundLocationUpdates = true
+            isPaused = false
         }
     }
     
     func stop() {
-        if isRunning() {
-            locationManager.stopUpdatingLocation()
-            sharedDefaults.set(false, forKey: "trackerRunning")
-            sharedDefaults.synchronize()
-        }
+        locationManager.stopUpdatingLocation()
+        isPaused = true
     }
-    
-    func isRunning() -> Bool {
-        return sharedDefaults.bool(forKey: "trackerRunning")
-    }
-    
+
     // MARK: - CoreData stack
     
     lazy var sharedDefaults: UserDefaults = {
@@ -241,6 +235,14 @@ class LocationManager: NSObject {
             return count
         } else {
             return 0
+        }
+    }
+    
+    func isRunning() -> Bool {
+        if let track = lastTrack(), track.count > 0 {
+            return true
+        } else {
+            return false
         }
     }
     

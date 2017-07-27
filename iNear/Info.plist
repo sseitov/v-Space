@@ -38,6 +38,8 @@
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>v-Space needs your camera for take photos and put their on your tracks.</string>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>v-Space will be show okaces nearby.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>v-Space will be collect your location point into track.</string>
 	<key>NSPhotoLibraryUsageDescription</key>

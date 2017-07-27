@@ -21,14 +21,15 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         let tap = UITapGestureRecognizer(target: self, action: #selector(self.openApp))
         self.view.addGestureRecognizer(tap)
         self.extensionContext?.widgetLargestAvailableDisplayMode = .compact
+        refresh()
     }
     
     func widgetPerformUpdate(completionHandler: (@escaping (NCUpdateResult) -> Void)) {
-        self.refresh()
+        refresh()
         completionHandler(NCUpdateResult.newData)
     }
     
-    @IBAction func refresh() {
+    func refresh() {
         if LocationManager.shared.isRunning() {
             nonActive.isHidden = true
             headerView.isHidden = false

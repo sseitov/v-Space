@@ -25,12 +25,12 @@ class TitleView : UILabel {
 
 extension UIViewController {
     
-    func setupTitle(_ text:String, promptText:String? = nil) {
+    func setupTitle(_ text:String, color:UIColor = UIColor.white, promptText:String? = nil) {
         let label = TitleView(frame: CGRect(x: 0, y: 0, width: 200, height: 44))
         label.textAlignment = .center
         label.font = UIFont(name: "HelveticaNeue-CondensedBold", size: 15)
         label.text = text
-        label.textColor = UIColor.white
+        label.textColor = color
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
         if promptText != nil {
