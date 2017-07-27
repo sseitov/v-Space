@@ -22,10 +22,6 @@
 	<string>4.0</string>
 	<key>CFBundleVersion</key>
 	<string>1</string>
-    <key>UIBackgroundModes</key>
-    <array>
-        <string>location</string>
-    </array>
 	<key>NSExtension</key>
 	<dict>
 		<key>NSExtensionMainStoryboard</key>
