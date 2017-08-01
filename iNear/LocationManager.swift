@@ -11,7 +11,7 @@ import CoreLocation
 
 class LocationManager: NSObject {
     
-    static let shared = Model()
+    static let shared = LocationManager()
     
     let locationManager = CLLocationManager()
     
@@ -30,21 +30,24 @@ class LocationManager: NSObject {
     
     func getCurrentLocation(_ location: @escaping(CLLocation?) -> ()) {
         if CLLocationManager.locationServicesEnabled() {
-            if CLLocationManager.authorizationStatus() != .authorizedAlways {
-                self.locationManager.requestWhenInUseAuthorization()
-                location(nil)
-            } else {
-                currentLocation = nil
-                locationCondition = NSCondition()
+            currentLocation = nil
+            locationCondition = NSCondition()
+            if CLLocationManager.authorizationStatus() == .authorizedAlways {
                 self.locationManager.startUpdatingLocation()
-                DispatchQueue.global().async {
-                    self.locationCondition?.lock()
-                    self.locationCondition?.wait()
-                    self.locationCondition?.unlock()
-                    DispatchQueue.main.async {
-                        self.locationCondition = nil
-                        location(self.currentLocation)
-                    }
+            } else if CLLocationManager.authorizationStatus() == .notDetermined {
+                self.locationManager.requestAlwaysAuthorization()
+            } else {
+                locationCondition = nil
+                location(nil)
+                return
+            }
+            DispatchQueue.global().async {
+                self.locationCondition?.lock()
+                self.locationCondition?.wait()
+                self.locationCondition?.unlock()
+                DispatchQueue.main.async {
+                    self.locationCondition = nil
+                    location(self.currentLocation)
                 }
             }
         } else {
@@ -52,20 +55,31 @@ class LocationManager: NSObject {
         }
     }
     
-    func register() {
-        if CLLocationManager.locationServicesEnabled() {
-            if CLLocationManager.authorizationStatus() != .authorizedAlways {
-                locationManager.requestAlwaysAuthorization()
+    func registered(_ isRegistered: @escaping(Bool) -> ()) {
+        switch CLLocationManager.authorizationStatus() {
+        case .authorizedAlways:
+            isRegistered(true)
+        case .notDetermined:
+            currentLocation = nil
+            locationCondition = NSCondition()
+            self.locationManager.requestAlwaysAuthorization()
+            DispatchQueue.global().async {
+                self.locationCondition?.lock()
+                self.locationCondition?.wait()
+                self.locationCondition?.unlock()
+                DispatchQueue.main.async {
+                    isRegistered(CLLocationManager.authorizationStatus() == .authorizedAlways)
+                }
             }
+        default:
+            isRegistered(false)
         }
     }
     
     func startInBackground() {
-        if CLLocationManager.authorizationStatus() == .authorizedAlways {
-            locationManager.startUpdatingLocation()
-            locationManager.allowsBackgroundLocationUpdates = true
-            isPaused = false
-        }
+        locationManager.startUpdatingLocation()
+        locationManager.allowsBackgroundLocationUpdates = true
+        isPaused = false
     }
     
     func stop() {
@@ -82,6 +96,20 @@ extension LocationManager : CLLocationManagerDelegate {
             return true
         } else {
             return location.horizontalAccuracy <= 10.0
+        }
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        if status == .authorizedAlways {
+            if self.locationCondition != nil {
+                manager.startUpdatingLocation()
+            } else {
+                startInBackground()
+            }
+        } else if status != .notDetermined && self.locationCondition != nil {
+            self.locationCondition?.lock()
+            self.locationCondition?.signal()
+            self.locationCondition?.unlock()
         }
     }
     

@@ -13,6 +13,10 @@ import WatchConnectivity
 import GoogleMaps
 import GooglePlaces
 
+func IS_PAD() -> Bool {
+    return UIDevice.current.userInterfaceIdiom == .pad
+}
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDelegate {
 
@@ -24,11 +28,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
         // Initialize Google Maps
         GMSServices.provideAPIKey(GoolgleMapAPIKey)
         GMSPlacesClient.provideAPIKey(GoolglePlacesAPIKey)
-        
-        // Location manager
-        
-        LocationManager.shared.register()
-        
+                
         // connect iWatch
         
         if WCSession.isSupported() {
@@ -156,10 +156,10 @@ extension AppDelegate : WCSessionDelegate {
                      "speed" : Model.shared.lastTrackSpeed()])
             } else if command == "start" {
                 LocationManager.shared.startInBackground()
-                replyHandler(["result": !Model.shared.isPaused])
+                replyHandler(["result": !LocationManager.shared.isPaused])
             } else if command == "stop" {
                 LocationManager.shared.stop()
-                replyHandler(["result": !Model.shared.isPaused])
+                replyHandler(["result": !LocationManager.shared.isPaused])
             }
         }
     }

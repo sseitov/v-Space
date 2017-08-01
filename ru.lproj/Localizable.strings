@@ -16,3 +16,6 @@
 "Tracker starting" = "трекер запускается";
 "Tracker not running" = "трекер не запущен";
 "trackFormat" = "РАССТОЯНИЕ\t%.2f км\nСКОРОСТЬ\t\t%.1f км/ч";
+"Can not get current location." = "Вы должны разрешить доступ к геопозиции в настройках.";
+"Information" = "Информация";
+"Error" = "Ошибка";

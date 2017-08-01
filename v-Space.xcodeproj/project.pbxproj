@@ -16,7 +16,6 @@
 		2C362BE01EB4999300749C46 /* Place+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C362BD81EB495C500749C46 /* Place+CoreDataClass.swift */; };
 		2C362BE11EB4999300749C46 /* Place+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C362BD91EB495C500749C46 /* Place+CoreDataProperties.swift */; };
 		2C3684431F307C6C00A5AD4E /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C3684421F307C6C00A5AD4E /* LocationManager.swift */; };
-		2C3684441F307C6C00A5AD4E /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C3684421F307C6C00A5AD4E /* LocationManager.swift */; };
 		2C3ED20F1EB1F0E300463199 /* PlaceInfoController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C3ED20E1EB1F0E300463199 /* PlaceInfoController.swift */; };
 		2C3ED2111EB1FB2900463199 /* WebController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C3ED2101EB1FB2900463199 /* WebController.swift */; };
 		2C3ED2131EB2046200463199 /* RouteController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C3ED2121EB2046200463199 /* RouteController.swift */; };
@@ -807,7 +806,6 @@
 				2CE268C41E6758C200FE8219 /* UIColorExtensions.swift in Sources */,
 				2C362BE11EB4999300749C46 /* Place+CoreDataProperties.swift in Sources */,
 				2CBE202B1E8D9821002EF13C /* Track+CoreDataClass.swift in Sources */,
-				2C3684441F307C6C00A5AD4E /* LocationManager.swift in Sources */,
 				2C79D4A21E92C73400EF4954 /* Photo+CoreDataProperties.swift in Sources */,
 				2CE268A21E66E15600FE8219 /* TodayViewController.swift in Sources */,
 				2CE268BF1E6716BE00FE8219 /* Location+CoreDataProperties.swift in Sources */,

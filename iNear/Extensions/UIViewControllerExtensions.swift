@@ -67,13 +67,13 @@ extension UIViewController {
         var title:String = ""
         switch messageType {
         case .success:
-            title = "Success"
+            title = ""
         case .information:
-            title = "Information"
+            title = NSLocalizedString("Information", comment: "")
         default:
-            title = "Error"
+            title = NSLocalizedString("Error", comment: "")
         }
-        let alert = LGAlertView.decoratedAlert(withTitle:title, message: error, cancelButtonTitle: "OK", cancelButtonBlock: { alert in
+        let alert = LGAlertView.decoratedAlert(withTitle:title.uppercased(), message: error, cancelButtonTitle: "OK", cancelButtonBlock: { alert in
             if messageHandler != nil {
                 messageHandler!()
             }

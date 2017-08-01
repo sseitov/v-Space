@@ -111,6 +111,12 @@ class TrackListController: UITableViewController, LastTrackCellDelegate, PHPhoto
         })
     }
     
+    // MARK: - LastTrackCell delegate
+
+    func accessDenied() {
+        self.showMessage(NSLocalizedString("Can not get current location.", comment: ""), messageType: .error)
+    }
+
     func saveLastTrack() {
         if let points = Model.shared.lastTrack() {
             if points.count < 2 {
@@ -187,7 +193,9 @@ class TrackListController: UITableViewController, LastTrackCellDelegate, PHPhoto
             })
         }
     }
- 
+    
+    // MARK: - Places nearby
+
     @IBAction func nearByMe(_ sender: Any) {
         SVProgressHUD.show(withStatus: "Get location...")
         LocationManager.shared.getCurrentLocation({ location in
@@ -206,7 +214,7 @@ class TrackListController: UITableViewController, LastTrackCellDelegate, PHPhoto
                     self.navigationController?.pushViewController(placePicker, animated: true)
                 }
             } else {
-                self.showMessage("Can not get current location", messageType: .error)
+                self.showMessage(NSLocalizedString("Can not get current location.", comment: ""), messageType: .error)
             }
         })
     }

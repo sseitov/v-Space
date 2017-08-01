@@ -28,21 +28,14 @@ let photoNotification = Notification.Name("NEW_PHOTO")
     }
 
     // MARK: - Photos
-
-    private func photoID(_ photos:[PHAsset], forDate:Double) -> String? {
-        for photo in photos {
-            let date = photo.creationDate!.timeIntervalSince1970
-            if Int64(date) == Int64(forDate) {
-                return photo.localIdentifier
-            }
-        }
-        return nil
-    }
     
     func syncTrackPhotos(_ track:Track) {
         
         func assetForDate(_ date:Double) -> PHAsset? {
-            return nil
+            let fetchOptions = PHFetchOptions()
+            fetchOptions.predicate = NSPredicate(format: "creationDate == %@", Date(timeIntervalSince1970: date) as CVarArg)
+            let result = PHAsset.fetchAssets(with: fetchOptions)
+            return result.firstObject
         }
         
         let predicate = NSPredicate(format: "trackID = %@", track.uid!)
@@ -54,19 +47,20 @@ let photoNotification = Notification.Name("NEW_PHOTO")
                 return
             }
             DispatchQueue.main.async {
-                if results != nil {
+                if results != nil, results!.count > 0 {
+                    var cloudAssets:[PHAsset] = []
                     for record in results! {
-                        if let date = record.value(forKey: "photoDate") as? Double,
-                            let latitude = record.value(forKey: "latitude"),
-                            let longitude = record.value(forKey: "latitude")
-                        {
+                        if let date = record.value(forKey: "photoDate") as? Double {
                             if let asset = assetForDate(date) {
-                                let uid = asset.localIdentifier
+                                if Model.shared.getPhoto(asset.localIdentifier) == nil {
+                                    cloudAssets.append(asset)
+                                }
                             }
                         }
                     }
+                    _ = Model.shared.addPhotosIntoTrack(track, assets: cloudAssets)
+                    NotificationCenter.default.post(name: photoNotification, object: nil)
                 }
-                NotificationCenter.default.post(name: photoNotification, object: nil)
             }
         }
     }
@@ -163,7 +157,7 @@ let photoNotification = Notification.Name("NEW_PHOTO")
                     print(error!.localizedDescription)
                     return
                 }
-                if results != nil {
+                if results != nil, results!.count > 0 {
                     for record in results! {
                         self.cloudDB?.delete(withRecordID: record.recordID, completionHandler: { _, error in
                             print(error!.localizedDescription)

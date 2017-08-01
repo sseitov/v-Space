@@ -10,7 +10,6 @@ import UIKit
 import CoreData
 import Photos
 import MapKit
-import CloudKit
 
 // MARK: - Date formatter
 
@@ -35,10 +34,6 @@ func textYearFormatter() -> DateFormatter {
     return formatter
 }
 
-func IS_PAD() -> Bool {
-    return UIDevice.current.userInterfaceIdiom == .pad
-}
-
 let newPointNotification = Notification.Name("NEW_POINT")
 let newPlaceNotification = Notification.Name("NEW_PLACE")
 
@@ -47,11 +42,7 @@ class Model: NSObject {
     static let shared = Model()
 
     // MARK: - CoreData stack
-/*
-    lazy var sharedDefaults: UserDefaults = {
-        return UserDefaults(suiteName: "group.com.vchannel.iNearby")!
-    }()
-  */  
+    
     lazy var sharedDocumentsDirectory: URL = {
         return FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.vchannel.iNearby")!
     }()
@@ -297,9 +288,9 @@ class Model: NSObject {
                 photo!.track = track
                 track.addToPhotos(photo!)
                 newPhotos.append(photo!)
-                saveContext()
             }
         }
+        saveContext()
         return newPhotos
     }
 

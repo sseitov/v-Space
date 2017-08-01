@@ -16,3 +16,6 @@
 "Tracker starting" = "Tracker starting";
 "Tracker not running" = "Tracker not running";
 "trackFormat" = "DISTANCE km\t%.2f\nSPEED km/h\t\t%.1f";
+"Can not get current location." = "You must enable geolocation access in settings";
+"Information" = "Information";
+"Error" = "Error";

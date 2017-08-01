@@ -10,6 +10,7 @@ import UIKit
 
 protocol LastTrackCellDelegate {
     func saveLastTrack()
+    func accessDenied()
 }
 
 class LastTrackCell: UITableViewCell {
@@ -41,8 +42,15 @@ class LastTrackCell: UITableViewCell {
     
     @IBAction func switchStatus(_ sender: UISwitch) {
         if sender.isOn {
-            LocationManager.shared.startInBackground()
-            statusLabel.text = NSLocalizedString("Tracker starting", comment: "").uppercased()
+            LocationManager.shared.registered({ enabled in
+                if enabled {
+                    LocationManager.shared.startInBackground()
+                    self.statusLabel.text = NSLocalizedString("Tracker starting", comment: "").uppercased()
+                } else {
+                    sender.isOn = false
+                    self.delegate?.accessDenied()
+                }
+            })
         } else {
             LocationManager.shared.stop()
             statusLabel.text = NSLocalizedString("Tracker not running", comment: "").uppercased()

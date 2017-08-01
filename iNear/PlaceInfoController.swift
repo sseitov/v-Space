@@ -29,18 +29,8 @@ class PlaceInfoController: UITableViewController {
         if gmsPlace == nil {
             navigationItem.rightBarButtonItem = nil
         }
-        
-        if myCoordinate == nil {
-            SVProgressHUD.show(withStatus: "Get location...")
-            LocationManager.shared.getCurrentLocation({ location in
-                SVProgressHUD.dismiss()
-                if location != nil {
-                    self.myCoordinate = location!.coordinate
-                } else {
-                    self.showMessage("Can not get current location.", messageType: .error)
-                }
-            })
-        }
+/*
+ */
     }
 
     @IBAction func savePlace(_ sender: Any) {
@@ -138,6 +128,21 @@ class PlaceInfoController: UITableViewController {
         case 1:
             if myCoordinate != nil {
                 performSegue(withIdentifier: "route", sender: nil)
+            } else {
+                LocationManager.shared.registered({ enable in
+                    if enable {
+                        SVProgressHUD.show(withStatus: "Get location...")
+                        LocationManager.shared.getCurrentLocation({ location in
+                            SVProgressHUD.dismiss()
+                            if location != nil {
+                                self.myCoordinate = location!.coordinate
+                                self.performSegue(withIdentifier: "route", sender: nil)
+                            }
+                        })
+                    } else {
+                        self.showMessage(NSLocalizedString("Can not get current location.", comment: ""), messageType: .error)
+                    }
+                })
             }
         case 2:
             performSegue(withIdentifier: "webPage", sender: nil)
@@ -145,7 +150,7 @@ class PlaceInfoController: UITableViewController {
             break
         }
     }
-    
+
     // MARK: - Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
