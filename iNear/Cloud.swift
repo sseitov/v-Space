@@ -51,7 +51,7 @@ let syncNotification = Notification.Name("SYNCED")
                 networkStatus = newStatus
                 sync({ error in
                     print(error!)
-                    self.saveUnsynced()
+                    self.upload()
                 })
             } else {
                 networkStatus = newStatus
@@ -113,8 +113,6 @@ let syncNotification = Notification.Name("SYNCED")
 
     private func syncTracks(_ result:@escaping (String?) -> ()) {
        
-        let localTracks = Model.shared.allTracks()
-        
         let predicate = NSPredicate(value: true)
         let query = CKQuery(recordType: "Track", predicate: predicate)
         cloudDB!.perform(query, inZoneWith: nil) { results, error in
@@ -126,7 +124,6 @@ let syncNotification = Notification.Name("SYNCED")
             }
             
             DispatchQueue.main.async {
-                var cloudTracks:[Track] = []
                 for record in results! {
                     if let uid = record.value(forKey: "uid") as? String,
                         let place = record.value(forKey: "place") as? String,
@@ -138,15 +135,11 @@ let syncNotification = Notification.Name("SYNCED")
                         var track = Model.shared.getTrack(uid)
                         if track == nil {
                             track = Model.shared.saveTrack(uid, name: place, path: path, start: startDate, finish:date, distance: distance)
-                            self.syncTrackPhotos(track!)
+                        } else {
+                            track?.synced = true
+                            Model.shared.saveContext()
                         }
-                        cloudTracks.append(track!)
-                    }
-                }
-                for track in localTracks {
-                    if !cloudTracks.contains(track) {
-                        Model.shared.managedObjectContext.delete(track)
-                        Model.shared.saveContext()
+                        self.syncTrackPhotos(track!)
                     }
                 }
                 result(nil)
@@ -216,7 +209,9 @@ let syncNotification = Notification.Name("SYNCED")
                 if results != nil, results!.count > 0 {
                     for record in results! {
                         self.cloudDB?.delete(withRecordID: record.recordID, completionHandler: { _, error in
-                            print(error!.localizedDescription)
+                            if error != nil {
+                                print(error!.localizedDescription)
+                            }
                         })
                     }
                 }
@@ -269,8 +264,6 @@ let syncNotification = Notification.Name("SYNCED")
 
     private func syncPlaces(_ result:@escaping (String?) -> ()) {
         
-        let localPlaces = Model.shared.allPlaces()
-        
         let predicate = NSPredicate(value: true)
         let query = CKQuery(recordType: "Place", predicate: predicate)
         cloudDB!.perform(query, inZoneWith: nil) { results, error in
@@ -282,7 +275,6 @@ let syncNotification = Notification.Name("SYNCED")
             }
             
             DispatchQueue.main.async {
-                var cloudPlaces:[Place] = []
                 for record in results! {
                     if let placeID = record.value(forKey: "placeID") as? String,
                         let name = record.value(forKey: "name") as? String,
@@ -301,14 +293,9 @@ let syncNotification = Notification.Name("SYNCED")
                                                            address: address,
                                                            website: url)
                         {
-                            cloudPlaces.append(place)
+                            place.synced = true
+                            Model.shared.saveContext()
                         }
-                    }
-                }
-                for place in localPlaces {
-                    if !cloudPlaces.contains(place) {
-                        Model.shared.managedObjectContext.delete(place)
-                        Model.shared.saveContext()
                     }
                 }
                 result(nil)
@@ -383,7 +370,7 @@ let syncNotification = Notification.Name("SYNCED")
     }
     
     // MARK: - Sync get update
-
+    
     func sync(_ result:@escaping (String?) -> ()) {
         if syncAvailable(networkStatus) {
             syncPlaces({ placesError in
@@ -407,7 +394,7 @@ let syncNotification = Notification.Name("SYNCED")
     
     // MARK: - Sync put unsynced
     
-    private func saveUnsynced() {
+    func upload() {
         for track in Model.shared.unsyncedTracks() {
             saveTrack(track)
         }

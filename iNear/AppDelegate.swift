@@ -79,12 +79,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
+        Cloud.shared.upload()
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
+        Cloud.shared.sync({ error in
+            if error != nil {
+                print(error!)
+            }
+        })
     }
 
     func applicationWillTerminate(_ application: UIApplication) {

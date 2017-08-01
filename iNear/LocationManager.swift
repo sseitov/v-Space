@@ -16,6 +16,7 @@ class LocationManager: NSObject {
     let locationManager = CLLocationManager()
     
     var locationCondition:NSCondition?
+    var authCondition:NSCondition?
     var currentLocation:CLLocation?
     var isPaused:Bool = true
     
@@ -55,12 +56,12 @@ class LocationManager: NSObject {
             case .authorizedAlways:
                 isRegistered(true)
             case .notDetermined:
-                locationCondition = NSCondition()
+                authCondition = NSCondition()
                 self.locationManager.requestAlwaysAuthorization()
                 DispatchQueue.global().async {
-                    self.locationCondition?.lock()
-                    self.locationCondition?.wait()
-                    self.locationCondition?.unlock()
+                    self.authCondition?.lock()
+                    self.authCondition?.wait()
+                    self.authCondition?.unlock()
                     DispatchQueue.main.async {
                         isRegistered(CLLocationManager.authorizationStatus() == .authorizedAlways)
                     }
@@ -97,17 +98,9 @@ extension LocationManager : CLLocationManagerDelegate {
     }
     
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-        if status == .authorizedAlways {
-            if self.locationCondition != nil {
-                manager.startUpdatingLocation()
-            } else {
-                startInBackground()
-            }
-        } else if status != .notDetermined && self.locationCondition != nil {
-            self.locationCondition?.lock()
-            self.locationCondition?.signal()
-            self.locationCondition?.unlock()
-        }
+        self.authCondition?.lock()
+        self.authCondition?.signal()
+        self.authCondition?.unlock()
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
