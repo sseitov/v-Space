@@ -20,7 +20,7 @@ class LastTrackCell: UITableViewCell {
     
     var delegate:LastTrackCellDelegate? {
         didSet {
-            statusSwitch.isOn = Model.shared.isRunning()
+            statusSwitch.isOn = Model.shared.trackerIsRunning()
             if !statusSwitch.isOn {
                 statusLabel.text = NSLocalizedString("Tracker not running", comment: "").uppercased()
                 statusLabel.textColor = UIColor.lightGray

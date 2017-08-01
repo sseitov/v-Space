@@ -19,3 +19,4 @@
 "Can not get current location." = "You must enable geolocation access in settings";
 "Information" = "Information";
 "Error" = "Error";
+"Current track" = "Current track";

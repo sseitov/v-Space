@@ -48,7 +48,7 @@ class TrackController: UIViewController {
             if let date = Model.shared.lastLocationDate(),
                 let all = Model.shared.lastTrack(), all.count > 1
             {
-                setupTitle(textDateFormatter().string(from: date))
+                setupTitle("\(NSLocalizedString("Current track", comment: ""))\n\(textDateFormatter().string(from: date))")
                 
                 path = GMSMutablePath()
                 for pt in all {

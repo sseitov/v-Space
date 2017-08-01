@@ -11,6 +11,7 @@
 		2C1747631DDB872A0018AEAB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2C1747611DDB872A0018AEAB /* Main.storyboard */; };
 		2C1747681DDB872A0018AEAB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2C1747661DDB872A0018AEAB /* LaunchScreen.storyboard */; };
 		2C2B3FBC1E3BB6AD003FE095 /* TrackController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C2B3FBB1E3BB6AD003FE095 /* TrackController.swift */; };
+		2C33C7091F30C4F30031241F /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C33C7081F30C4F30031241F /* Reachability.m */; };
 		2C362BDA1EB495C500749C46 /* Place+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C362BD81EB495C500749C46 /* Place+CoreDataClass.swift */; };
 		2C362BDB1EB495C500749C46 /* Place+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C362BD91EB495C500749C46 /* Place+CoreDataProperties.swift */; };
 		2C362BE01EB4999300749C46 /* Place+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C362BD81EB495C500749C46 /* Place+CoreDataClass.swift */; };
@@ -154,6 +155,8 @@
 		2C1747671DDB872A0018AEAB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2C1747691DDB872A0018AEAB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = iNear/Info.plist; sourceTree = "<group>"; };
 		2C2B3FBB1E3BB6AD003FE095 /* TrackController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackController.swift; sourceTree = "<group>"; };
+		2C33C7071F30C4F30031241F /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
+		2C33C7081F30C4F30031241F /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		2C362BD71EB4947000749C46 /* LocationModel 5.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "LocationModel 5.xcdatamodel"; sourceTree = "<group>"; };
 		2C362BD81EB495C500749C46 /* Place+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Place+CoreDataClass.swift"; path = "Model/Place+CoreDataClass.swift"; sourceTree = "<group>"; };
 		2C362BD91EB495C500749C46 /* Place+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Place+CoreDataProperties.swift"; path = "Model/Place+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -316,10 +319,10 @@
 				2C87D3181DDEF36800F05528 /* CustomViews */,
 				2CE15FBE1EB466A60085915E /* Track */,
 				2CE15FC01EB46CAA0085915E /* Place */,
-				2C17475B1DDB872A0018AEAB /* AppDelegate.swift */,
-				2CE268C11E672F7C00FE8219 /* Model.swift */,
+				2C33C7061F30C4650031241F /* Sync */,
 				2C3684421F307C6C00A5AD4E /* LocationManager.swift */,
-				2C91E0631EAC809C0067286B /* Cloud.swift */,
+				2CE268C11E672F7C00FE8219 /* Model.swift */,
+				2C17475B1DDB872A0018AEAB /* AppDelegate.swift */,
 				2C3F368C1E6C132900021B10 /* Credentials.swift */,
 				2C17476F1DDB93660018AEAB /* Resources */,
 			);
@@ -339,6 +342,16 @@
 			);
 			name = Resources;
 			path = ..;
+			sourceTree = "<group>";
+		};
+		2C33C7061F30C4650031241F /* Sync */ = {
+			isa = PBXGroup;
+			children = (
+				2C33C7071F30C4F30031241F /* Reachability.h */,
+				2C33C7081F30C4F30031241F /* Reachability.m */,
+				2C91E0631EAC809C0067286B /* Cloud.swift */,
+			);
+			name = Sync;
 			sourceTree = "<group>";
 		};
 		2C87D3151DDEE4A800F05528 /* Extensions */ = {
@@ -767,6 +780,7 @@
 				2CE268C21E672F7C00FE8219 /* Model.swift in Sources */,
 				2C87D3331DDF1A5C00F05528 /* LGProgressView.m in Sources */,
 				2C87D32F1DDF1A5C00F05528 /* LGAlertView.m in Sources */,
+				2C33C7091F30C4F30031241F /* Reachability.m in Sources */,
 				2CBE20291E8D9799002EF13C /* Track+CoreDataClass.swift in Sources */,
 				2CBE202A1E8D9799002EF13C /* Track+CoreDataProperties.swift in Sources */,
 				2C3ED20F1EB1F0E300463199 /* PlaceInfoController.swift in Sources */,

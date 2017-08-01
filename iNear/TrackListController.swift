@@ -49,10 +49,10 @@ class TrackListController: UITableViewController, LastTrackCellDelegate, PHPhoto
         setupTitle("v-Space")
         
         if IS_PAD() {
-            if tracks.count > 0 {
-                performSegue(withIdentifier: "showDetail", sender: tracks[0])
-            } else {
+            if Model.shared.trackerIsRunning() {
                 performSegue(withIdentifier: "showDetail", sender: nil)
+            } else if tracks.count > 0 {
+                performSegue(withIdentifier: "showDetail", sender: tracks[0])
             }
         }
         
@@ -90,13 +90,15 @@ class TrackListController: UITableViewController, LastTrackCellDelegate, PHPhoto
         tracks = Model.shared.allTracks()
         places = Model.shared.allPlaces()
         tableView.reloadData()
+/*
         if IS_PAD() {
-            if tracks.count > 0 {
-                performSegue(withIdentifier: "showDetail", sender: tracks[0])
-            } else {
+            if Model.shared.trackerIsRunning() {
                 performSegue(withIdentifier: "showDetail", sender: nil)
+            } else if tracks.count > 0 {
+                performSegue(withIdentifier: "showDetail", sender: tracks[0])
             }
         }
+ */
     }
 
     // MARK: - LastTrackCell delegate

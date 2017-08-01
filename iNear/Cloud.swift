@@ -18,13 +18,45 @@ let syncNotification = Notification.Name("SYNCED")
     
     static let shared = Cloud()
     
-    var cloudDB: CKDatabase?
-    
+    private var cloudDB: CKDatabase?
+    private var internetReachability:Reachability?
+    private var networkStatus:NetworkStatus = NotReachable
+
     private override init() {
         super.init()
         
         let container = CKContainer.default()
         cloudDB = container.privateCloudDatabase
+        
+        internetReachability = Reachability.forInternetConnection()
+        if internetReachability != nil {
+            NotificationCenter.default.addObserver(self,
+                                                   selector: #selector(self.reachabilityChanged(_:)),
+                                                   name: NSNotification.Name.reachabilityChanged,
+                                                   object: nil)
+            networkStatus = internetReachability!.currentReachabilityStatus()
+            internetReachability!.startNotifier()
+        }
+    }
+    // MARK: - Reachability
+    
+    private func syncAvailable(_ status:NetworkStatus) -> Bool {
+        return status == ReachableViaWiFi
+    }
+    
+    func reachabilityChanged(_ notify:Notification) {
+        if let currentReachability = notify.object as? Reachability {
+            let newStatus = currentReachability.currentReachabilityStatus()
+            if !syncAvailable(networkStatus) && syncAvailable(newStatus) {
+                networkStatus = newStatus
+                sync({ error in
+                    print(error!)
+                    self.saveUnsynced()
+                })
+            } else {
+                networkStatus = newStatus
+            }
+        }
     }
 
     // MARK: - Photos
@@ -336,22 +368,32 @@ let syncNotification = Notification.Name("SYNCED")
         }
     }
     
-    // MARK: - Sync all
+    // MARK: - Sync get update
 
     func sync(_ result:@escaping (String?) -> ()) {
-        syncPlaces({ placesError in
-            if placesError != nil {
-                result(placesError)
-            } else {
-                Cloud.shared.syncTracks({ tracksError in
-                    if tracksError != nil {
-                        result(tracksError)
-                    } else {
-                        result(nil)
-                    }
-                    NotificationCenter.default.post(name: syncNotification, object: nil)
-                })
-            }
-        })
+        if syncAvailable(networkStatus) {
+            syncPlaces({ placesError in
+                if placesError != nil {
+                    result(placesError)
+                } else {
+                    Cloud.shared.syncTracks({ tracksError in
+                        if tracksError != nil {
+                            result(tracksError)
+                        } else {
+                            result(nil)
+                        }
+                        NotificationCenter.default.post(name: syncNotification, object: nil)
+                    })
+                }
+            })
+        } else {
+            result(nil)
+        }
+    }
+    
+    // MARK: - Sync put unsynced
+    
+    private func saveUnsynced() {
+        
     }
 }

@@ -30,7 +30,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
     }
     
     func refresh() {
-        if Model.shared.isRunning() {
+        if Model.shared.trackerIsRunning() {
             nonActive.isHidden = true
             headerView.isHidden = false
             distance.isHidden = false

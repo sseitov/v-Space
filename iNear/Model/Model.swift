@@ -168,7 +168,7 @@ class Model: NSObject {
         }
     }
     
-    func isRunning() -> Bool {
+    func trackerIsRunning() -> Bool {
         if let track = lastTrack(), track.count > 0 {
             return true
         } else {
