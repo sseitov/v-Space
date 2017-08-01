@@ -29,20 +29,32 @@ class PlaceInfoController: UITableViewController {
         if gmsPlace == nil {
             navigationItem.rightBarButtonItem = nil
         }
-/*
- */
     }
 
     @IBAction func savePlace(_ sender: Any) {
-        SVProgressHUD.show(withStatus: "Save...")
-        Cloud.shared.savePlace(gmsPlace!, result: { error in
-            SVProgressHUD.dismiss()
-            if error != nil {
-                self.showMessage(error!, messageType: .error)
+        if Model.shared.getPlace(gmsPlace!.placeID) == nil {
+            if let place = Model.shared.createPlace(gmsPlace!.placeID,
+                                                    name: gmsPlace!.name,
+                                                    coordinate: gmsPlace!.coordinate,
+                                                    phone: gmsPlace!.phoneNumber,
+                                                    address: gmsPlace!.formattedAddress,
+                                                    website: gmsPlace!.website)
+            {
+                SVProgressHUD.show(withStatus: "Save...")
+                Cloud.shared.savePlace(place, result: { error in
+                    SVProgressHUD.dismiss()
+                    if error != nil {
+                        self.showMessage(error!, messageType: .error)
+                    } else {
+                        NotificationCenter.default.post(name: newPlaceNotification, object: nil)
+                    }
+                })
             } else {
-                NotificationCenter.default.post(name: newPlaceNotification, object: nil)
+                self.showMessage("Error create place.", messageType: .error)
             }
-        })
+        } else {
+            self.showMessage("Place already synced.", messageType: .error)
+        }
     }
     
     // MARK: - Table view data source

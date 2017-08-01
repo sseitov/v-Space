@@ -187,10 +187,11 @@ class Model: NSObject {
             return nil
         }
     }
-    
+ 
     func saveTrack(_ uid:String, name:String, path:String, start:Double, finish:Double, distance:Double) -> Track {
         let track = NSEntityDescription.insertNewObject(forEntityName: "Track", into: managedObjectContext) as! Track
         track.uid = uid
+        track.synced = true
         track.place = name
         track.path = path
         track.startDate = NSDate(timeIntervalSince1970: start)
@@ -198,10 +199,11 @@ class Model: NSObject {
         saveContext()
         return track
     }
-    
+   
     func createTrack(_ name:String, path:String, start:Double, finish:Double, distance: Double) -> Track {
         let track = NSEntityDescription.insertNewObject(forEntityName: "Track", into: managedObjectContext) as! Track
         track.uid = UUID().uuidString
+        track.synced = false
         track.place = name
         track.path = path
         track.startDate = NSDate(timeIntervalSince1970: start)
@@ -222,6 +224,16 @@ class Model: NSObject {
         }
     }
     
+    func unsyncedTracks() -> [Track] {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Track")
+        fetchRequest.predicate = NSPredicate(format: "synced == %@", NSNumber(booleanLiteral: false))
+        if let all = try? managedObjectContext.fetch(fetchRequest) as! [Track] {
+            return all
+        } else {
+            return []
+        }
+    }
+    
     // MARK: - Place table
     
     func getPlace(_ uid:String) -> Place? {
@@ -234,11 +246,12 @@ class Model: NSObject {
         }
     }
     
-    func createPlace(_ placeID:String, name:String, coordinate:CLLocationCoordinate2D, phone:String?, address:String?, website:URL?) -> Place {
+    func createPlace(_ placeID:String, name:String, coordinate:CLLocationCoordinate2D, phone:String?, address:String?, website:URL?) -> Place? {
         var place = getPlace(placeID)
         if place == nil {
             place = NSEntityDescription.insertNewObject(forEntityName: "Place", into: managedObjectContext) as? Place
             place?.placeID = placeID
+            place?.synced = false
             place?.name = name
             place?.latitude = coordinate.latitude
             place?.longitude = coordinate.longitude
@@ -248,14 +261,26 @@ class Model: NSObject {
                 place?.website = website!.absoluteString
             }
             saveContext()
+            return place
+        } else {
+            return place
         }
-        return place!
     }
     
     func allPlaces() -> [Place] {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Place")
         let sortDescriptor = NSSortDescriptor(key: "name", ascending: true)
         fetchRequest.sortDescriptors = [sortDescriptor]
+        if let all = try? managedObjectContext.fetch(fetchRequest) as! [Place] {
+            return all
+        } else {
+            return []
+        }
+    }
+    
+    func unsyncedPlaces() -> [Place] {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Place")
+        fetchRequest.predicate = NSPredicate(format: "synced == %@", NSNumber(booleanLiteral: false))
         if let all = try? managedObjectContext.fetch(fetchRequest) as! [Place] {
             return all
         } else {
@@ -275,7 +300,7 @@ class Model: NSObject {
         }
     }
   
-    func addPhotosIntoTrack(_ track:Track, assets:[PHAsset]) -> [Photo] {
+    func addPhotosIntoTrack(_ track:Track, assets:[PHAsset]) {
         var newPhotos:[Photo] = []
         for asset in assets {
             var photo = getPhoto(asset.localIdentifier)
@@ -286,12 +311,12 @@ class Model: NSObject {
                 photo!.latitude = asset.location!.coordinate.latitude
                 photo!.longitude = asset.location!.coordinate.longitude
                 photo!.track = track
+                photo!.synced = false
                 track.addToPhotos(photo!)
                 newPhotos.append(photo!)
             }
         }
         saveContext()
-        return newPhotos
     }
 
 }

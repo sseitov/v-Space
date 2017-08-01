@@ -101,7 +101,7 @@ let syncNotification = Notification.Name("SYNCED")
                         }
                     }
                     if cloudAssets.count > 0 {
-                        _ = Model.shared.addPhotosIntoTrack(track, assets: cloudAssets)
+                        Model.shared.addPhotosIntoTrack(track, assets: cloudAssets)
                         NotificationCenter.default.post(name: syncNotification, object: nil)
                     }
                 }
@@ -154,44 +154,56 @@ let syncNotification = Notification.Name("SYNCED")
         }
     }
     
-    func saveTrack(_ track:Track, assets:[PHAsset]) {
-        
-        func saveTrackPhotos(_ photos:[Photo]) {
-            for photo in photos {
+    private func saveTrackPhotos(_ photos:[Photo]) {
+        for photo in photos {
+            if !photo.synced {
                 let record = CKRecord(recordType: "Photo")
                 record.setValue(photo.date, forKey: "photoDate")
                 record.setValue(photo.latitude, forKey: "latitude")
                 record.setValue(photo.longitude, forKey: "longitude")
                 record.setValue(photo.track!.uid!, forKey: "trackID")
                 self.cloudDB!.save(record, completionHandler: { record, error in
-                    if error != nil {
-                        print(error!.localizedDescription)
+                    DispatchQueue.main.async {
+                        if error != nil {
+                            print(error!.localizedDescription)
+                        } else {
+                            photo.synced = true
+                            Model.shared.saveContext()
+                        }
                     }
                 })
             }
         }
-        
-        let photos = Model.shared.addPhotosIntoTrack(track, assets: assets)
-        if photos.count > 0 {
-            saveTrackPhotos(photos)
+    }
+
+    func saveTrack(_ track:Track) {
+        let photos = track.allPhotos()
+        if photos.count > 0 && syncAvailable(networkStatus) {
+            self.saveTrackPhotos(photos)
         }
         
-        let record = CKRecord(recordType: "Track")
-        record.setValue(track.path!, forKey: "track")
-        record.setValue(track.place!, forKey: "place")
-        record.setValue(track.finishDate!.timeIntervalSince1970, forKey: "date")
-        record.setValue(track.startDate!.timeIntervalSince1970, forKey: "startDate")
-        record.setValue(track.distance, forKey: "distance")
-        record.setValue(track.uid!, forKey: "uid")
-        self.cloudDB!.save(record, completionHandler: { record, error in
-            if error != nil {
-                print(error!.localizedDescription)
-            }
-        })
+        if syncAvailable(networkStatus) {
+            let record = CKRecord(recordType: "Track")
+            record.setValue(track.path!, forKey: "track")
+            record.setValue(track.place!, forKey: "place")
+            record.setValue(track.finishDate!.timeIntervalSince1970, forKey: "date")
+            record.setValue(track.startDate!.timeIntervalSince1970, forKey: "startDate")
+            record.setValue(track.distance, forKey: "distance")
+            record.setValue(track.uid!, forKey: "uid")
+            self.cloudDB!.save(record, completionHandler: { record, error in
+                DispatchQueue.main.async {
+                    if error != nil {
+                        print(error!.localizedDescription)
+                    } else {
+                        track.synced = true
+                    }
+                }
+            })
+        }
     }
     
-    func deleteTrack(_ track:Track, complete:@escaping () -> ()) {
-        
+    func deleteTrack(_ track:Track, complete:@escaping (Bool) -> ()) {
+
         func deleteTrackPhotos(_ trackID:String) {
             let predicate = NSPredicate(format: "trackID = %@", trackID)
             let query = CKQuery(recordType: "Photo", predicate: predicate)
@@ -211,13 +223,17 @@ let syncNotification = Notification.Name("SYNCED")
             }
         }
         
+        if !syncAvailable(networkStatus) {
+            complete(false)
+        }
+        
         let predicate = NSPredicate(format: "uid = %@", track.uid!)
         let query = CKQuery(recordType: "Track", predicate: predicate)
         self.cloudDB!.perform(query, inZoneWith: nil) { results, error in
             guard error == nil else {
                 DispatchQueue.main.async {
                     print(error!.localizedDescription)
-                    complete()
+                    complete(false)
                 }
                 return
             }
@@ -239,11 +255,11 @@ let syncNotification = Notification.Name("SYNCED")
                             if error != nil {
                                 print(error!.localizedDescription)
                             }
-                            complete()
+                            complete(true)
                         }
                     })
                 } else {
-                    complete()
+                    complete(true)
                 }
             }
         }
@@ -278,13 +294,15 @@ let syncNotification = Notification.Name("SYNCED")
                         let address = record.value(forKey: "address") as? String
                         let website = record.value(forKey: "website") as? String
                         let url = website != nil ? URL(string: website!) : nil
-                        let place = Model.shared.createPlace(placeID,
+                        if let place = Model.shared.createPlace(placeID,
                                                            name: name,
                                                            coordinate: coordinate,
                                                            phone: phone,
                                                            address: address,
                                                            website: url)
-                        cloudPlaces.append(place)
+                        {
+                            cloudPlaces.append(place)
+                        }
                     }
                 }
                 for place in localPlaces {
@@ -298,52 +316,48 @@ let syncNotification = Notification.Name("SYNCED")
         }
     }
     
-    func savePlace(_ gmsPlace:GMSPlace, result:@escaping (String?) -> ()) {
+    func savePlace(_ place:Place, result:@escaping (String?) -> ()) {
         
-        if Model.shared.getPlace(gmsPlace.placeID) == nil {
-            let place = Model.shared.createPlace(gmsPlace.placeID,
-                                               name: gmsPlace.name,
-                                               coordinate: gmsPlace.coordinate,
-                                               phone: gmsPlace.phoneNumber,
-                                               address: gmsPlace.formattedAddress,
-                                               website: gmsPlace.website)
-            let record = CKRecord(recordType: "Place")
-            record.setValue(place.placeID, forKey: "placeID")
-            record.setValue(place.name, forKey: "name")
-            record.setValue(place.latitude, forKey: "latitude")
-            record.setValue(place.longitude, forKey: "longitude")
-            if place.phone != nil {
-                record.setValue(place.phone!, forKey: "phone")
-            }
-            if place.address != nil {
-                record.setValue(place.address!, forKey: "address")
-            }
-            if place.website != nil {
-                record.setValue(place.website!, forKey: "website")
-            }
-            self.cloudDB!.save(record, completionHandler: { record, error in
-                DispatchQueue.main.async {
-                    if let error = error {
-                        result("iCloud error: \(error.localizedDescription)")
-                    } else {
-                        result(nil)
-                    }
-                }
-            })
-        } else {
-            result("Place already synced.")
+        let record = CKRecord(recordType: "Place")
+        record.setValue(place.placeID, forKey: "placeID")
+        record.setValue(place.name, forKey: "name")
+        record.setValue(place.latitude, forKey: "latitude")
+        record.setValue(place.longitude, forKey: "longitude")
+        if place.phone != nil {
+            record.setValue(place.phone!, forKey: "phone")
         }
+        if place.address != nil {
+            record.setValue(place.address!, forKey: "address")
+        }
+        if place.website != nil {
+            record.setValue(place.website!, forKey: "website")
+        }
+        self.cloudDB!.save(record, completionHandler: { record, error in
+            DispatchQueue.main.async {
+                if let error = error {
+                    result("iCloud error: \(error.localizedDescription)")
+                } else {
+                    place.synced = true
+                    Model.shared.saveContext()
+                    result(nil)
+                }
+            }
+        })
     }
     
-    func deletePlace(_ place:Place, complete:@escaping () -> ()) {
+    func deletePlace(_ place:Place, complete:@escaping (Bool) -> ()) {
         
+        if !syncAvailable(networkStatus) {
+            complete(false)
+        }
+
         let predicate = NSPredicate(format: "placeID = %@", place.placeID!)
         let query = CKQuery(recordType: "Place", predicate: predicate)
         self.cloudDB!.perform(query, inZoneWith: nil) { results, error in
             guard error == nil else {
                 DispatchQueue.main.async {
                     print(error!.localizedDescription)
-                    complete()
+                    complete(false)
                 }
                 return
             }
@@ -355,14 +369,14 @@ let syncNotification = Notification.Name("SYNCED")
                         }
                         Model.shared.managedObjectContext.delete(place)
                         Model.shared.saveContext()
-                        complete()
+                        complete(true)
                     }
                 })
             } else {
                 DispatchQueue.main.async {
                     Model.shared.managedObjectContext.delete(place)
                     Model.shared.saveContext()
-                    complete()
+                    complete(true)
                 }
             }
         }
@@ -394,6 +408,15 @@ let syncNotification = Notification.Name("SYNCED")
     // MARK: - Sync put unsynced
     
     private func saveUnsynced() {
-        
+        for track in Model.shared.unsyncedTracks() {
+            saveTrack(track)
+        }
+        for place in Model.shared.unsyncedPlaces() {
+            savePlace(place, result: { error in
+                if error != nil {
+                    print(error!)
+                }
+            })
+        }
     }
 }

@@ -124,7 +124,8 @@ class TrackListController: UITableViewController, LastTrackCellDelegate, PHPhoto
             }, acceptHandler: { name in
                 let track = Model.shared.createTrack(name, path: path.encodedPath(), start: points.last!.date, finish: points.first!.date, distance: Model.shared.lastTrackDistance())
                 Model.shared.clearLastTrack()
-                Cloud.shared.saveTrack(track, assets: self.assets)
+                Model.shared.addPhotosIntoTrack(track, assets: self.assets)
+                Cloud.shared.saveTrack(track)
                 self.assets.removeAll()
                 
                 self.tableView.beginUpdates()
@@ -292,35 +293,43 @@ class TrackListController: UITableViewController, LastTrackCellDelegate, PHPhoto
             if indexPath.section == 1 {
                 let track = tracks[indexPath.row]
                 SVProgressHUD.show(withStatus: "Delete...")
-                Cloud.shared.deleteTrack(track, complete: {
+                Cloud.shared.deleteTrack(track, complete: { success in
                     SVProgressHUD.dismiss()
-                    self.tableView.beginUpdates()
-                    self.tracks.remove(at: indexPath.row)
-                    self.tableView.deleteRows(at: [indexPath], with: .top)
-                    self.tableView.endUpdates()
-                    if IS_PAD() {
-                        if self.tracks.count > 0 {
-                            self.performSegue(withIdentifier: "showDetail", sender: self.tracks[0])
-                        } else {
-                            self.performSegue(withIdentifier: "showDetail", sender: nil)
+                    if success {
+                        self.tableView.beginUpdates()
+                        self.tracks.remove(at: indexPath.row)
+                        self.tableView.deleteRows(at: [indexPath], with: .top)
+                        self.tableView.endUpdates()
+                        if IS_PAD() {
+                            if self.tracks.count > 0 {
+                                self.performSegue(withIdentifier: "showDetail", sender: self.tracks[0])
+                            } else {
+                                self.performSegue(withIdentifier: "showDetail", sender: nil)
+                            }
                         }
+                    } else {
+                        self.showMessage(NSLocalizedString("iCloud unavailable", comment: ""), messageType: .error)
                     }
                 })
             } else {
                 let place = places[indexPath.row]
                 SVProgressHUD.show(withStatus: "Delete...")
-                Cloud.shared.deletePlace(place, complete: {
+                Cloud.shared.deletePlace(place, complete: { success in
                     SVProgressHUD.dismiss()
-                    self.tableView.beginUpdates()
-                    self.places.remove(at: indexPath.row)
-                    self.tableView.deleteRows(at: [indexPath], with: .top)
-                    self.tableView.endUpdates()
-                    if IS_PAD() {
-                        if self.tracks.count > 0 {
-                            self.performSegue(withIdentifier: "showDetail", sender: self.tracks[0])
-                        } else {
-                            self.performSegue(withIdentifier: "showDetail", sender: nil)
+                    if success {
+                        self.tableView.beginUpdates()
+                        self.places.remove(at: indexPath.row)
+                        self.tableView.deleteRows(at: [indexPath], with: .top)
+                        self.tableView.endUpdates()
+                        if IS_PAD() {
+                            if self.tracks.count > 0 {
+                                self.performSegue(withIdentifier: "showDetail", sender: self.tracks[0])
+                            } else {
+                                self.performSegue(withIdentifier: "showDetail", sender: nil)
+                            }
                         }
+                    } else {
+                        self.showMessage(NSLocalizedString("iCloud unavailable", comment: ""), messageType: .error)
                     }
                 })
             }

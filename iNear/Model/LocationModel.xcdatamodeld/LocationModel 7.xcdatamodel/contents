@@ -9,6 +9,7 @@
         <attribute name="date" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="latitude" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="longitude" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="synced" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="uid" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="track" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Track" inverseName="photos" inverseEntity="Track" syncable="YES"/>
     </entity>
@@ -19,6 +20,7 @@
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="phone" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="placeID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="synced" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="website" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <entity name="Track" representedClassName=".Track" syncable="YES">
@@ -27,13 +29,14 @@
         <attribute name="path" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="place" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="startDate" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="synced" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="uid" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="photos" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Photo" inverseName="track" inverseEntity="Photo" syncable="YES"/>
     </entity>
     <elements>
         <element name="Location" positionX="-3971" positionY="-2583" width="128" height="90"/>
-        <element name="Photo" positionX="-3591" positionY="-2574" width="128" height="118"/>
-        <element name="Place" positionX="-3816" positionY="-2394" width="128" height="150"/>
-        <element name="Track" positionX="-3818" positionY="-2583" width="128" height="150"/>
+        <element name="Photo" positionX="-3591" positionY="-2574" width="128" height="135"/>
+        <element name="Place" positionX="-3816" positionY="-2394" width="128" height="165"/>
+        <element name="Track" positionX="-3818" positionY="-2583" width="128" height="165"/>
     </elements>
 </model>

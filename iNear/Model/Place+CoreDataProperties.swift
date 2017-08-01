@@ -2,7 +2,7 @@
 //  Place+CoreDataProperties.swift
 //  v-Space
 //
-//  Created by Сергей Сейтов on 29.04.17.
+//  Created by Sergey Seitov on 01.08.17.
 //  Copyright © 2017 Сергей Сейтов. All rights reserved.
 //
 
@@ -23,5 +23,6 @@ extension Place {
     @NSManaged public var phone: String?
     @NSManaged public var placeID: String?
     @NSManaged public var website: String?
+    @NSManaged public var synced: Bool
 
 }

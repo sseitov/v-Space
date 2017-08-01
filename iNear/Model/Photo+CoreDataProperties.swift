@@ -20,6 +20,7 @@ extension Photo {
     @NSManaged public var latitude: Double
     @NSManaged public var longitude: Double
     @NSManaged public var uid: String?
+    @NSManaged public var synced: Bool
     @NSManaged public var track: Track?
 
 }
