@@ -117,15 +117,34 @@ class TrackController: UIViewController {
                 marker.map = map
                 photoMarkers.append(marker)
             }
+            if photoMarkers.count > 0 {
+                let btn = UIBarButtonItem(image: UIImage(named: "cameraRoll"),
+                                          style: .plain,
+                                          target: self,
+                                          action: #selector(self.showPhotos))
+                btn.tintColor = UIColor.white
+                navigationItem.setRightBarButton(btn, animated: true)
+            } else {
+                navigationItem.setRightBarButton(nil, animated: true)
+            }
+        } else {
+            navigationItem.setRightBarButton(nil, animated: true)
         }
     }
     
     // MARK: - Navigation
     
+    func showPhotos() {
+        performSegue(withIdentifier: "allPhotos", sender: nil)
+    }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showPhoto" {
             let next = segue.destination as! PhotoController
             next.photo = sender as? Photo
+        } else if segue.identifier == "allPhotos" {
+            let next = segue.destination as! PhotoCollectionController
+            next.track = track
         }
     }
 

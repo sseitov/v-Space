@@ -12,6 +12,8 @@
 		2C1747681DDB872A0018AEAB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2C1747661DDB872A0018AEAB /* LaunchScreen.storyboard */; };
 		2C2B3FBC1E3BB6AD003FE095 /* TrackController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C2B3FBB1E3BB6AD003FE095 /* TrackController.swift */; };
 		2C33C7091F30C4F30031241F /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C33C7081F30C4F30031241F /* Reachability.m */; };
+		2C33C70D1F310C790031241F /* PhotoCollectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C33C70C1F310C790031241F /* PhotoCollectionController.swift */; };
+		2C33C70F1F3112980031241F /* PhotoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C33C70E1F3112980031241F /* PhotoCell.swift */; };
 		2C362BDA1EB495C500749C46 /* Place+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C362BD81EB495C500749C46 /* Place+CoreDataClass.swift */; };
 		2C362BDB1EB495C500749C46 /* Place+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C362BD91EB495C500749C46 /* Place+CoreDataProperties.swift */; };
 		2C362BE01EB4999300749C46 /* Place+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C362BD81EB495C500749C46 /* Place+CoreDataClass.swift */; };
@@ -157,6 +159,8 @@
 		2C2B3FBB1E3BB6AD003FE095 /* TrackController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackController.swift; sourceTree = "<group>"; };
 		2C33C7071F30C4F30031241F /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		2C33C7081F30C4F30031241F /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
+		2C33C70C1F310C790031241F /* PhotoCollectionController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoCollectionController.swift; sourceTree = "<group>"; };
+		2C33C70E1F3112980031241F /* PhotoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoCell.swift; sourceTree = "<group>"; };
 		2C362BD71EB4947000749C46 /* LocationModel 5.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "LocationModel 5.xcdatamodel"; sourceTree = "<group>"; };
 		2C362BD81EB495C500749C46 /* Place+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Place+CoreDataClass.swift"; path = "Model/Place+CoreDataClass.swift"; sourceTree = "<group>"; };
 		2C362BD91EB495C500749C46 /* Place+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Place+CoreDataProperties.swift"; path = "Model/Place+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -453,6 +457,8 @@
 				2CBE20181E8D61AF002EF13C /* SavedTrackCell.swift */,
 				2C2B3FBB1E3BB6AD003FE095 /* TrackController.swift */,
 				2C79D4A31E92DE9F00EF4954 /* PhotoController.swift */,
+				2C33C70C1F310C790031241F /* PhotoCollectionController.swift */,
+				2C33C70E1F3112980031241F /* PhotoCell.swift */,
 			);
 			name = Track;
 			sourceTree = "<group>";
@@ -760,6 +766,7 @@
 				2CBE20171E8D6151002EF13C /* LastTrackCell.swift in Sources */,
 				2C3ED2111EB1FB2900463199 /* WebController.swift in Sources */,
 				2C9423B31DFC6708003C4075 /* UIImageExtensions.swift in Sources */,
+				2C33C70D1F310C790031241F /* PhotoCollectionController.swift in Sources */,
 				2C79D4A41E92DE9F00EF4954 /* PhotoController.swift in Sources */,
 				2C87D31C1DDEF3C200F05528 /* UIColorExtensions.swift in Sources */,
 				2C3ED2131EB2046200463199 /* RouteController.swift in Sources */,
@@ -785,6 +792,7 @@
 				2CBE202A1E8D9799002EF13C /* Track+CoreDataProperties.swift in Sources */,
 				2C3ED20F1EB1F0E300463199 /* PlaceInfoController.swift in Sources */,
 				2C54EB7A1E8ADC49009C4A27 /* TrackListController.swift in Sources */,
+				2C33C70F1F3112980031241F /* PhotoCell.swift in Sources */,
 				2C3F368D1E6C132900021B10 /* Credentials.swift in Sources */,
 				2CBE20191E8D61AF002EF13C /* SavedTrackCell.swift in Sources */,
 				2C91E0641EAC809C0067286B /* Cloud.swift in Sources */,

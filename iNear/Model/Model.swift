@@ -27,10 +27,24 @@ func textDateFormatter() -> DateFormatter {
     return formatter
 }
 
+func textShortDateFormatter() -> DateFormatter {
+    let formatter = DateFormatter()
+    formatter.dateStyle = .short
+    formatter.timeStyle = .none
+    formatter.doesRelativeDateFormatting = true
+    return formatter
+}
+
 func textYearFormatter() -> DateFormatter {
     let formatter = DateFormatter()
     formatter.dateStyle = .long
     formatter.timeStyle = .none
+    return formatter
+}
+
+func textTimeFormatter() -> DateFormatter {
+    let formatter = DateFormatter()
+    formatter.dateFormat = "HH:mm"
     return formatter
 }
 
