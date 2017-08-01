@@ -29,49 +29,46 @@ class LocationManager: NSObject {
     }
     
     func getCurrentLocation(_ location: @escaping(CLLocation?) -> ()) {
-        if CLLocationManager.locationServicesEnabled() {
-            currentLocation = nil
-            locationCondition = NSCondition()
-            if CLLocationManager.authorizationStatus() == .authorizedAlways {
+        registered({ enable in
+            if enable {
+                self.currentLocation = nil
+                self.locationCondition = NSCondition()
                 self.locationManager.startUpdatingLocation()
-            } else if CLLocationManager.authorizationStatus() == .notDetermined {
-                self.locationManager.requestAlwaysAuthorization()
-            } else {
-                locationCondition = nil
-                location(nil)
-                return
-            }
-            DispatchQueue.global().async {
-                self.locationCondition?.lock()
-                self.locationCondition?.wait()
-                self.locationCondition?.unlock()
-                DispatchQueue.main.async {
-                    self.locationCondition = nil
-                    location(self.currentLocation)
+                DispatchQueue.global().async {
+                    self.locationCondition?.lock()
+                    self.locationCondition?.wait()
+                    self.locationCondition?.unlock()
+                    DispatchQueue.main.async {
+                        self.locationCondition = nil
+                        location(self.currentLocation)
+                    }
                 }
+            } else {
+                location(nil)
             }
-        } else {
-            location(nil)
-        }
+        })
     }
     
     func registered(_ isRegistered: @escaping(Bool) -> ()) {
-        switch CLLocationManager.authorizationStatus() {
-        case .authorizedAlways:
-            isRegistered(true)
-        case .notDetermined:
-            currentLocation = nil
-            locationCondition = NSCondition()
-            self.locationManager.requestAlwaysAuthorization()
-            DispatchQueue.global().async {
-                self.locationCondition?.lock()
-                self.locationCondition?.wait()
-                self.locationCondition?.unlock()
-                DispatchQueue.main.async {
-                    isRegistered(CLLocationManager.authorizationStatus() == .authorizedAlways)
+        if CLLocationManager.locationServicesEnabled() {
+            switch CLLocationManager.authorizationStatus() {
+            case .authorizedAlways:
+                isRegistered(true)
+            case .notDetermined:
+                locationCondition = NSCondition()
+                self.locationManager.requestAlwaysAuthorization()
+                DispatchQueue.global().async {
+                    self.locationCondition?.lock()
+                    self.locationCondition?.wait()
+                    self.locationCondition?.unlock()
+                    DispatchQueue.main.async {
+                        isRegistered(CLLocationManager.authorizationStatus() == .authorizedAlways)
+                    }
                 }
+            default:
+                isRegistered(false)
             }
-        default:
+        } else {
             isRegistered(false)
         }
     }

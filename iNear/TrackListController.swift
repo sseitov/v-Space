@@ -59,6 +59,7 @@ class TrackListController: UITableViewController, LastTrackCellDelegate, PHPhoto
         NotificationCenter.default.addObserver(self, selector: #selector(self.refreshPlaces), name: newPlaceNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.refreshCurrentTrack), name: newPointNotification, object: nil)
         PHPhotoLibrary.shared().register(self)
+        refresh()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -297,6 +298,7 @@ class TrackListController: UITableViewController, LastTrackCellDelegate, PHPhoto
     }
 
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        SVProgressHUD.dismiss()
         if editingStyle == .delete {
             if indexPath.section == 1 {
                 let track = tracks[indexPath.row]
@@ -337,6 +339,7 @@ class TrackListController: UITableViewController, LastTrackCellDelegate, PHPhoto
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        SVProgressHUD.dismiss()
         if indexPath.section == 0  {
             if Model.shared.lastTrackSize() > 1 {
                 performSegue(withIdentifier: "showDetail", sender: nil)

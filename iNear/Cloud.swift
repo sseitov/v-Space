@@ -31,11 +31,20 @@ let photoNotification = Notification.Name("NEW_PHOTO")
     
     func syncTrackPhotos(_ track:Track) {
         
-        func assetForDate(_ date:Double) -> PHAsset? {
-            let fetchOptions = PHFetchOptions()
-            fetchOptions.predicate = NSPredicate(format: "creationDate == %@", Date(timeIntervalSince1970: date) as CVarArg)
-            let result = PHAsset.fetchAssets(with: fetchOptions)
-            return result.firstObject
+        func assetForLocation(latitude:Double, longitude:Double) -> PHAsset? {
+            var result:PHAsset?
+            let fetchResult = PHAsset.fetchAssets(with: .image, options: nil)
+            fetchResult.enumerateObjects({ asset, index, stop in
+                if let lat = asset.location?.coordinate.latitude,
+                    let lon = asset.location?.coordinate.longitude
+                {
+                    if lat == latitude && lon == longitude {
+                        result = asset
+                        stop.initialize(to: true)
+                    }
+                }
+            })
+            return result
         }
         
         let predicate = NSPredicate(format: "trackID = %@", track.uid!)
@@ -50,16 +59,19 @@ let photoNotification = Notification.Name("NEW_PHOTO")
                 if results != nil, results!.count > 0 {
                     var cloudAssets:[PHAsset] = []
                     for record in results! {
-                        if let date = record.value(forKey: "photoDate") as? Double {
-                            if let asset = assetForDate(date) {
-                                if Model.shared.getPhoto(asset.localIdentifier) == nil {
-                                    cloudAssets.append(asset)
-                                }
+                        if let latitude = record.value(forKey: "latitude") as? Double,
+                            let longitude = record.value(forKey: "longitude") as? Double,
+                            let asset = assetForLocation(latitude: latitude, longitude: longitude)
+                        {
+                            if Model.shared.getPhoto(asset.localIdentifier) == nil {
+                                cloudAssets.append(asset)
                             }
                         }
                     }
-                    _ = Model.shared.addPhotosIntoTrack(track, assets: cloudAssets)
-                    NotificationCenter.default.post(name: photoNotification, object: nil)
+                    if cloudAssets.count > 0 {
+                        _ = Model.shared.addPhotosIntoTrack(track, assets: cloudAssets)
+                        NotificationCenter.default.post(name: photoNotification, object: nil)
+                    }
                 }
             }
         }

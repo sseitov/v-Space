@@ -44,6 +44,7 @@ class LastTrackCell: UITableViewCell {
         if sender.isOn {
             LocationManager.shared.registered({ enabled in
                 if enabled {
+                    Model.shared.clearLastTrack()
                     LocationManager.shared.startInBackground()
                     self.statusLabel.text = NSLocalizedString("Tracker starting", comment: "").uppercased()
                 } else {
