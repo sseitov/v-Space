@@ -11,6 +11,7 @@ import CoreLocation
 import CoreData
 import Photos
 import MapKit
+import CloudKit
 
 // MARK: - Date formatter
 
@@ -304,7 +305,7 @@ class LocationManager: NSObject {
         }
     }
     
-    func createPlace(_ placeID:String, name:String, coordinate:CLLocationCoordinate2D, phone:String?, address:String?, website:URL?) -> Place? {
+    func createPlace(_ placeID:String, name:String, coordinate:CLLocationCoordinate2D, phone:String?, address:String?, website:URL?) -> Place {
         var place = getPlace(placeID)
         if place == nil {
             place = NSEntityDescription.insertNewObject(forEntityName: "Place", into: managedObjectContext) as? Place
@@ -319,7 +320,7 @@ class LocationManager: NSObject {
             }
             saveContext()
         }
-        return place
+        return place!
     }
     
     func allPlaces() -> [Place] {
@@ -345,46 +346,25 @@ class LocationManager: NSObject {
         }
     }
   
-    func createPhoto(_ asset:PHAsset) -> Photo? {
-        var photo = getPhoto(asset.localIdentifier)
-        if photo == nil {
-            photo = NSEntityDescription.insertNewObject(forEntityName: "Photo", into: managedObjectContext) as? Photo
-            photo?.uid = asset.localIdentifier
-            photo?.creationDate = asset.creationDate! as NSDate
-            photo?.latitude = asset.location!.coordinate.latitude
-            photo?.longitude = asset.location!.coordinate.longitude
-            return photo!
-        } else {
-            return nil
-        }
-    }
-    
-    func addPhotoIntoTrack(_ track:Track, uid:String, date:Double, latitude:Double, longitude:Double) {
-        var photo = getPhoto(uid)
-        if photo == nil {
-            photo = NSEntityDescription.insertNewObject(forEntityName: "Photo", into: managedObjectContext) as? Photo
-            photo!.uid = uid
-            photo!.creationDate = NSDate(timeIntervalSince1970: date)
-            photo!.latitude = latitude
-            photo!.longitude = longitude
-            photo!.track = track
-            track.addToPhotos(photo!)
-            saveContext()
-        }
-    }
-
-    func addPhotos(_ assets:[PHAsset], into:Track?) {
+    func addPhotosIntoTrack(_ track:Track, assets:[PHAsset]) -> [Photo] {
+        var newPhotos:[Photo] = []
         for asset in assets {
-            if asset.location != nil && asset.creationDate != nil {
-                if let photo = createPhoto(asset) {
-                    photo.track = into
-                    into?.addToPhotos(photo)
-                }
+            var photo = getPhoto(asset.localIdentifier)
+            if photo == nil {
+                photo = NSEntityDescription.insertNewObject(forEntityName: "Photo", into: managedObjectContext) as? Photo
+                photo!.uid = asset.localIdentifier
+                photo!.date = asset.creationDate!.timeIntervalSince1970
+                photo!.latitude = asset.location!.coordinate.latitude
+                photo!.longitude = asset.location!.coordinate.longitude
+                photo!.track = track
+                track.addToPhotos(photo!)
+                newPhotos.append(photo!)
+                saveContext()
             }
         }
-        saveContext()
+        return newPhotos
     }
- 
+
 }
 
 extension LocationManager : CLLocationManagerDelegate {

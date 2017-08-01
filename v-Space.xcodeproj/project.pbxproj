@@ -166,6 +166,7 @@
 		2C79D49D1E92C5CA00EF4954 /* Photo+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Photo+CoreDataClass.swift"; path = "Model/Photo+CoreDataClass.swift"; sourceTree = "<group>"; };
 		2C79D49E1E92C5CA00EF4954 /* Photo+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Photo+CoreDataProperties.swift"; path = "Model/Photo+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		2C79D4A31E92DE9F00EF4954 /* PhotoController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoController.swift; sourceTree = "<group>"; };
+		2C7B77141F2FD3100014ABC2 /* LocationModel 7.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "LocationModel 7.xcdatamodel"; sourceTree = "<group>"; };
 		2C85AA101E01FE350050D9D8 /* UIFontExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIFontExtensions.swift; path = Extensions/UIFontExtensions.swift; sourceTree = "<group>"; };
 		2C87D3131DDEE1E500F05528 /* iNear.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = iNear.entitlements; path = iNear/iNear.entitlements; sourceTree = "<group>"; };
 		2C87D3191DDEF37900F05528 /* TextFieldContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TextFieldContainer.swift; path = CustomViews/TextFieldContainer.swift; sourceTree = "<group>"; };
@@ -1207,6 +1208,7 @@
 		2CE268B51E67156400FE8219 /* LocationModel.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				2C7B77141F2FD3100014ABC2 /* LocationModel 7.xcdatamodel */,
 				2C500F051F2875B900D04B69 /* LocationModel 6.xcdatamodel */,
 				2C362BD71EB4947000749C46 /* LocationModel 5.xcdatamodel */,
 				2C4E00AD1EADACB000BB935F /* LocationModel 4.xcdatamodel */,
@@ -1214,7 +1216,7 @@
 				2CBE20221E8D955B002EF13C /* LocationModel 2.xcdatamodel */,
 				2CE268B61E67156400FE8219 /* LocationModel.xcdatamodel */,
 			);
-			currentVersion = 2C500F051F2875B900D04B69 /* LocationModel 6.xcdatamodel */;
+			currentVersion = 2C7B77141F2FD3100014ABC2 /* LocationModel 7.xcdatamodel */;
 			name = LocationModel.xcdatamodeld;
 			path = Model/LocationModel.xcdatamodeld;
 			sourceTree = "<group>";

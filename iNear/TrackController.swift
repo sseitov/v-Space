@@ -19,10 +19,20 @@ class TrackController: UIViewController {
     
     var track:Track?
     var fromRoot = false
-
+    
+    private var photoMarkers:[PhotoMarker] = []
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(self.refreshPhotos),
+                                               name: photoNotification,
+                                               object: nil)
         if IS_PAD() {
             navigationItem.leftBarButtonItem = nil
             navigationItem.hidesBackButton = true
@@ -50,6 +60,8 @@ class TrackController: UIViewController {
                 return
             }
         } else {
+            refreshPhotos()
+            Cloud.shared.syncTrackPhotos(track!)
             setupTitle("\(track!.place!)\n\(textDateFormatter().string(from: (track!.finishDate! as Date)))")
             path = GMSMutablePath(fromEncodedPath: track!.path!)
         }
@@ -71,16 +83,6 @@ class TrackController: UIViewController {
         startMarker.groundAnchor = CGPoint(x: 0.5, y: 0.5)
         startMarker.map = map
         
-        if let photos = track?.photos?.allObjects as? [Photo] {
-            for photo in photos {
-                let marker = PhotoMarker(position: CLLocationCoordinate2D(latitude: photo.latitude, longitude: photo.longitude))
-                marker.photo = photo
-                marker.icon = UIImage(named: "photo")
-                marker.groundAnchor = CGPoint(x: 0.5, y: 0.5)
-                marker.map = map
-            }
-        }
-        
         var bounds = GMSCoordinateBounds()
         for i in 0..<path!.count() {
             let pt = path!.coordinate(at: i)
@@ -96,6 +98,25 @@ class TrackController: UIViewController {
         } else {
             navigationItem.prompt = nil
             super.goBack()
+        }
+    }
+    
+    func refreshPhotos() {
+        
+        for marker in photoMarkers {
+            marker.map = nil
+        }
+        photoMarkers.removeAll()
+        
+        if let photos = track?.photos?.allObjects as? [Photo] {
+            for photo in photos {
+                let marker = PhotoMarker(position: CLLocationCoordinate2D(latitude: photo.latitude, longitude: photo.longitude))
+                marker.photo = photo
+                marker.icon = UIImage(named: "photo")
+                marker.groundAnchor = CGPoint(x: 0.5, y: 0.5)
+                marker.map = map
+                photoMarkers.append(marker)
+            }
         }
     }
     

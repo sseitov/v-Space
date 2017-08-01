@@ -2,7 +2,7 @@
 //  Photo+CoreDataProperties.swift
 //  v-Space
 //
-//  Created by Сергей Сейтов on 03.04.17.
+//  Created by Sergey Seitov on 01.08.17.
 //  Copyright © 2017 Сергей Сейтов. All rights reserved.
 //
 
@@ -16,10 +16,10 @@ extension Photo {
         return NSFetchRequest<Photo>(entityName: "Photo")
     }
 
-    @NSManaged public var creationDate: NSDate?
-    @NSManaged public var uid: String?
+    @NSManaged public var date: Double
     @NSManaged public var latitude: Double
     @NSManaged public var longitude: Double
+    @NSManaged public var uid: String?
     @NSManaged public var track: Track?
 
 }

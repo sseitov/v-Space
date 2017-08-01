@@ -18,7 +18,8 @@ class PhotoController: UIViewController, UIScrollViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupTitle(textDateFormatter().string(from: photo!.creationDate! as Date))
+        let date = Date(timeIntervalSince1970: photo!.date)
+        setupTitle(textDateFormatter().string(from: date))
         setupBackButton()
         
         scrollView.minimumZoomScale = 1.0

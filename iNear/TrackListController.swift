@@ -79,79 +79,36 @@ class TrackListController: UITableViewController, LastTrackCellDelegate, PHPhoto
     }
     
     @IBAction func refresh() {
-        if PHPhotoLibrary.authorizationStatus() != .authorized {
-            PHPhotoLibrary.requestAuthorization({ status in
-                DispatchQueue.main.async {
-                    if status == .authorized {
-                        SVProgressHUD.show(withStatus: "Sync...")
-                        self.syncTracks({ error in
-                            SVProgressHUD.dismiss()
-                            if error != nil {
-                                self.showMessage(error!, messageType: .error)
-                            } else {
-                                self.finishSync()
-                            }
-                        })
-                    } else {
-                        self.showMessage(NSLocalizedString("photoLibrary", comment: ""), messageType: .error)
-                    }
-                }
-            })
-        } else {
-            SVProgressHUD.show(withStatus: "Sync...")
-            self.syncTracks({ error in
-                SVProgressHUD.dismiss()
-                if error != nil {
-                    self.showMessage(error!, messageType: .error)
+        
+        func finishSync() {
+            tracks = LocationManager.shared.allTracks()
+            places = LocationManager.shared.allPlaces()
+            tableView.reloadData()
+            if IS_PAD() {
+                if tracks.count > 0 {
+                    performSegue(withIdentifier: "showDetail", sender: tracks[0])
                 } else {
-                    self.finishSync()
+                    performSegue(withIdentifier: "showDetail", sender: nil)
                 }
-            })
+            }
         }
-    }
 
-    func finishSync() {
-        tracks = LocationManager.shared.allTracks()
-        places = LocationManager.shared.allPlaces()
-        tableView.reloadData()
-        if IS_PAD() {
-            if tracks.count > 0 {
-                performSegue(withIdentifier: "showDetail", sender: tracks[0])
+        SVProgressHUD.show(withStatus: "iCloud Sync...")
+        Cloud.shared.syncPlaces({ placesError in
+            if placesError != nil {
+                SVProgressHUD.dismiss()
+                self.showMessage(placesError!, messageType: .error)
             } else {
-                performSegue(withIdentifier: "showDetail", sender: nil)
+                Cloud.shared.syncTracks({ tracksError in
+                    SVProgressHUD.dismiss()
+                    if tracksError != nil {
+                        self.showMessage(tracksError!, messageType: .error)
+                    } else {
+                        finishSync()
+                    }
+                })
             }
-        }
-    }
-    
-    func syncTracks(_ error:@escaping (String?) -> ()) {
-        let syncedResult = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .albumMyPhotoStream, options: nil)
-        if syncedResult.count > 0 {
-            let collection = syncedResult.object(at: 0)
-            let options = PHFetchOptions()
-            options.sortDescriptors = [ NSSortDescriptor(key: "creationDate", ascending: false) ]
-            let fetchResult = PHAsset.fetchAssets(in: collection, options: options)
-            var assets:[PHAsset] = []
-            fetchResult.enumerateObjects({ asset, index, _ in
-                assets.append(asset)
-            })
-            DispatchQueue.main.async {
-                if assets.count == 0 {
-                    error(NSLocalizedString("photoCount", comment: ""))
-                } else {
-                    Cloud.shared.syncTracks(assets, error: { err in
-                        if err != nil {
-                            error(err)
-                        } else {
-                            Cloud.shared.syncPlaces({ placesErr in
-                                error(placesErr)
-                            })
-                        }
-                    })
-                }
-            }
-        } else {
-            error(NSLocalizedString("photoStream", comment: ""))
-        }
+        })
     }
     
     func saveLastTrack() {
@@ -170,12 +127,10 @@ class TrackListController: UITableViewController, LastTrackCellDelegate, PHPhoto
                 self.assets.removeAll()
             }, acceptHandler: { name in
                 let track = LocationManager.shared.createTrack(name, path: path.encodedPath(), start: points.last!.date, finish: points.first!.date, distance: LocationManager.shared.lastTrackDistance())
-                
                 LocationManager.shared.clearLastTrack()
-                LocationManager.shared.addPhotos(self.assets, into: track)
+                Cloud.shared.saveTrack(track, assets: self.assets)
                 self.assets.removeAll()
                 
-                Cloud.shared.putTrack(track)
                 self.tableView.beginUpdates()
                 self.tracks.insert(track, at: 0)
                 self.tableView.insertRows(at: [IndexPath(row: 0, section: 1)], with: .bottom)
@@ -190,7 +145,7 @@ class TrackListController: UITableViewController, LastTrackCellDelegate, PHPhoto
     func photoLibraryDidChange(_ changeInstance: PHChange) {
         DispatchQueue.main.sync {
             if let date = LocationManager.shared.lastLocationDate(first: true) {
-                self.putPhotoOnTrack(date, result: { success in
+                self.putPhotosOnTrack(date, result: { success in
                     if !success {
                         self.showMessage(NSLocalizedString("photoLibrary", comment: ""), messageType: .error)
                     }
@@ -199,7 +154,7 @@ class TrackListController: UITableViewController, LastTrackCellDelegate, PHPhoto
         }
     }
 
-    private func putPhotoOnTrack(_ date:Date, result:@escaping (Bool) -> ()) {
+    private func putPhotosOnTrack(_ date:Date, result:@escaping (Bool) -> ()) {
         if PHPhotoLibrary.authorizationStatus() != .authorized {
             PHPhotoLibrary.requestAuthorization({ status in
                 DispatchQueue.main.async {
@@ -230,7 +185,6 @@ class TrackListController: UITableViewController, LastTrackCellDelegate, PHPhoto
                     self.assets.append(asset)
                 }
             })
-            print("\(self.assets.count)")
         }
     }
  
