@@ -31,7 +31,7 @@ class TrackController: UIViewController {
         
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(self.refreshPhotos),
-                                               name: photoNotification,
+                                               name: syncNotification,
                                                object: nil)
         if IS_PAD() {
             navigationItem.leftBarButtonItem = nil

@@ -28,7 +28,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
         // Initialize Google Maps
         GMSServices.provideAPIKey(GoolgleMapAPIKey)
         GMSPlacesClient.provideAPIKey(GoolglePlacesAPIKey)
-                
+        
+        LocationManager.shared.registered({ _ in
+        })
+        
         // connect iWatch
         
         if WCSession.isSupported() {

@@ -174,12 +174,6 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" id="q7a-X7-vIZ">
-                        <barButtonItem key="leftBarButtonItem" systemItem="refresh" id="jkd-op-vWJ">
-                            <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            <connections>
-                                <action selector="refresh" destination="0ES-to-eOf" id="BzM-cL-JqC"/>
-                            </connections>
-                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" image="near" id="SYr-vG-9s4">
                             <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <connections>

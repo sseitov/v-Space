@@ -58,8 +58,15 @@ class TrackListController: UITableViewController, LastTrackCellDelegate, PHPhoto
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.refreshPlaces), name: newPlaceNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.refreshCurrentTrack), name: newPointNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.finishSync), name: syncNotification, object: nil)
+        
         PHPhotoLibrary.shared().register(self)
-        refresh()
+        
+        Cloud.shared.sync({ error in
+            if error != nil {
+                self.showMessage(error!, messageType: .error)
+            }
+        })
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -79,39 +86,19 @@ class TrackListController: UITableViewController, LastTrackCellDelegate, PHPhoto
         tableView.reloadRows(at: [indexPath], with: .fade)
     }
     
-    @IBAction func refresh() {
-        
-        func finishSync() {
-            tracks = Model.shared.allTracks()
-            places = Model.shared.allPlaces()
-            tableView.reloadData()
-            if IS_PAD() {
-                if tracks.count > 0 {
-                    performSegue(withIdentifier: "showDetail", sender: tracks[0])
-                } else {
-                    performSegue(withIdentifier: "showDetail", sender: nil)
-                }
+    func finishSync() {
+        tracks = Model.shared.allTracks()
+        places = Model.shared.allPlaces()
+        tableView.reloadData()
+        if IS_PAD() {
+            if tracks.count > 0 {
+                performSegue(withIdentifier: "showDetail", sender: tracks[0])
+            } else {
+                performSegue(withIdentifier: "showDetail", sender: nil)
             }
         }
-
-        SVProgressHUD.show(withStatus: "iCloud Sync...")
-        Cloud.shared.syncPlaces({ placesError in
-            if placesError != nil {
-                SVProgressHUD.dismiss()
-                self.showMessage(placesError!, messageType: .error)
-            } else {
-                Cloud.shared.syncTracks({ tracksError in
-                    SVProgressHUD.dismiss()
-                    if tracksError != nil {
-                        self.showMessage(tracksError!, messageType: .error)
-                    } else {
-                        finishSync()
-                    }
-                })
-            }
-        })
     }
-    
+
     // MARK: - LastTrackCell delegate
 
     func accessDenied() {

@@ -12,7 +12,7 @@ import Photos
 import GoogleMaps
 import GooglePlaces
 
-let photoNotification = Notification.Name("NEW_PHOTO")
+let syncNotification = Notification.Name("SYNCED")
 
 @objc class Cloud: NSObject {
     
@@ -70,7 +70,7 @@ let photoNotification = Notification.Name("NEW_PHOTO")
                     }
                     if cloudAssets.count > 0 {
                         _ = Model.shared.addPhotosIntoTrack(track, assets: cloudAssets)
-                        NotificationCenter.default.post(name: photoNotification, object: nil)
+                        NotificationCenter.default.post(name: syncNotification, object: nil)
                     }
                 }
             }
@@ -79,7 +79,7 @@ let photoNotification = Notification.Name("NEW_PHOTO")
 
     // MARK: - Tracks
 
-    func syncTracks(_ result:@escaping (String?) -> ()) {
+    private func syncTracks(_ result:@escaping (String?) -> ()) {
        
         let localTracks = Model.shared.allTracks()
         
@@ -219,7 +219,7 @@ let photoNotification = Notification.Name("NEW_PHOTO")
 
     // MARK: - Places
 
-    func syncPlaces(_ result:@escaping (String?) -> ()) {
+    private func syncPlaces(_ result:@escaping (String?) -> ()) {
         
         let localPlaces = Model.shared.allPlaces()
         
@@ -334,5 +334,24 @@ let photoNotification = Notification.Name("NEW_PHOTO")
                 }
             }
         }
+    }
+    
+    // MARK: - Sync all
+
+    func sync(_ result:@escaping (String?) -> ()) {
+        syncPlaces({ placesError in
+            if placesError != nil {
+                result(placesError)
+            } else {
+                Cloud.shared.syncTracks({ tracksError in
+                    if tracksError != nil {
+                        result(tracksError)
+                    } else {
+                        result(nil)
+                    }
+                    NotificationCenter.default.post(name: syncNotification, object: nil)
+                })
+            }
+        })
     }
 }
