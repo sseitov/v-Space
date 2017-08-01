@@ -11,4 +11,11 @@ import CoreData
 
 public class Track: NSManagedObject {
     
+    func allPhotos() -> [Photo] {
+        if let all = photos?.allObjects as? [Photo] {
+            return all
+        } else {
+            return []
+        }
+    }
 }

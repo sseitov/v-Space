@@ -15,6 +15,8 @@
 		2C362BDB1EB495C500749C46 /* Place+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C362BD91EB495C500749C46 /* Place+CoreDataProperties.swift */; };
 		2C362BE01EB4999300749C46 /* Place+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C362BD81EB495C500749C46 /* Place+CoreDataClass.swift */; };
 		2C362BE11EB4999300749C46 /* Place+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C362BD91EB495C500749C46 /* Place+CoreDataProperties.swift */; };
+		2C3684431F307C6C00A5AD4E /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C3684421F307C6C00A5AD4E /* LocationManager.swift */; };
+		2C3684441F307C6C00A5AD4E /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C3684421F307C6C00A5AD4E /* LocationManager.swift */; };
 		2C3ED20F1EB1F0E300463199 /* PlaceInfoController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C3ED20E1EB1F0E300463199 /* PlaceInfoController.swift */; };
 		2C3ED2111EB1FB2900463199 /* WebController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C3ED2101EB1FB2900463199 /* WebController.swift */; };
 		2C3ED2131EB2046200463199 /* RouteController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C3ED2121EB2046200463199 /* RouteController.swift */; };
@@ -76,8 +78,8 @@
 		2CE268BD1E6716BE00FE8219 /* Location+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CE268BA1E6716BE00FE8219 /* Location+CoreDataClass.swift */; };
 		2CE268BE1E6716BE00FE8219 /* Location+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CE268BB1E6716BE00FE8219 /* Location+CoreDataProperties.swift */; };
 		2CE268BF1E6716BE00FE8219 /* Location+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CE268BB1E6716BE00FE8219 /* Location+CoreDataProperties.swift */; };
-		2CE268C21E672F7C00FE8219 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CE268C11E672F7C00FE8219 /* LocationManager.swift */; };
-		2CE268C31E672F9C00FE8219 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CE268C11E672F7C00FE8219 /* LocationManager.swift */; };
+		2CE268C21E672F7C00FE8219 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CE268C11E672F7C00FE8219 /* Model.swift */; };
+		2CE268C31E672F9C00FE8219 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CE268C11E672F7C00FE8219 /* Model.swift */; };
 		2CE268C41E6758C200FE8219 /* UIColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C87D31B1DDEF3C200F05528 /* UIColorExtensions.swift */; };
 		2CF6723A1F29E54300BDE68C /* UIColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C87D31B1DDEF3C200F05528 /* UIColorExtensions.swift */; };
 		2CF6723B1F29EF2400BDE68C /* UIFontExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C85AA101E01FE350050D9D8 /* UIFontExtensions.swift */; };
@@ -156,6 +158,7 @@
 		2C362BD71EB4947000749C46 /* LocationModel 5.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "LocationModel 5.xcdatamodel"; sourceTree = "<group>"; };
 		2C362BD81EB495C500749C46 /* Place+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Place+CoreDataClass.swift"; path = "Model/Place+CoreDataClass.swift"; sourceTree = "<group>"; };
 		2C362BD91EB495C500749C46 /* Place+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Place+CoreDataProperties.swift"; path = "Model/Place+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		2C3684421F307C6C00A5AD4E /* LocationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		2C3ED20E1EB1F0E300463199 /* PlaceInfoController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaceInfoController.swift; sourceTree = "<group>"; };
 		2C3ED2101EB1FB2900463199 /* WebController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebController.swift; sourceTree = "<group>"; };
 		2C3ED2121EB2046200463199 /* RouteController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RouteController.swift; sourceTree = "<group>"; };
@@ -226,7 +229,7 @@
 		2CE268BA1E6716BE00FE8219 /* Location+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Location+CoreDataClass.swift"; path = "Model/Location+CoreDataClass.swift"; sourceTree = "<group>"; };
 		2CE268BB1E6716BE00FE8219 /* Location+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Location+CoreDataProperties.swift"; path = "Model/Location+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		2CE268C01E672D2B00FE8219 /* Today.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Today.entitlements; sourceTree = "<group>"; };
-		2CE268C11E672F7C00FE8219 /* LocationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LocationManager.swift; path = Model/LocationManager.swift; sourceTree = "<group>"; };
+		2CE268C11E672F7C00FE8219 /* Model.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Model.swift; path = Model/Model.swift; sourceTree = "<group>"; };
 		551BE7C10D556D1602CBA6E7 /* Pods_v_Space.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_v_Space.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7E63B13F1CC7ED11C64BF95C /* Pods-v-Space.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-v-Space.debug.xcconfig"; path = "Pods/Target Support Files/Pods-v-Space/Pods-v-Space.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -315,7 +318,8 @@
 				2CE15FBE1EB466A60085915E /* Track */,
 				2CE15FC01EB46CAA0085915E /* Place */,
 				2C17475B1DDB872A0018AEAB /* AppDelegate.swift */,
-				2CE268C11E672F7C00FE8219 /* LocationManager.swift */,
+				2CE268C11E672F7C00FE8219 /* Model.swift */,
+				2C3684421F307C6C00A5AD4E /* LocationManager.swift */,
 				2C91E0631EAC809C0067286B /* Cloud.swift */,
 				2C3F368C1E6C132900021B10 /* Credentials.swift */,
 				2C17476F1DDB93660018AEAB /* Resources */,
@@ -758,9 +762,10 @@
 				2C87D3201DDF026300F05528 /* UIViewControllerExtensions.swift in Sources */,
 				2C362BDB1EB495C500749C46 /* Place+CoreDataProperties.swift in Sources */,
 				2CE268B71E67156400FE8219 /* LocationModel.xcdatamodeld in Sources */,
+				2C3684431F307C6C00A5AD4E /* LocationManager.swift in Sources */,
 				2C79D4A01E92C5CA00EF4954 /* Photo+CoreDataProperties.swift in Sources */,
 				2CBE202F1E8DA170002EF13C /* TextInput.swift in Sources */,
-				2CE268C21E672F7C00FE8219 /* LocationManager.swift in Sources */,
+				2CE268C21E672F7C00FE8219 /* Model.swift in Sources */,
 				2C87D3331DDF1A5C00F05528 /* LGProgressView.m in Sources */,
 				2C87D32F1DDF1A5C00F05528 /* LGAlertView.m in Sources */,
 				2CBE20291E8D9799002EF13C /* Track+CoreDataClass.swift in Sources */,
@@ -798,10 +803,11 @@
 				2CBE202C1E8D9829002EF13C /* Track+CoreDataProperties.swift in Sources */,
 				2C8060771E689B45001B9409 /* UIViewExtensions.swift in Sources */,
 				2C362BE01EB4999300749C46 /* Place+CoreDataClass.swift in Sources */,
-				2CE268C31E672F9C00FE8219 /* LocationManager.swift in Sources */,
+				2CE268C31E672F9C00FE8219 /* Model.swift in Sources */,
 				2CE268C41E6758C200FE8219 /* UIColorExtensions.swift in Sources */,
 				2C362BE11EB4999300749C46 /* Place+CoreDataProperties.swift in Sources */,
 				2CBE202B1E8D9821002EF13C /* Track+CoreDataClass.swift in Sources */,
+				2C3684441F307C6C00A5AD4E /* LocationManager.swift in Sources */,
 				2C79D4A21E92C73400EF4954 /* Photo+CoreDataProperties.swift in Sources */,
 				2CE268A21E66E15600FE8219 /* TodayViewController.swift in Sources */,
 				2CE268BF1E6716BE00FE8219 /* Location+CoreDataProperties.swift in Sources */,

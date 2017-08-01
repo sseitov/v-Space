@@ -19,17 +19,17 @@ class LastTrackCell: UITableViewCell {
     
     var delegate:LastTrackCellDelegate? {
         didSet {
-            statusSwitch.isOn = LocationManager.shared.isRunning()
+            statusSwitch.isOn = Model.shared.isRunning()
             if !statusSwitch.isOn {
                 statusLabel.text = NSLocalizedString("Tracker not running", comment: "").uppercased()
                 statusLabel.textColor = UIColor.lightGray
                 accessoryType = .none
             } else {
                 statusLabel.text = String(format: NSLocalizedString("trackFormat", comment: ""),
-                                          LocationManager.shared.lastTrackDistance(),
-                                          LocationManager.shared.lastTrackSpeed())
+                                          Model.shared.lastTrackDistance(),
+                                          Model.shared.lastTrackSpeed())
                 statusLabel.textColor = UIColor.mainColor()
-                let count = LocationManager.shared.lastTrackSize()
+                let count = Model.shared.lastTrackSize()
                 if count < 2 {
                     accessoryType = .none
                 } else {

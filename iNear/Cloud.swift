@@ -41,6 +41,10 @@ let photoNotification = Notification.Name("NEW_PHOTO")
     
     func syncTrackPhotos(_ track:Track) {
         
+        func assetForDate(_ date:Double) -> PHAsset? {
+            return nil
+        }
+        
         let predicate = NSPredicate(format: "trackID = %@", track.uid!)
         let query = CKQuery(recordType: "Photo", predicate: predicate)
         
@@ -52,7 +56,14 @@ let photoNotification = Notification.Name("NEW_PHOTO")
             DispatchQueue.main.async {
                 if results != nil {
                     for record in results! {
-                        
+                        if let date = record.value(forKey: "photoDate") as? Double,
+                            let latitude = record.value(forKey: "latitude"),
+                            let longitude = record.value(forKey: "latitude")
+                        {
+                            if let asset = assetForDate(date) {
+                                let uid = asset.localIdentifier
+                            }
+                        }
                     }
                 }
                 NotificationCenter.default.post(name: photoNotification, object: nil)
@@ -64,7 +75,7 @@ let photoNotification = Notification.Name("NEW_PHOTO")
 
     func syncTracks(_ result:@escaping (String?) -> ()) {
        
-        let localTracks = LocationManager.shared.allTracks()
+        let localTracks = Model.shared.allTracks()
         
         let predicate = NSPredicate(value: true)
         let query = CKQuery(recordType: "Track", predicate: predicate)
@@ -86,9 +97,9 @@ let photoNotification = Notification.Name("NEW_PHOTO")
                         let startDate = record.value(forKey: "startDate") as? Double,
                         let distance = record.value(forKey: "distance") as? Double
                     {
-                        var track = LocationManager.shared.getTrack(uid)
+                        var track = Model.shared.getTrack(uid)
                         if track == nil {
-                            track = LocationManager.shared.saveTrack(uid, name: place, path: path, start: startDate, finish:date, distance: distance)
+                            track = Model.shared.saveTrack(uid, name: place, path: path, start: startDate, finish:date, distance: distance)
                             self.syncTrackPhotos(track!)
                         }
                         cloudTracks.append(track!)
@@ -96,8 +107,8 @@ let photoNotification = Notification.Name("NEW_PHOTO")
                 }
                 for track in localTracks {
                     if !cloudTracks.contains(track) {
-                        LocationManager.shared.managedObjectContext.delete(track)
-                        LocationManager.shared.saveContext()
+                        Model.shared.managedObjectContext.delete(track)
+                        Model.shared.saveContext()
                     }
                 }
                 result(nil)
@@ -122,7 +133,7 @@ let photoNotification = Notification.Name("NEW_PHOTO")
             }
         }
         
-        let photos = LocationManager.shared.addPhotosIntoTrack(track, assets: assets)
+        let photos = Model.shared.addPhotosIntoTrack(track, assets: assets)
         if photos.count > 0 {
             saveTrackPhotos(photos)
         }
@@ -178,11 +189,11 @@ let photoNotification = Notification.Name("NEW_PHOTO")
                 deleteTrackPhotos(track.uid!)
                 if let photos = track.photos?.allObjects as? [Photo] {
                     for photo in photos {
-                        LocationManager.shared.managedObjectContext.delete(photo)
+                        Model.shared.managedObjectContext.delete(photo)
                     }
                 }
-                LocationManager.shared.managedObjectContext.delete(track)
-                LocationManager.shared.saveContext()
+                Model.shared.managedObjectContext.delete(track)
+                Model.shared.saveContext()
                 
                 if let record = results!.first {
                     self.cloudDB?.delete(withRecordID: record.recordID, completionHandler: { _, error in
@@ -204,7 +215,7 @@ let photoNotification = Notification.Name("NEW_PHOTO")
 
     func syncPlaces(_ result:@escaping (String?) -> ()) {
         
-        let localPlaces = LocationManager.shared.allPlaces()
+        let localPlaces = Model.shared.allPlaces()
         
         let predicate = NSPredicate(value: true)
         let query = CKQuery(recordType: "Place", predicate: predicate)
@@ -229,7 +240,7 @@ let photoNotification = Notification.Name("NEW_PHOTO")
                         let address = record.value(forKey: "address") as? String
                         let website = record.value(forKey: "website") as? String
                         let url = website != nil ? URL(string: website!) : nil
-                        let place = LocationManager.shared.createPlace(placeID,
+                        let place = Model.shared.createPlace(placeID,
                                                            name: name,
                                                            coordinate: coordinate,
                                                            phone: phone,
@@ -240,8 +251,8 @@ let photoNotification = Notification.Name("NEW_PHOTO")
                 }
                 for place in localPlaces {
                     if !cloudPlaces.contains(place) {
-                        LocationManager.shared.managedObjectContext.delete(place)
-                        LocationManager.shared.saveContext()
+                        Model.shared.managedObjectContext.delete(place)
+                        Model.shared.saveContext()
                     }
                 }
                 result(nil)
@@ -251,8 +262,8 @@ let photoNotification = Notification.Name("NEW_PHOTO")
     
     func savePlace(_ gmsPlace:GMSPlace, result:@escaping (String?) -> ()) {
         
-        if LocationManager.shared.getPlace(gmsPlace.placeID) == nil {
-            let place = LocationManager.shared.createPlace(gmsPlace.placeID,
+        if Model.shared.getPlace(gmsPlace.placeID) == nil {
+            let place = Model.shared.createPlace(gmsPlace.placeID,
                                                name: gmsPlace.name,
                                                coordinate: gmsPlace.coordinate,
                                                phone: gmsPlace.phoneNumber,
@@ -304,15 +315,15 @@ let photoNotification = Notification.Name("NEW_PHOTO")
                         if error != nil {
                             print(error!.localizedDescription)
                         }
-                        LocationManager.shared.managedObjectContext.delete(place)
-                        LocationManager.shared.saveContext()
+                        Model.shared.managedObjectContext.delete(place)
+                        Model.shared.saveContext()
                         complete()
                     }
                 })
             } else {
                 DispatchQueue.main.async {
-                    LocationManager.shared.managedObjectContext.delete(place)
-                    LocationManager.shared.saveContext()
+                    Model.shared.managedObjectContext.delete(place)
+                    Model.shared.saveContext()
                     complete()
                 }
             }

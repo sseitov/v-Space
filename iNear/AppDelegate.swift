@@ -152,14 +152,14 @@ extension AppDelegate : WCSessionDelegate {
             if command == "status" {
                 replyHandler(
                     ["isRunning" : !LocationManager.shared.isPaused,
-                     "distance" : LocationManager.shared.lastTrackDistance(),
-                     "speed" : LocationManager.shared.lastTrackSpeed()])
+                     "distance" : Model.shared.lastTrackDistance(),
+                     "speed" : Model.shared.lastTrackSpeed()])
             } else if command == "start" {
                 LocationManager.shared.startInBackground()
-                replyHandler(["result": !LocationManager.shared.isPaused])
+                replyHandler(["result": !Model.shared.isPaused])
             } else if command == "stop" {
                 LocationManager.shared.stop()
-                replyHandler(["result": !LocationManager.shared.isPaused])
+                replyHandler(["result": !Model.shared.isPaused])
             }
         }
     }

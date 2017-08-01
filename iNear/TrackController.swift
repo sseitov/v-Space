@@ -45,8 +45,8 @@ class TrackController: UIViewController {
         var path:GMSMutablePath?
         
         if track == nil {            
-            if let date = LocationManager.shared.lastLocationDate(),
-                let all = LocationManager.shared.lastTrack(), all.count > 1
+            if let date = Model.shared.lastLocationDate(),
+                let all = Model.shared.lastTrack(), all.count > 1
             {
                 setupTitle(textDateFormatter().string(from: date))
                 

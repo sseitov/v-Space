@@ -1,5 +1,5 @@
 //
-//  LocationManager.swift
+//  Model.swift
 //  iNear
 //
 //  Created by Сергей Сейтов on 01.03.17.
@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import CoreLocation
 import CoreData
 import Photos
 import MapKit
@@ -43,77 +42,16 @@ func IS_PAD() -> Bool {
 let newPointNotification = Notification.Name("NEW_POINT")
 let newPlaceNotification = Notification.Name("NEW_PLACE")
 
-class LocationManager: NSObject {
+class Model: NSObject {
     
-    static let shared = LocationManager()
-    
-    let locationManager = CLLocationManager()
-    
-    var locationCondition:NSCondition?
-    var currentLocation:CLLocation?
-    var isPaused:Bool = true
-    
-    private override init() {
-        super.init()
-        locationManager.delegate = self
-        locationManager.desiredAccuracy = kCLLocationAccuracyBest
-        locationManager.distanceFilter = 10.0
-        locationManager.headingFilter = 5.0
-        locationManager.pausesLocationUpdatesAutomatically = false
-    }
-    
-    func getCurrentLocation(_ location: @escaping(CLLocation?) -> ()) {
-        if CLLocationManager.locationServicesEnabled() {
-            if CLLocationManager.authorizationStatus() != .authorizedAlways {
-                self.locationManager.requestWhenInUseAuthorization()
-                location(nil)
-            } else {
-                currentLocation = nil
-                locationCondition = NSCondition()
-                self.locationManager.startUpdatingLocation()
-                DispatchQueue.global().async {
-                    self.locationCondition?.lock()
-                    self.locationCondition?.wait()
-                    self.locationCondition?.unlock()
-                    DispatchQueue.main.async {
-                        self.locationCondition = nil
-                        location(self.currentLocation)
-                    }
-                }
-            }
-        } else {
-            location(nil)
-        }
-    }
-
-    func register() {
-        if CLLocationManager.locationServicesEnabled() {
-            if CLLocationManager.authorizationStatus() != .authorizedAlways {
-                locationManager.requestAlwaysAuthorization()
-            }
-        }
-    }
-    
-    func startInBackground() {
-        if CLLocationManager.authorizationStatus() == .authorizedAlways {
-            locationManager.startUpdatingLocation()
-            sharedDefaults.synchronize()
-            locationManager.allowsBackgroundLocationUpdates = true
-            isPaused = false
-        }
-    }
-    
-    func stop() {
-        locationManager.stopUpdatingLocation()
-        isPaused = true
-    }
+    static let shared = Model()
 
     // MARK: - CoreData stack
-    
+/*
     lazy var sharedDefaults: UserDefaults = {
         return UserDefaults(suiteName: "group.com.vchannel.iNearby")!
     }()
-    
+  */  
     lazy var sharedDocumentsDirectory: URL = {
         return FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.vchannel.iNearby")!
     }()
@@ -365,29 +303,4 @@ class LocationManager: NSObject {
         return newPhotos
     }
 
-}
-
-extension LocationManager : CLLocationManagerDelegate {
-    
-    private func checkAccurancy(_ location:CLLocation) -> Bool {
-        if IS_PAD() {
-            return true
-        } else {
-            return location.horizontalAccuracy <= 10.0
-        }
-    }
-    
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        if let location = locations.last, checkAccurancy(location) {
-            if self.locationCondition != nil {
-                locationManager.stopUpdatingLocation()
-                self.locationCondition?.lock()
-                self.currentLocation = location
-                self.locationCondition?.signal()
-                self.locationCondition?.unlock()
-            } else {
-                addCoordinate(location.coordinate, at:NSDate().timeIntervalSince1970)
-            }
-        }
-    }
 }

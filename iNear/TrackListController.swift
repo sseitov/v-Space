@@ -63,13 +63,13 @@ class TrackListController: UITableViewController, LastTrackCellDelegate, PHPhoto
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        tracks = LocationManager.shared.allTracks()
-        places = LocationManager.shared.allPlaces()
+        tracks = Model.shared.allTracks()
+        places = Model.shared.allPlaces()
         tableView.reloadData()
     }
     
     func refreshPlaces() {
-        places = LocationManager.shared.allPlaces()
+        places = Model.shared.allPlaces()
         self.tableView.reloadData()
     }
     
@@ -81,8 +81,8 @@ class TrackListController: UITableViewController, LastTrackCellDelegate, PHPhoto
     @IBAction func refresh() {
         
         func finishSync() {
-            tracks = LocationManager.shared.allTracks()
-            places = LocationManager.shared.allPlaces()
+            tracks = Model.shared.allTracks()
+            places = Model.shared.allPlaces()
             tableView.reloadData()
             if IS_PAD() {
                 if tracks.count > 0 {
@@ -112,9 +112,9 @@ class TrackListController: UITableViewController, LastTrackCellDelegate, PHPhoto
     }
     
     func saveLastTrack() {
-        if let points = LocationManager.shared.lastTrack() {
+        if let points = Model.shared.lastTrack() {
             if points.count < 2 {
-                LocationManager.shared.clearLastTrack()
+                Model.shared.clearLastTrack()
                 self.assets.removeAll()
                 return
             }
@@ -123,11 +123,11 @@ class TrackListController: UITableViewController, LastTrackCellDelegate, PHPhoto
                 path.add(CLLocationCoordinate2D(latitude: pt.latitude, longitude: pt.longitude))
             }
             let ask = TextInput.create(cancelHandler: {
-                LocationManager.shared.clearLastTrack()
+                Model.shared.clearLastTrack()
                 self.assets.removeAll()
             }, acceptHandler: { name in
-                let track = LocationManager.shared.createTrack(name, path: path.encodedPath(), start: points.last!.date, finish: points.first!.date, distance: LocationManager.shared.lastTrackDistance())
-                LocationManager.shared.clearLastTrack()
+                let track = Model.shared.createTrack(name, path: path.encodedPath(), start: points.last!.date, finish: points.first!.date, distance: Model.shared.lastTrackDistance())
+                Model.shared.clearLastTrack()
                 Cloud.shared.saveTrack(track, assets: self.assets)
                 self.assets.removeAll()
                 
@@ -144,7 +144,7 @@ class TrackListController: UITableViewController, LastTrackCellDelegate, PHPhoto
     
     func photoLibraryDidChange(_ changeInstance: PHChange) {
         DispatchQueue.main.sync {
-            if let date = LocationManager.shared.lastLocationDate(first: true) {
+            if let date = Model.shared.lastLocationDate(first: true) {
                 self.putPhotosOnTrack(date, result: { success in
                     if !success {
                         self.showMessage(NSLocalizedString("photoLibrary", comment: ""), messageType: .error)
@@ -330,7 +330,7 @@ class TrackListController: UITableViewController, LastTrackCellDelegate, PHPhoto
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section == 0  {
-            if LocationManager.shared.lastTrackSize() > 1 {
+            if Model.shared.lastTrackSize() > 1 {
                 performSegue(withIdentifier: "showDetail", sender: nil)
             }
         } else if indexPath.section == 1 {

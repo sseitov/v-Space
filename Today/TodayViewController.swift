@@ -30,13 +30,13 @@ class TodayViewController: UIViewController, NCWidgetProviding {
     }
     
     func refresh() {
-        if LocationManager.shared.isRunning() {
+        if Model.shared.isRunning() {
             nonActive.isHidden = true
             headerView.isHidden = false
             distance.isHidden = false
             speed.isHidden = false
-            distance.text = String(format: "%.2f", LocationManager.shared.lastTrackDistance())
-            speed.text = String(format: "%.1f", LocationManager.shared.lastTrackSpeed())
+            distance.text = String(format: "%.2f", Model.shared.lastTrackDistance())
+            speed.text = String(format: "%.1f", Model.shared.lastTrackSpeed())
         } else {
             nonActive.isHidden = false
             headerView.isHidden = true
