@@ -71,9 +71,7 @@ class TrackListController: UITableViewController, LastTrackCellDelegate, PHPhoto
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        tracks = Model.shared.allTracks()
-        places = Model.shared.allPlaces()
-        tableView.reloadData()
+        finishSync()
     }
     
     func refreshPlaces() {
@@ -90,15 +88,6 @@ class TrackListController: UITableViewController, LastTrackCellDelegate, PHPhoto
         tracks = Model.shared.allTracks()
         places = Model.shared.allPlaces()
         tableView.reloadData()
-/*
-        if IS_PAD() {
-            if Model.shared.trackerIsRunning() {
-                performSegue(withIdentifier: "showDetail", sender: nil)
-            } else if tracks.count > 0 {
-                performSegue(withIdentifier: "showDetail", sender: tracks[0])
-            }
-        }
- */
     }
 
     // MARK: - LastTrackCell delegate
