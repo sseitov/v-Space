@@ -43,7 +43,7 @@ class RouteController: UIViewController {
         let update = GMSCameraUpdate.fit(bounds, withPadding: 100)
         map.moveCamera(update)
         
-        SVProgressHUD.show(withStatus: "Create route...")
+        SVProgressHUD.show(withStatus: NSLocalizedString("Create route...", comment: ""))
         
         createDirection(from: myCoordinate!, to: placeCoordinate, completion: { result in
             SVProgressHUD.dismiss()

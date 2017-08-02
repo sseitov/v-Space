@@ -12,16 +12,18 @@ class SavedTrackCell: UITableViewCell {
 
     @IBOutlet weak var lastPhoto: UIImageView!
     @IBOutlet weak var placeLabel: UILabel!
-    @IBOutlet weak var distanceLabel: UILabel!
     @IBOutlet weak var startDateLabel: UILabel!
     @IBOutlet weak var finishDateLabel: UILabel!
     
     var track:Track? {
         didSet {
-            placeLabel.text = track!.place
+            if track!.allPhotos().count > 0 {
+                placeLabel.text = "\(track!.place!) (\(track!.allPhotos().count) \(NSLocalizedString("Photo", comment: "")))"
+            } else {
+                placeLabel.text = track!.place
+            }
             startDateLabel.text = textDateFormatter().string(from: (track!.startDate! as Date))
             finishDateLabel.text = textDateFormatter().string(from: (track!.finishDate! as Date))
-            distanceLabel.text = String(format: "%.2f km", track!.distance)
             lastPhoto.image = UIImage(named: "logo")
         }
     }

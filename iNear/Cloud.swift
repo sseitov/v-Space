@@ -70,6 +70,7 @@ let syncNotification = Notification.Name("SYNCED")
                 if let lat = asset.location?.coordinate.latitude,
                     let lon = asset.location?.coordinate.longitude
                 {
+                    print("\(lat) - \(lon) | \(latitude) - \(longitude)")
                     if lat == latitude && lon == longitude {
                         result = asset
                         stop.initialize(to: true)

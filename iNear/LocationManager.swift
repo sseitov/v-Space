@@ -42,6 +42,7 @@ class LocationManager: NSObject {
                     DispatchQueue.main.async {
                         self.locationCondition = nil
                         location(self.currentLocation)
+                        self.currentLocation = nil
                     }
                 }
             } else {
@@ -63,6 +64,7 @@ class LocationManager: NSObject {
                     self.authCondition?.wait()
                     self.authCondition?.unlock()
                     DispatchQueue.main.async {
+                        self.authCondition = nil
                         isRegistered(CLLocationManager.authorizationStatus() == .authorizedAlways)
                     }
                 }
@@ -98,9 +100,11 @@ extension LocationManager : CLLocationManagerDelegate {
     }
     
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-        self.authCondition?.lock()
-        self.authCondition?.signal()
-        self.authCondition?.unlock()
+        if status != .notDetermined {
+            self.authCondition?.lock()
+            self.authCondition?.signal()
+            self.authCondition?.unlock()
+        }
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {

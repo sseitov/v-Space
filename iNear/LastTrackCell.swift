@@ -17,21 +17,22 @@ class LastTrackCell: UITableViewCell {
 
     @IBOutlet weak var statusSwitch: UISwitch!
     @IBOutlet weak var statusLabel: UILabel!
+    @IBOutlet weak var stateView: UIView!
+    @IBOutlet weak var distance: UILabel!
+    @IBOutlet weak var speed: UILabel!
     
     var delegate:LastTrackCellDelegate? {
         didSet {
             statusSwitch.isOn = Model.shared.trackerIsRunning()
             if !statusSwitch.isOn {
+                stateView.isHidden = true
                 statusLabel.text = NSLocalizedString("Tracker not running", comment: "").uppercased()
-                statusLabel.textColor = UIColor.lightGray
                 accessoryType = .none
             } else {
-                statusLabel.text = String(format: NSLocalizedString("trackFormat", comment: ""),
-                                          Model.shared.lastTrackDistance(),
-                                          Model.shared.lastTrackSpeed())
-                statusLabel.textColor = UIColor.mainColor()
-                let count = Model.shared.lastTrackSize()
-                if count < 2 {
+                distance.text = String(format: "%.2f", Model.shared.lastTrackDistance())
+                speed.text = String(format: "%.1f", Model.shared.lastTrackSpeed())
+                stateView.isHidden = false
+                if Model.shared.lastTrackSize() < 2 {
                     accessoryType = .none
                 } else {
                     accessoryType = .disclosureIndicator
@@ -54,16 +55,17 @@ class LastTrackCell: UITableViewCell {
             })
         } else {
             LocationManager.shared.stop()
+            stateView.isHidden = true
             statusLabel.text = NSLocalizedString("Tracker not running", comment: "").uppercased()
             delegate?.saveLastTrack()
         }
         accessoryType = .none
-        statusLabel.textColor = UIColor.lightGray
     }
 
     override func awakeFromNib() {
         super.awakeFromNib()
         statusLabel.text = NSLocalizedString("Tracker not running", comment: "").uppercased()
+        stateView.isHidden = true
         accessoryType = .none
     }
 }

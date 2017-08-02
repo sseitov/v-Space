@@ -2,11 +2,32 @@
 /* Class = "UILabel"; text = "Label"; ObjectID = "2kj-K9-XrH"; */
 "2kj-K9-XrH.text" = "Label";
 
+/* Class = "UILabel"; text = "23:59"; ObjectID = "8PP-3y-LoX"; */
+"8PP-3y-LoX.text" = "23:59";
+
+/* Class = "UILabel"; text = "SPEED, km/h"; ObjectID = "CIY-Y5-zz7"; */
+"CIY-Y5-zz7.text" = "СКОРОСТЬ, км/ч";
+
+/* Class = "UILabel"; text = "DISTANCE, km"; ObjectID = "JTU-o1-hpE"; */
+"JTU-o1-hpE.text" = "РАССТОЯНИЕ, км";
+
 /* Class = "UINavigationController"; title = "Master"; ObjectID = "RMx-3f-FxP"; */
 "RMx-3f-FxP.title" = "Master";
 
+/* Class = "UILabel"; text = "999,9 km"; ObjectID = "Urj-kV-DAY"; */
+"Urj-kV-DAY.text" = "999,9 km";
+
+/* Class = "UILabel"; text = "999.99"; ObjectID = "a89-PL-rdU"; */
+"a89-PL-rdU.text" = "999.99";
+
 /* Class = "UILabel"; text = "Tracker not running"; ObjectID = "c5U-5p-2li"; */
 "c5U-5p-2li.text" = "Tracker not running";
+
+/* Class = "UILabel"; text = "999.9"; ObjectID = "dCM-IX-had"; */
+"dCM-IX-had.text" = "999.9";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "dcH-uo-wPE"; */
+"dcH-uo-wPE.text" = "Label";
 
 /* Class = "UILabel"; text = "Label"; ObjectID = "iOh-hE-dWF"; */
 "iOh-hE-dWF.text" = "Label";

@@ -26,16 +26,21 @@ class PhotoCollectionController: UICollectionViewController {
         setupBackButton()
         
     }
-/*
+
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         
         guard let flowLayout = collectionView!.collectionViewLayout as? UICollectionViewFlowLayout else {
             return
         }
-        flowLayout.invalidateLayout()
+        
+        coordinator.animate(alongsideTransition: { (context: UIViewControllerTransitionCoordinatorContext) in
+            flowLayout.invalidateLayout()
+        }) { (context: UIViewControllerTransitionCoordinatorContext) in
+        }
+
     }
-*/
+
     // MARK: UICollectionViewDataSource
 
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -54,10 +59,17 @@ class PhotoCollectionController: UICollectionViewController {
 
     // MARK: UICollectionViewDelegate
 
+    func columns() -> CGFloat {
+        if UIInterfaceOrientationIsLandscape(UIApplication.shared.statusBarOrientation) {
+            return 3
+        } else {
+            return 2
+        }
+    }
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: IndexPath) -> CGSize {
-        let columns:CGFloat = IS_PAD() ? 3.0 : 2.0
-        let w = (self.view.frame.size.width - 40.0) / columns
-        return CGSize(width: w, height: w+20)
+        let w = (self.view.frame.size.width - 40.0) / columns()
+        return CGSize(width: w, height: w*1.4)
     }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

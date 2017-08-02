@@ -26,11 +26,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
         // Initialize Google Maps
+        
         GMSServices.provideAPIKey(GoolgleMapAPIKey)
         GMSPlacesClient.provideAPIKey(GoolglePlacesAPIKey)
-        
-        LocationManager.shared.registered({ _ in
-        })
         
         // connect iWatch
         

@@ -11,14 +11,14 @@
 "photoCount" = "You have  no any photos in your photo stream yet.";
 "Places nearby" = "Places nearby";
 "my tracks" = "my tracks";
-"bookmarks of interesing places" = "bookmarks of interesing places";
+"bookmarks of interesing places" = "bookmarks";
 "current track" = "current track";
 "Tracker starting" = "Tracker starting";
 "Tracker not running" = "Tracker not running";
-"trackFormat" = "DISTANCE km\t%.2f\nSPEED km/h\t\t%.1f";
 "Can not get current location." = "You must enable geolocation access in settings";
 "Information" = "Information";
 "Error" = "Error";
 "Current track" = "Current track";
 "iCloud unavailable" = "iCloud unavailable. Try again later.";
 "Photo" = "Photo";
+"Create route..." = "Create route...";
