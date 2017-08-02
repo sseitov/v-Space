@@ -506,6 +506,12 @@
                         <barButtonItem key="leftBarButtonItem" image="backButton" id="S1H-5c-5Rt">
                             <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" title="Select" id="eEK-4a-deA">
+                            <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <connections>
+                                <action selector="switchSelect:" destination="OHl-Jv-qZK" id="dvh-QV-cRz"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <segue destination="454-ym-49X" kind="show" identifier="showPhoto" id="qQk-mS-dnv"/>

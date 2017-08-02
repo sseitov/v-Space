@@ -28,12 +28,7 @@ class PhotoCollectionController: UICollectionViewController {
                 return photo1.date < photo2.date
             })
             
-            let btn = UIBarButtonItem(title: "Select",
-                                      style: .plain,
-                                      target: self,
-                                      action: #selector(self.switchSelect(_:)))
-            btn.tintColor = UIColor.white
-            navigationItem.rightBarButtonItem = btn
+            self.isEditing = false
             
             actionButton = UIBarButtonItem(barButtonSystemItem: .action,
                                            target: self,
@@ -49,7 +44,6 @@ class PhotoCollectionController: UICollectionViewController {
             setToolbarItems([actionButton, stretch, deleteButton], animated: false)
         }
         setupBackButton()
-        
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -127,7 +121,7 @@ class PhotoCollectionController: UICollectionViewController {
     
     // MARK: Selection control
     
-    func switchSelect(_ button:UIBarButtonItem) {
+    @IBAction func switchSelect(_ button:UIBarButtonItem) {
         if self.isEditing {
             button.title = "Select"
         } else {
