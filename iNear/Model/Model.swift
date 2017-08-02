@@ -332,5 +332,26 @@ class Model: NSObject {
         }
         saveContext()
     }
-
+    
+    func deletePhotosFromTrack(_ track:Track, photos:[Photo], result: @escaping(Error?) -> ()) {
+        var uids:[String] = []
+        for photo in photos {
+            uids.append(photo.uid!)
+        }
+        let assets = PHAsset.fetchAssets(withLocalIdentifiers: uids, options: nil)
+        PHPhotoLibrary.shared().performChanges({
+            PHAssetChangeRequest.deleteAssets(assets)
+        }, completionHandler: { success, error in
+            DispatchQueue.main.async {
+                if error == nil {
+                    for photo in photos {
+                        track.removeFromPhotos(photo)
+                        Model.shared.managedObjectContext.delete(photo)
+                    }
+                    Model.shared.saveContext()
+                }
+                result(error)
+            }
+        })
+    }
 }

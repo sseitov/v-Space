@@ -431,7 +431,7 @@
         <scene sceneID="7ip-hH-soI">
             <objects>
                 <collectionViewController id="OHl-Jv-qZK" customClass="PhotoCollectionController" customModule="v_Space" customModuleProvider="target" sceneMemberID="viewController">
-                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" dataMode="prototypes" id="k47-5g-smg">
+                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="k47-5g-smg">
                         <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
@@ -451,6 +451,13 @@
                                     <subviews>
                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="uhK-og-Pu2">
                                             <rect key="frame" x="0.0" y="0.0" width="100" height="118"/>
+                                        </imageView>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="check" translatesAutoresizingMaskIntoConstraints="NO" id="m0t-E3-fan">
+                                            <rect key="frame" x="70" y="10" width="20" height="20"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="20" id="00E-B0-Ng9"/>
+                                                <constraint firstAttribute="height" constant="20" id="lRf-tl-GFr"/>
+                                            </constraints>
                                         </imageView>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="23:59" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8PP-3y-LoX">
                                             <rect key="frame" x="30" y="118" width="40" height="20"/>
@@ -478,10 +485,13 @@
                                     <constraint firstItem="8PP-3y-LoX" firstAttribute="leading" secondItem="hTe-8G-bN4" secondAttribute="trailing" id="YQC-qY-3mc"/>
                                     <constraint firstItem="hTe-8G-bN4" firstAttribute="top" secondItem="uhK-og-Pu2" secondAttribute="bottom" id="YeZ-gQ-l3n"/>
                                     <constraint firstAttribute="bottom" secondItem="hTe-8G-bN4" secondAttribute="bottom" constant="2" id="eqx-H7-dtd"/>
+                                    <constraint firstAttribute="trailingMargin" secondItem="m0t-E3-fan" secondAttribute="trailing" constant="2" id="j7B-TS-LbR"/>
                                     <constraint firstItem="uhK-og-Pu2" firstAttribute="top" secondItem="cbE-d5-5qu" secondAttribute="top" id="ldy-ke-AWu"/>
+                                    <constraint firstItem="m0t-E3-fan" firstAttribute="top" secondItem="cbE-d5-5qu" secondAttribute="topMargin" constant="2" id="tTd-Ig-QvO"/>
                                     <constraint firstAttribute="bottom" secondItem="8PP-3y-LoX" secondAttribute="bottom" constant="2" id="vif-TR-7V1"/>
                                 </constraints>
                                 <connections>
+                                    <outlet property="checkView" destination="m0t-E3-fan" id="hO7-9h-vM1"/>
                                     <outlet property="dateView" destination="8PP-3y-LoX" id="GF7-Wf-0rK"/>
                                     <outlet property="thumbView" destination="uhK-og-Pu2" id="tTr-Xs-igO"/>
                                 </connections>
@@ -563,6 +573,7 @@
     </scenes>
     <resources>
         <image name="backButton" width="22" height="22"/>
+        <image name="check" width="30" height="30"/>
         <image name="near" width="26" height="26"/>
         <image name="time" width="24" height="24"/>
     </resources>

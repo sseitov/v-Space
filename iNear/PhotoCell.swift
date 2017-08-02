@@ -13,6 +13,7 @@ class PhotoCell: UICollectionViewCell {
     
     @IBOutlet weak var thumbView: UIImageView!
     @IBOutlet weak var dateView: UILabel!
+    @IBOutlet weak var checkView: UIImageView!
     
     var photo:Photo? {
         didSet {
@@ -27,6 +28,13 @@ class PhotoCell: UICollectionViewCell {
                 let date = Date(timeIntervalSince1970: photo!.date)
                 dateView.text = textTimeFormatter().string(from: date)
             }
+            checkView.isHidden = !isSelected
         }
     }
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        checkView.isHidden = true
+    }
+    
 }

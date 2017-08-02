@@ -7,11 +7,16 @@
 //
 
 import UIKit
+import SVProgressHUD
 
 class PhotoCollectionController: UICollectionViewController {
 
     var track:Track?
+    
     private var photos:[Photo] = []
+    private var actionButton:UIBarButtonItem!
+    private var deleteButton:UIBarButtonItem!
+    private var selectedIndexes:[IndexPath] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,13 +25,40 @@ class PhotoCollectionController: UICollectionViewController {
             let dateStr = textShortDateFormatter().string(from: (track!.finishDate! as Date))
             setupTitle("\(track!.place!) (\(NSLocalizedString("Photo", comment: "")))\n\(dateStr)")
             photos = track!.allPhotos().sorted(by: { photo1, photo2 in
-                return photo1.date > photo2.date
+                return photo1.date < photo2.date
             })
+            
+            let btn = UIBarButtonItem(title: "Select",
+                                      style: .plain,
+                                      target: self,
+                                      action: #selector(self.switchSelect(_:)))
+            btn.tintColor = UIColor.white
+            navigationItem.rightBarButtonItem = btn
+            
+            actionButton = UIBarButtonItem(barButtonSystemItem: .action,
+                                           target: self,
+                                           action: #selector(self.doAction))
+            actionButton.tintColor = UIColor.mainColor()
+            actionButton.isEnabled = false
+            deleteButton = UIBarButtonItem(barButtonSystemItem: .trash,
+                                           target: self,
+                                           action: #selector(self.doDelete))
+            deleteButton.tintColor = UIColor.mainColor()
+            deleteButton.isEnabled = false
+            let stretch = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+            setToolbarItems([actionButton, stretch, deleteButton], animated: false)
         }
         setupBackButton()
         
     }
 
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        if self.isEditing {
+            navigationController?.setToolbarHidden(true, animated: true)
+        }
+    }
+    
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         
@@ -40,7 +72,7 @@ class PhotoCollectionController: UICollectionViewController {
         }
 
     }
-
+    
     // MARK: UICollectionViewDataSource
 
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -53,6 +85,13 @@ class PhotoCollectionController: UICollectionViewController {
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "photo", for: indexPath) as! PhotoCell
+        if self.isEditing {
+            cell.isSelected = selectedIndexes.contains(indexPath)
+            cell.shake(!cell.isSelected)
+        } else {
+            cell.isSelected = false
+            cell.shake(false)
+        }
         cell.photo = photos[indexPath.row]
         return cell
     }
@@ -73,7 +112,65 @@ class PhotoCollectionController: UICollectionViewController {
     }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        performSegue(withIdentifier: "showPhoto", sender: photos[indexPath.row])
+        if self.isEditing {
+            if let index = selectedIndexes.index(of: indexPath) {
+                selectedIndexes.remove(at: index)
+            } else {
+                selectedIndexes.append(indexPath)
+            }
+            collectionView.reloadData()
+            refreshToolbar()
+        } else {
+            performSegue(withIdentifier: "showPhoto", sender: photos[indexPath.row])
+        }
+    }
+    
+    // MARK: Selection control
+    
+    func switchSelect(_ button:UIBarButtonItem) {
+        if self.isEditing {
+            button.title = "Select"
+        } else {
+            button.title = "Cancel"
+        }
+        self.isEditing = !self.isEditing
+        navigationController?.setToolbarHidden(!self.isEditing, animated: true)
+        selectedIndexes.removeAll()
+        collectionView?.reloadData()
+    }
+    
+    private func refreshToolbar() {
+        actionButton?.isEnabled = selectedIndexes.count > 0
+        deleteButton?.isEnabled = selectedIndexes.count > 0
+    }
+
+    func doAction() {
+        
+    }
+    
+    
+    
+    func doDelete() {
+        let q = createQuestion(NSLocalizedString("deleteAsk", comment: ""), acceptTitle: "Ok", cancelTitle: "Cancel", acceptHandler:
+        {
+            var selected:[Photo] = []
+            for index in self.selectedIndexes {
+                selected.append(self.photos[index.row])
+            }
+            SVProgressHUD.show()
+            Model.shared.deletePhotosFromTrack(self.track!, photos: selected, result: { error in
+                SVProgressHUD.dismiss()
+                if error != nil {
+                    self.showMessage(error!.localizedDescription, messageType: .error)
+                } else {
+                    self.photos = self.track!.allPhotos().sorted(by: { photo1, photo2 in
+                        return photo1.date < photo2.date
+                    })
+                    self.switchSelect(self.navigationItem.rightBarButtonItem!)
+                }
+            })
+        })
+        q?.show()
     }
     
     // MARK: - Navigation
