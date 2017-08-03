@@ -8,6 +8,7 @@
 
 import UIKit
 import SVProgressHUD
+import Photos
 
 class PhotoCollectionController: UICollectionViewController {
 
@@ -17,7 +18,7 @@ class PhotoCollectionController: UICollectionViewController {
     private var actionButton:UIBarButtonItem!
     private var deleteButton:UIBarButtonItem!
     private var selectedIndexes:[IndexPath] = []
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -123,9 +124,9 @@ class PhotoCollectionController: UICollectionViewController {
     
     @IBAction func switchSelect(_ button:UIBarButtonItem) {
         if self.isEditing {
-            button.title = "Select"
+            button.image = UIImage(named: "check_on")
         } else {
-            button.title = "Cancel"
+            button.image = UIImage(named: "check_off")
         }
         self.isEditing = !self.isEditing
         navigationController?.setToolbarHidden(!self.isEditing, animated: true)
@@ -138,8 +139,72 @@ class PhotoCollectionController: UICollectionViewController {
         deleteButton?.isEnabled = selectedIndexes.count > 0
     }
 
+    private func selectedPhotos() -> [Photo] {
+        var selected:[Photo] = []
+        for index in self.selectedIndexes {
+            selected.append(self.photos[index.row])
+        }
+        return selected
+    }
+    
+    private func selectedImages(_ result: @escaping([Data]) -> ()) {
+        var uids:[String] = []
+        for photo in selectedPhotos() {
+            uids.append(photo.uid!)
+        }
+        var assets:[PHAsset] = []
+        let fetchResult = PHAsset.fetchAssets(withLocalIdentifiers: uids, options: nil)
+        fetchResult.enumerateObjects({ asset, index, _ in
+            assets.append(asset)
+        })
+        if assets.count > 0 {
+            let next = NSCondition()
+            DispatchQueue.global().async {
+                var images:[Data] = []
+                let options = PHImageRequestOptions()
+                options.isSynchronous = false
+                options.version = .current
+                options.deliveryMode = .opportunistic
+                options.resizeMode = .none
+                for asset in assets {
+                    PHImageManager.default().requestImageData(for: asset, options: options, resultHandler: { data, _, _, _ in
+                        print(Thread.current)
+                        if data != nil {
+                            images.append(data!)
+                        }
+                        next.lock()
+                        next.signal()
+                        next.unlock()
+                    })
+                    next.lock()
+                    next.wait()
+                    next.unlock()
+                }
+                DispatchQueue.main.async {
+                    result(images)
+                }
+            }
+        } else {
+            result([])
+        }
+    }
+    
     func doAction() {
-        
+        SVProgressHUD.show()
+        selectedImages({ images in
+            SVProgressHUD.dismiss()
+            if images.count > 0 {
+                let activity = UIActivityViewController(activityItems: images, applicationActivities: nil)
+                if IS_PAD() {
+                    activity.modalPresentationStyle = .popover
+                    activity.popoverPresentationController?.barButtonItem = self.actionButton
+                    activity.popoverPresentationController?.permittedArrowDirections = .down
+                }
+                self.present(activity, animated: true, completion: {
+                    self.switchSelect(self.navigationItem.rightBarButtonItem!)
+                })
+            }
+        })
     }
     
     
@@ -147,12 +212,8 @@ class PhotoCollectionController: UICollectionViewController {
     func doDelete() {
         let q = createQuestion(NSLocalizedString("deleteAsk", comment: ""), acceptTitle: "Ok", cancelTitle: "Cancel", acceptHandler:
         {
-            var selected:[Photo] = []
-            for index in self.selectedIndexes {
-                selected.append(self.photos[index.row])
-            }
             SVProgressHUD.show()
-            Model.shared.deletePhotosFromTrack(self.track!, photos: selected, result: { error in
+            Model.shared.deletePhotosFromTrack(self.track!, photos: self.selectedPhotos(), result: { error in
                 SVProgressHUD.dismiss()
                 if error != nil {
                     self.showMessage(error!.localizedDescription, messageType: .error)

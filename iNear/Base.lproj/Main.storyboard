@@ -506,7 +506,7 @@
                         <barButtonItem key="leftBarButtonItem" image="backButton" id="S1H-5c-5Rt">
                             <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" title="Select" id="eEK-4a-deA">
+                        <barButtonItem key="rightBarButtonItem" image="check_on" id="eEK-4a-deA">
                             <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <connections>
                                 <action selector="switchSelect:" destination="OHl-Jv-qZK" id="dvh-QV-cRz"/>
@@ -580,6 +580,7 @@
     <resources>
         <image name="backButton" width="22" height="22"/>
         <image name="check" width="30" height="30"/>
+        <image name="check_on" width="24" height="24"/>
         <image name="near" width="26" height="26"/>
         <image name="time" width="24" height="24"/>
     </resources>
