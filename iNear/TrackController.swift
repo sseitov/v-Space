@@ -147,7 +147,14 @@ class TrackController: UIViewController {
             next.track = track
         }
     }
-
+    
+    // MARK: - Publishing
+    
+    @IBAction func publishInInstagram(_ sender: Any) {
+    }
+    
+    @IBAction func publishInFacebook(_ sender: Any) {
+    }
 }
 
 extension TrackController : GMSMapViewDelegate {

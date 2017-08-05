@@ -14,9 +14,6 @@
 /* Class = "UINavigationController"; title = "Master"; ObjectID = "RMx-3f-FxP"; */
 "RMx-3f-FxP.title" = "Master";
 
-/* Class = "UILabel"; text = "999,9 km"; ObjectID = "Urj-kV-DAY"; */
-"Urj-kV-DAY.text" = "999,9 km";
-
 /* Class = "UILabel"; text = "999.99"; ObjectID = "a89-PL-rdU"; */
 "a89-PL-rdU.text" = "999.99";
 
@@ -28,6 +25,9 @@
 
 /* Class = "UILabel"; text = "Label"; ObjectID = "dcH-uo-wPE"; */
 "dcH-uo-wPE.text" = "Label";
+
+/* Class = "UILabel"; text = "PUBLISH TRACK"; ObjectID = "f5M-1I-OEh"; */
+"f5M-1I-OEh.text" = "ОПУБЛИКОВАТЬ ТРЕК";
 
 /* Class = "UILabel"; text = "Label"; ObjectID = "iOh-hE-dWF"; */
 "iOh-hE-dWF.text" = "Label";
