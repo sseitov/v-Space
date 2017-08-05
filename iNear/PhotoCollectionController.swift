@@ -8,14 +8,12 @@
 
 import UIKit
 import SVProgressHUD
-import Photos
 
 class PhotoCollectionController: UICollectionViewController {
 
     var track:Track?
     
     private var photos:[Photo] = []
-    private var actionButton:UIBarButtonItem!
     private var deleteButton:UIBarButtonItem!
     private var selectedIndexes:[IndexPath] = []
 
@@ -31,27 +29,19 @@ class PhotoCollectionController: UICollectionViewController {
             
             self.isEditing = false
             
-            actionButton = UIBarButtonItem(barButtonSystemItem: .action,
-                                           target: self,
-                                           action: #selector(self.doAction))
-            actionButton.tintColor = UIColor.mainColor()
-            actionButton.isEnabled = false
             deleteButton = UIBarButtonItem(barButtonSystemItem: .trash,
                                            target: self,
                                            action: #selector(self.doDelete))
             deleteButton.tintColor = UIColor.mainColor()
-            deleteButton.isEnabled = false
             let stretch = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-            setToolbarItems([actionButton, stretch, deleteButton], animated: false)
+            setToolbarItems([stretch, deleteButton, stretch], animated: false)
         }
         setupBackButton()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        if self.isEditing {
-            navigationController?.setToolbarHidden(true, animated: true)
-        }
+        navigationController?.setToolbarHidden(true, animated: true)
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -128,16 +118,14 @@ class PhotoCollectionController: UICollectionViewController {
         } else {
             button.image = UIImage(named: "check_off")
         }
-        refreshToolbar()
         self.isEditing = !self.isEditing
-        navigationController?.setToolbarHidden(!self.isEditing, animated: true)
         selectedIndexes.removeAll()
+        refreshToolbar()
         collectionView?.reloadData()
     }
     
     private func refreshToolbar() {
-        actionButton?.isEnabled = selectedIndexes.count > 0
-        deleteButton?.isEnabled = selectedIndexes.count > 0
+        navigationController?.setToolbarHidden(!(self.isEditing && selectedIndexes.count > 0), animated: true)
     }
 
     private func selectedPhotos() -> [Photo] {
@@ -147,68 +135,6 @@ class PhotoCollectionController: UICollectionViewController {
         }
         return selected
     }
-    
-    private func selectedImages(_ result: @escaping([Data]) -> ()) {
-        var uids:[String] = []
-        for photo in selectedPhotos() {
-            uids.append(photo.uid!)
-        }
-        var assets:[PHAsset] = []
-        let fetchResult = PHAsset.fetchAssets(withLocalIdentifiers: uids, options: nil)
-        fetchResult.enumerateObjects({ asset, index, _ in
-            assets.append(asset)
-        })
-        if assets.count > 0 {
-            let next = NSCondition()
-            DispatchQueue.global().async {
-                var images:[Data] = []
-                let options = PHImageRequestOptions()
-                options.isSynchronous = false
-                options.version = .current
-                options.deliveryMode = .opportunistic
-                options.resizeMode = .none
-                for asset in assets {
-                    PHImageManager.default().requestImageData(for: asset, options: options, resultHandler: { data, _, _, _ in
-                        print(Thread.current)
-                        if data != nil {
-                            images.append(data!)
-                        }
-                        next.lock()
-                        next.signal()
-                        next.unlock()
-                    })
-                    next.lock()
-                    next.wait()
-                    next.unlock()
-                }
-                DispatchQueue.main.async {
-                    result(images)
-                }
-            }
-        } else {
-            result([])
-        }
-    }
-    
-    func doAction() {
-        SVProgressHUD.show()
-        selectedImages({ images in
-            SVProgressHUD.dismiss()
-            if images.count > 0 {
-                let activity = UIActivityViewController(activityItems: images, applicationActivities: nil)
-                if IS_PAD() {
-                    activity.modalPresentationStyle = .popover
-                    activity.popoverPresentationController?.barButtonItem = self.actionButton
-                    activity.popoverPresentationController?.permittedArrowDirections = .down
-                }
-                self.present(activity, animated: true, completion: {
-                    self.switchSelect(self.navigationItem.rightBarButtonItem!)
-                })
-            }
-        })
-    }
-    
-    
     
     func doDelete() {
         let q = createQuestion(NSLocalizedString("deleteAsk", comment: ""), acceptTitle: "Ok", cancelTitle: "Cancel", acceptHandler:

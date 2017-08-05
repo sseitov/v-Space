@@ -26,8 +26,5 @@
 /* Class = "UILabel"; text = "Label"; ObjectID = "dcH-uo-wPE"; */
 "dcH-uo-wPE.text" = "Label";
 
-/* Class = "UILabel"; text = "PUBLISH TRACK"; ObjectID = "f5M-1I-OEh"; */
-"f5M-1I-OEh.text" = "ОПУБЛИКОВАТЬ ТРЕК";
-
 /* Class = "UILabel"; text = "Label"; ObjectID = "iOh-hE-dWF"; */
 "iOh-hE-dWF.text" = "Label";

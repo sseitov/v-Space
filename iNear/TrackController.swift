@@ -8,6 +8,8 @@
 
 import UIKit
 import GoogleMaps
+import Photos
+import SVProgressHUD
 
 class PhotoMarker : GMSMarker {
     var photo:Photo?
@@ -16,9 +18,6 @@ class PhotoMarker : GMSMarker {
 class TrackController: UIViewController {
 
     @IBOutlet weak var map: GMSMapView!
-    @IBOutlet weak var facebookButton: UIButton!
-    @IBOutlet weak var instagramButton: UIButton!
-    @IBOutlet weak var publishHeight: NSLayoutConstraint!
     
     var track:Track?
     var fromRoot = false
@@ -42,10 +41,6 @@ class TrackController: UIViewController {
         } else {
             setupBackButton()
         }
-        
-        facebookButton.setupBorder(UIColor.mainColor(), radius: 10)
-        instagramButton.setupBorder(UIColor.black, radius: 10)
-        publishHeight.constant = 0
         
         map.delegate = self
         
@@ -107,16 +102,6 @@ class TrackController: UIViewController {
             super.goBack()
         }
     }
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        if track != nil {
-            publishHeight.constant = 60
-            UIView.animate(withDuration: 0.4, animations: {
-                self.view.layoutIfNeeded()
-            })
-        }
-    }
     
     func refreshPhotos() {
         
@@ -135,14 +120,18 @@ class TrackController: UIViewController {
                 photoMarkers.append(marker)
             }
             if photoMarkers.count > 0 {
-                let btn = UIBarButtonItem(image: UIImage(named: "cameraRoll"),
+                let btn1 = UIBarButtonItem(image: UIImage(named: "cameraRoll"),
                                           style: .plain,
                                           target: self,
                                           action: #selector(self.showPhotos))
+                btn1.tintColor = UIColor.white
+                let btn2 = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(self.publish))
+                btn2.tintColor = UIColor.white
+                navigationItem.setRightBarButtonItems([btn2, btn1], animated: true)
+            } else {
+                let btn = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(self.publish))
                 btn.tintColor = UIColor.white
                 navigationItem.setRightBarButton(btn, animated: true)
-            } else {
-                navigationItem.setRightBarButton(nil, animated: true)
             }
         } else {
             navigationItem.setRightBarButton(nil, animated: true)
@@ -167,11 +156,64 @@ class TrackController: UIViewController {
     
     // MARK: - Publishing
     
-    @IBAction func publishInInstagram(_ sender: Any) {
+    private func selectedImages(_ result: @escaping([Data]) -> ()) {
+        var uids:[String] = []
+        for photo in track!.allPhotos() {
+            uids.append(photo.uid!)
+        }
+        var assets:[PHAsset] = []
+        let fetchResult = PHAsset.fetchAssets(withLocalIdentifiers: uids, options: nil)
+        fetchResult.enumerateObjects({ asset, index, _ in
+            assets.append(asset)
+        })
+        if assets.count > 0 {
+            let next = NSCondition()
+            DispatchQueue.global().async {
+                var images:[Data] = []
+                let options = PHImageRequestOptions()
+                options.isSynchronous = false
+                options.version = .current
+                options.deliveryMode = .opportunistic
+                options.resizeMode = .none
+                for asset in assets {
+                    PHImageManager.default().requestImageData(for: asset, options: options, resultHandler: { data, _, _, _ in
+                        print(Thread.current)
+                        if data != nil {
+                            images.append(data!)
+                        }
+                        next.lock()
+                        next.signal()
+                        next.unlock()
+                    })
+                    next.lock()
+                    next.wait()
+                    next.unlock()
+                }
+                DispatchQueue.main.async {
+                    result(images)
+                }
+            }
+        } else {
+            result([])
+        }
     }
     
-    @IBAction func publishInFacebook(_ sender: Any) {
+    func publish() {
+        SVProgressHUD.show()
+        selectedImages({ images in
+            SVProgressHUD.dismiss()
+            if images.count > 0 {
+                let activity = UIActivityViewController(activityItems: images, applicationActivities: nil)
+                if IS_PAD() {
+                    activity.modalPresentationStyle = .popover
+                    activity.popoverPresentationController?.sourceView = self.view
+                    activity.popoverPresentationController?.sourceRect = self.view.frame
+                }
+                self.present(activity, animated: true, completion: nil)
+            }
+        })
     }
+
 }
 
 extension TrackController : GMSMapViewDelegate {
