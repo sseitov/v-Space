@@ -128,6 +128,7 @@ class PhotoCollectionController: UICollectionViewController {
         } else {
             button.image = UIImage(named: "check_off")
         }
+        refreshToolbar()
         self.isEditing = !self.isEditing
         navigationController?.setToolbarHidden(!self.isEditing, animated: true)
         selectedIndexes.removeAll()

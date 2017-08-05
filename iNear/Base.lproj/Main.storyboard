@@ -402,7 +402,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="444"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="i4N-od-Wzn">
+                            <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="i4N-od-Wzn">
                                 <rect key="frame" x="0.0" y="444" width="320" height="60"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="PUBLISH TRACK" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="f5M-1I-OEh">
@@ -477,7 +477,10 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="facebookButton" destination="6eC-Ak-qTM" id="AfW-6P-aex"/>
+                        <outlet property="instagramButton" destination="PML-v9-9IX" id="La5-AK-K6m"/>
                         <outlet property="map" destination="uwx-7Y-GXV" id="bcf-3e-6Mj"/>
+                        <outlet property="publishHeight" destination="dXb-68-ffK" id="Xhk-oQ-WPg"/>
                         <segue destination="454-ym-49X" kind="show" identifier="showPhoto" id="0JP-9t-1Ml"/>
                         <segue destination="OHl-Jv-qZK" kind="show" identifier="allPhotos" id="dHj-jh-YgR"/>
                     </connections>

@@ -16,6 +16,9 @@ class PhotoMarker : GMSMarker {
 class TrackController: UIViewController {
 
     @IBOutlet weak var map: GMSMapView!
+    @IBOutlet weak var facebookButton: UIButton!
+    @IBOutlet weak var instagramButton: UIButton!
+    @IBOutlet weak var publishHeight: NSLayoutConstraint!
     
     var track:Track?
     var fromRoot = false
@@ -39,6 +42,10 @@ class TrackController: UIViewController {
         } else {
             setupBackButton()
         }
+        
+        facebookButton.setupBorder(UIColor.mainColor(), radius: 10)
+        instagramButton.setupBorder(UIColor.black, radius: 10)
+        publishHeight.constant = 0
         
         map.delegate = self
         
@@ -98,6 +105,16 @@ class TrackController: UIViewController {
         } else {
             navigationItem.prompt = nil
             super.goBack()
+        }
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if track != nil {
+            publishHeight.constant = 60
+            UIView.animate(withDuration: 0.4, animations: {
+                self.view.layoutIfNeeded()
+            })
         }
     }
     
