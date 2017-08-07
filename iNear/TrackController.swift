@@ -161,10 +161,13 @@ class TrackController: UIViewController {
         for photo in track!.allPhotos() {
             uids.append(photo.uid!)
         }
-        var assets:[PHAsset] = []
+        var unsorted:[PHAsset] = []
         let fetchResult = PHAsset.fetchAssets(withLocalIdentifiers: uids, options: nil)
         fetchResult.enumerateObjects({ asset, index, _ in
-            assets.append(asset)
+            unsorted.append(asset)
+        })
+        let assets = unsorted.sorted(by: { asset1, asset2 in
+            return asset1.creationDate!.timeIntervalSince1970 < asset2.creationDate!.timeIntervalSince1970
         })
         if assets.count > 0 {
             let next = NSCondition()
@@ -190,6 +193,9 @@ class TrackController: UIViewController {
                     next.unlock()
                 }
                 DispatchQueue.main.async {
+                    if let screenshot = self.map.screenShotImageWithBounds(self.map.bounds) {
+                        images.insert(UIImageJPEGRepresentation(screenshot, 0.7)!, at: 0)
+                    }
                     result(images)
                 }
             }
