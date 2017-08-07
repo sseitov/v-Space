@@ -10,8 +10,6 @@
 		2C17475C1DDB872A0018AEAB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C17475B1DDB872A0018AEAB /* AppDelegate.swift */; };
 		2C1747631DDB872A0018AEAB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2C1747611DDB872A0018AEAB /* Main.storyboard */; };
 		2C1747681DDB872A0018AEAB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2C1747661DDB872A0018AEAB /* LaunchScreen.storyboard */; };
-		2C28083A1F358F9100DEA56F /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C2808381F358F9100DEA56F /* Fabric.framework */; };
-		2C28083B1F358F9100DEA56F /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C2808391F358F9100DEA56F /* Crashlytics.framework */; };
 		2C2B3FBC1E3BB6AD003FE095 /* TrackController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C2B3FBB1E3BB6AD003FE095 /* TrackController.swift */; };
 		2C33C7091F30C4F30031241F /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C33C7081F30C4F30031241F /* Reachability.m */; };
 		2C33C70D1F310C790031241F /* PhotoCollectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C33C70C1F310C790031241F /* PhotoCollectionController.swift */; };
@@ -159,8 +157,6 @@
 		2C1747641DDB872A0018AEAB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = iNear/Assets.xcassets; sourceTree = "<group>"; };
 		2C1747671DDB872A0018AEAB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2C1747691DDB872A0018AEAB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = iNear/Info.plist; sourceTree = "<group>"; };
-		2C2808381F358F9100DEA56F /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
-		2C2808391F358F9100DEA56F /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		2C2B3FBB1E3BB6AD003FE095 /* TrackController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackController.swift; sourceTree = "<group>"; };
 		2C33C7071F30C4F30031241F /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		2C33C7081F30C4F30031241F /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
@@ -250,10 +246,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				2CE15FC21EB470AE0085915E /* CoreTelephony.framework in Frameworks */,
-				2C28083A1F358F9100DEA56F /* Fabric.framework in Frameworks */,
 				2C91E0741EACBB680067286B /* CloudKit.framework in Frameworks */,
 				2CBE20211E8D8ACA002EF13C /* CoreLocation.framework in Frameworks */,
-				2C28083B1F358F9100DEA56F /* Crashlytics.framework in Frameworks */,
 				46811E5591FD9B65000FCF47 /* Pods_v_Space.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -286,8 +280,6 @@
 		12915D74E6089C1BDDF892C9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				2C2808381F358F9100DEA56F /* Fabric.framework */,
-				2C2808391F358F9100DEA56F /* Crashlytics.framework */,
 				2CE15FC11EB470AE0085915E /* CoreTelephony.framework */,
 				2C91E0731EACBB680067286B /* CloudKit.framework */,
 				2CBE20201E8D8ACA002EF13C /* CoreLocation.framework */,
@@ -516,7 +508,6 @@
 				AC996106096E5B9200730D7D /* [CP] Copy Pods Resources */,
 				2CB65EF11DFD5CA8002A9D29 /* Embed Watch Content */,
 				2CE268AD1E66E15600FE8219 /* Embed App Extensions */,
-				2C2808371F358F4900DEA56F /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -719,19 +710,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		2C2808371F358F4900DEA56F /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "releaseConfig=\"Release\"\n\nif [ \"$releaseConfig\" = \"${CONFIGURATION}\" ]; then\necho \"Running Fabric\"\n./Fabric.framework/run c01e70f276107c573a71a72b21766ebe4ba90066 3e34252f5bdbf35c51e80d0178bb229479cdde0c1bd271bbfe85b67c4a558ed9\nfi\n";
-		};
 		3653E38FEED1161F2DBAC656 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;

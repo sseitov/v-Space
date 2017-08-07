@@ -12,8 +12,6 @@ import SVProgressHUD
 import WatchConnectivity
 import GoogleMaps
 import GooglePlaces
-import Fabric
-import Crashlytics
 
 func IS_PAD() -> Bool {
     return UIDevice.current.userInterfaceIdiom == .pad
@@ -26,8 +24,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
     var watchSession:WCSession?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        
-        Fabric.with([Crashlytics.self])
 
         // Initialize Google Maps
         
