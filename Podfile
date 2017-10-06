@@ -9,10 +9,22 @@ inhibit_all_warnings!
 use_frameworks!
 
 target 'v-Space' do
+    pod 'Firebase/Core'
+    pod 'Firebase/Storage'
+    pod 'Firebase/Auth'
+    pod 'Firebase/Database'
+    pod 'Firebase/Messaging'
+    pod 'Firebase/Invites'
+
     pod 'GoogleMaps'
     pod 'GooglePlaces'
     pod 'GooglePlacePicker'
-    
+    pod 'GoogleSignIn'
+
+    pod 'FBSDKCoreKit'
+    pod 'FBSDKLoginKit'
+    pod 'FBSDKShareKit'
+
     pod 'AFNetworking'
 
     pod 'SDWebImage'

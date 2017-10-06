@@ -44,7 +44,7 @@ let syncNotification = Notification.Name("SYNCED")
         return status == ReachableViaWiFi
     }
     
-    func reachabilityChanged(_ notify:Notification) {
+    @objc func reachabilityChanged(_ notify:Notification) {
         if let currentReachability = notify.object as? Reachability {
             let newStatus = currentReachability.currentReachabilityStatus()
             if !syncAvailable(networkStatus) && syncAvailable(newStatus) {

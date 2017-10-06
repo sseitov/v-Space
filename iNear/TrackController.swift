@@ -103,7 +103,7 @@ class TrackController: UIViewController {
         }
     }
     
-    func refreshPhotos() {
+    @objc func refreshPhotos() {
         
         for marker in photoMarkers {
             marker.map = nil
@@ -140,7 +140,7 @@ class TrackController: UIViewController {
     
     // MARK: - Navigation
     
-    func showPhotos() {
+    @objc func showPhotos() {
         performSegue(withIdentifier: "allPhotos", sender: nil)
     }
     
@@ -204,7 +204,7 @@ class TrackController: UIViewController {
         }
     }
     
-    func publish() {
+    @objc func publish() {
         SVProgressHUD.show()
         selectedImages({ images in
             SVProgressHUD.dismiss()

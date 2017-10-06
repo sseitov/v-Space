@@ -8,7 +8,7 @@
 
 import UIKit
 
-typealias CompletionBlock = (Void) -> Void
+typealias CompletionBlock = () -> Void
 
 // MARK: - Action sheet
 

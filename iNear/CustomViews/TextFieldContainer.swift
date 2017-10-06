@@ -44,7 +44,7 @@ class TextFieldContainer: UIView, UITextFieldDelegate {
     
     var placeholder: String = "" {
         didSet {
-            textField.attributedPlaceholder = NSAttributedString(string: placeholder, attributes: [NSForegroundColorAttributeName : placeholderColor])
+            textField.attributedPlaceholder = NSAttributedString(string: placeholder, attributes: [NSAttributedStringKey.foregroundColor : placeholderColor])
         }
     }
     var textField:UITextField!

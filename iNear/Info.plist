@@ -39,7 +39,11 @@
 	<key>NSCameraUsageDescription</key>
 	<string>v-Space needs your camera for take photos and put their on your tracks.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>v-Space will show places nearby and also will be collect your geolocation points into track.</string>
+    <string>v-Space will be collect your geolocation points into track and show places nearby.</string>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>v-Space will be collect your geolocation points into track and show places nearby.</string>
+    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+    <string>v-Space will be collect your geolocation points into track and show places nearby.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>v-Space needs your photo library for sync photos with your tracks.</string>
 	<key>UIBackgroundModes</key>

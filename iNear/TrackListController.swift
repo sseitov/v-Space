@@ -27,7 +27,7 @@ class CustomGMSPlacePickerViewController : GMSPlacePickerViewController {
             self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "backButton"), style: .plain, target: nil, action: nil)
             self.navigationItem.leftBarButtonItem?.tintColor = UIColor.white
             setupBackButton()
-            let searchBarTextAttributes = [NSForegroundColorAttributeName: UIColor.white]
+            let searchBarTextAttributes = [NSAttributedStringKey.foregroundColor.rawValue : UIColor.white]
             UITextField.appearance(whenContainedInInstancesOf:[UISearchBar.self]).defaultTextAttributes = searchBarTextAttributes
         }
     }
@@ -74,17 +74,17 @@ class TrackListController: UITableViewController, LastTrackCellDelegate, PHPhoto
         finishSync()
     }
     
-    func refreshPlaces() {
+    @objc func refreshPlaces() {
         places = Model.shared.allPlaces()
         self.tableView.reloadData()
     }
     
-    func refreshCurrentTrack() {
+    @objc func refreshCurrentTrack() {
         let indexPath = IndexPath(row: 0, section: 0)
         tableView.reloadRows(at: [indexPath], with: .fade)
     }
     
-    func finishSync() {
+    @objc func finishSync() {
         tracks = Model.shared.allTracks()
         places = Model.shared.allPlaces()
         tableView.reloadData()

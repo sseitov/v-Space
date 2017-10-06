@@ -57,7 +57,7 @@ extension UIViewController {
         navigationItem.leftBarButtonItem?.action = #selector(UIViewController.goBack)
     }
     
-    func goBack() {
+    @objc func goBack() {
          _ = self.navigationController!.popViewController(animated: true)
     }
     

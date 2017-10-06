@@ -45,7 +45,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         }
     }
     
-    func openApp() {
+    @objc func openApp() {
         extensionContext?.open(URL(string: "iNearby://")!, completionHandler: nil)
     }
 

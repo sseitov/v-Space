@@ -136,7 +136,7 @@ class PhotoCollectionController: UICollectionViewController {
         return selected
     }
     
-    func doDelete() {
+    @objc func doDelete() {
         let q = createQuestion(NSLocalizedString("deleteAsk", comment: ""), acceptTitle: "Ok", cancelTitle: "Cancel", acceptHandler:
         {
             SVProgressHUD.show()

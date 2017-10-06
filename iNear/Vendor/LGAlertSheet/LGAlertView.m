@@ -501,7 +501,7 @@ static dispatch_semaphore_t show_animation_semaphore;
     [self.superView addSubview:self];
 }
 
-- (void)performShowAnimation:(void (^)())completion {
+- (void)performShowAnimation:(void (^)(void))completion {
     self.hidden = NO;
     self.alpha = .0f;
     CGAffineTransform originalTransform = self.containerView.transform;
@@ -614,7 +614,7 @@ static dispatch_semaphore_t show_animation_semaphore;
          isError:(BOOL)isError
         animated:(BOOL)animated {
     
-    void (^block)() = ^(){
+    void (^block)(void) = ^(){
         if (textColor) {
             label.textColor = textColor;
         }

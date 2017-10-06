@@ -27,7 +27,7 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
     override func awake(withContext context: Any?) {
         super.awake(withContext: context)
         if WCSession.isSupported() {
-            session = WCSession.default()
+            session = WCSession.default
             session!.delegate = self
             session!.activate()
         }
@@ -117,20 +117,20 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
     
     private func setStatusSpeed() {
         let status = NSAttributedString(string: String(format: "%.1f", speed),
-                                        attributes: [NSFontAttributeName : statusFont!])
+                                        attributes: [NSAttributedStringKey.font : statusFont!])
         statusLabel.setAttributedText(status)
         statusLabel.setTextColor(UIColor.color(0, 219, 123, 1))
     }
     
     private func setStatusDistance() {
         let status = NSAttributedString(string: String(format: "%.2f", distance),
-                                        attributes: [NSFontAttributeName : statusFont!])
+                                        attributes: [NSAttributedStringKey.font : statusFont!])
         statusLabel.setAttributedText(status)
         statusLabel.setTextColor(UIColor.white)
     }
     
     private func setStatusOff() {
-        let status = NSAttributedString(string: "OFF", attributes: [NSFontAttributeName : statusFont!])
+        let status = NSAttributedString(string: "OFF", attributes: [NSAttributedStringKey.font : statusFont!])
         statusLabel.setAttributedText(status)
         statusLabel.setTextColor(UIColor.lightGray)
     }

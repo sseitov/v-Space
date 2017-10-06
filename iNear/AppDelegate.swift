@@ -33,7 +33,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
         // connect iWatch
         
         if WCSession.isSupported() {
-            watchSession = WCSession.default()
+            watchSession = WCSession.default
             watchSession!.delegate = self
             watchSession!.activate()
         }
@@ -52,9 +52,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
         UIApplication.shared.statusBarStyle = .lightContent
         if let font = UIFont(name: "HelveticaNeue-CondensedBold", size: 17) {
             if IS_PAD() {
-                UIBarButtonItem.appearance().setTitleTextAttributes([NSFontAttributeName : font, NSForegroundColorAttributeName: UIColor.mainColor()], for: .normal)
+                UIBarButtonItem.appearance().setTitleTextAttributes([NSAttributedStringKey.font : font, NSAttributedStringKey.foregroundColor: UIColor.mainColor()], for: .normal)
             } else {
-                UIBarButtonItem.appearance().setTitleTextAttributes([NSFontAttributeName : font, NSForegroundColorAttributeName: UIColor.white], for: .normal)
+                UIBarButtonItem.appearance().setTitleTextAttributes([NSAttributedStringKey.font : font, NSAttributedStringKey.foregroundColor: UIColor.white], for: .normal)
             }
             SVProgressHUD.setFont(font)
         }
