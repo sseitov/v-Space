@@ -15,7 +15,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>4.1</string>
+	<string>5.0</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
@@ -38,12 +38,12 @@
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>v-Space needs your camera for take photos and put their on your tracks.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>v-Space will be collect your geolocation points into track and show places nearby.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-    <string>v-Space will be collect your geolocation points into track and show places nearby.</string>
-    <key>NSLocationWhenInUseUsageDescription</key>
-    <string>v-Space will be collect your geolocation points into track and show places nearby.</string>
-    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-    <string>v-Space will be collect your geolocation points into track and show places nearby.</string>
+	<string>v-Space will be collect your geolocation points into track and show places nearby.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>v-Space will be collect your geolocation points into track and show places nearby.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>v-Space needs your photo library for sync photos with your tracks.</string>
 	<key>UIBackgroundModes</key>
