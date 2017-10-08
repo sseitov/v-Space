@@ -21,10 +21,6 @@ target 'v-Space' do
     pod 'GooglePlacePicker'
     pod 'GoogleSignIn'
 
-    pod 'FBSDKCoreKit'
-    pod 'FBSDKLoginKit'
-    pod 'FBSDKShareKit'
-
     pod 'AFNetworking'
 
     pod 'SDWebImage'

@@ -30,7 +30,7 @@ class LocationManager: NSObject {
     }
     
     func getCurrentLocation(_ location: @escaping(CLLocation?) -> ()) {
-        registered({ enable in
+        registeredInUse({ enable in
             if enable {
                 self.currentLocation = nil
                 self.locationCondition = NSCondition()
@@ -51,7 +51,34 @@ class LocationManager: NSObject {
         })
     }
     
-    func registered(_ isRegistered: @escaping(Bool) -> ()) {
+    func registeredInUse(_  isRegistered: @escaping(Bool) -> ()) {
+        if CLLocationManager.locationServicesEnabled() {
+            switch CLLocationManager.authorizationStatus() {
+            case .authorizedWhenInUse:
+                isRegistered(true)
+            case .authorizedAlways:
+                isRegistered(true)
+            case .notDetermined:
+                authCondition = NSCondition()
+                self.locationManager.requestAlwaysAuthorization()
+                DispatchQueue.global().async {
+                    self.authCondition?.lock()
+                    self.authCondition?.wait()
+                    self.authCondition?.unlock()
+                    DispatchQueue.main.async {
+                        self.authCondition = nil
+                        isRegistered(CLLocationManager.authorizationStatus() == .authorizedAlways)
+                    }
+                }
+            default:
+                isRegistered(false)
+            }
+        } else {
+            isRegistered(false)
+        }
+    }
+    
+    func registeredAlways(_  isRegistered: @escaping(Bool) -> ()) {
         if CLLocationManager.locationServicesEnabled() {
             switch CLLocationManager.authorizationStatus() {
             case .authorizedAlways:

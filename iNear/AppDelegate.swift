@@ -12,6 +12,9 @@ import SVProgressHUD
 import WatchConnectivity
 import GoogleMaps
 import GooglePlaces
+import Firebase
+import UserNotifications
+import GoogleSignIn
 
 func IS_PAD() -> Bool {
     return UIDevice.current.userInterfaceIdiom == .pad
@@ -24,6 +27,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
     var watchSession:WCSession?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+
+        // Use Firebase library to configure APIs
+        FirebaseApp.configure()
+
+        
+        // Register_for_notifications
+        if #available(iOS 10.0, *) {
+            let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
+            UNUserNotificationCenter.current().requestAuthorization(
+                options: authOptions,
+                completionHandler: {_, _ in })
+            
+            UNUserNotificationCenter.current().delegate = self
+            
+        } else {
+            let settings: UIUserNotificationSettings =
+                UIUserNotificationSettings(types: [.alert, .badge, .sound], categories: nil)
+            application.registerUserNotificationSettings(settings)
+        }
+        
+        application.registerForRemoteNotifications()
+        
+        Messaging.messaging().delegate = self
 
         // Initialize Google Maps
         
@@ -69,10 +95,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
         if url.scheme! == "iNearby" {
             return true
         } else {
-            return false
+            return GIDSignIn.sharedInstance().handle(url,
+                                                     sourceApplication: options[.sourceApplication] as! String!,
+                                                     annotation: options[.annotation])
         }
     }
+
+    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any],
+                     fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+        completionHandler(.newData)
+    }
     
+    func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
+        print("Unable to register for remote notifications: \(error.localizedDescription)")
+    }
+    
+    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        #if DEBUG
+            Messaging.messaging().setAPNSToken(deviceToken, type: .sandbox)
+        #else
+            Messaging.messaging().setAPNSToken(deviceToken, type: .prod)
+        #endif
+    }
+
     func applicationWillResignActive(_ application: UIApplication) {
     }
 
@@ -125,6 +170,31 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
     func application(_ application: UIApplication, handleWatchKitExtensionRequest userInfo: [AnyHashable : Any]?, reply: @escaping ([AnyHashable : Any]?) -> Void) {
         
     }
+}
+
+// MARK: - NotificationCenter delegate
+
+@available(iOS 10, *)
+extension AppDelegate : UNUserNotificationCenterDelegate {
+    
+    // Receive displayed notifications for iOS 10 devices.
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+                                willPresent notification: UNNotification,
+                                withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+    }
+    
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+                                didReceive response: UNNotificationResponse,
+                                withCompletionHandler completionHandler: @escaping () -> Void) {
+    }
+}
+
+extension AppDelegate : MessagingDelegate {
+    
+    func messaging(_ messaging: Messaging, didRefreshRegistrationToken fcmToken: String) {
+        Messaging.messaging().shouldEstablishDirectChannel = true
+    }
+    
 }
 
 // MARK: - WCSession delegate

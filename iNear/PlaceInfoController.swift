@@ -141,7 +141,7 @@ class PlaceInfoController: UITableViewController {
             if myCoordinate != nil {
                 performSegue(withIdentifier: "route", sender: nil)
             } else {
-                LocationManager.shared.registered({ enable in
+                LocationManager.shared.registeredInUse({ enable in
                     if enable {
                         SVProgressHUD.show(withStatus: "Get location...")
                         LocationManager.shared.getCurrentLocation({ location in

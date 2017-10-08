@@ -43,7 +43,7 @@ class LastTrackCell: UITableViewCell {
     
     @IBAction func switchStatus(_ sender: UISwitch) {
         if sender.isOn {
-            LocationManager.shared.registered({ enabled in
+            LocationManager.shared.registeredAlways({ enabled in
                 if enabled {
                     Model.shared.clearLastTrack()
                     LocationManager.shared.startInBackground()

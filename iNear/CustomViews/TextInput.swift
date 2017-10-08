@@ -13,10 +13,14 @@ typealias CompletionTextBlock = (String) -> Void
 class TextInput: LGAlertView, TextFieldContainerDelegate {
 
     @IBOutlet weak var inputField: TextFieldContainer!
+    
     var handler:CompletionTextBlock?
     
     class func create(cancelHandler:CompletionBlock?, acceptHandler:CompletionTextBlock?) -> TextInput? {
         if let textInput = Bundle.main.loadNibNamed("TextInput", owner: nil, options: nil)?.first as? TextInput {
+            textInput.titleLabel.text = "Want you to save this track?"
+            textInput.cancelButton.setTitle("Delete", for: .normal)
+            textInput.otherButton.setTitle("Save", for: .normal)
             textInput.inputField.delegate = textInput
             textInput.inputField.placeholder = "track name"
             textInput.inputField.autocapitalizationType = .words
@@ -44,6 +48,36 @@ class TextInput: LGAlertView, TextFieldContainerDelegate {
         }
     }
     
+    class func getEmail(cancelHandler:CompletionBlock?, acceptHandler:CompletionTextBlock?) -> TextInput? {
+        if let textInput = Bundle.main.loadNibNamed("TextInput", owner: nil, options: nil)?.first as? TextInput {
+            textInput.titleLabel.text = "Friend email"
+            textInput.cancelButton.setTitle("Cancel", for: .normal)
+            textInput.otherButton.setTitle("Ok", for: .normal)
+            textInput.inputField.delegate = textInput
+            textInput.inputField.placeholder = "input email"
+            textInput.inputField.textType = .emailAddress
+            textInput.cancelButtonBlock = { alert in
+                cancelHandler!()
+            }
+            textInput.otherButtonBlock = { alert in
+                if textInput.inputField.text().isEmail() {
+                    textInput.dismiss()
+                    acceptHandler!(textInput.inputField.text())
+                } else {
+                    textInput.showErrorMessage("Email should have xxxx@domain.prefix format.", animated: true)
+                }
+            }
+            textInput.handler = acceptHandler
+            
+            UIApplication.shared.sendAction(#selector(UIApplication.resignFirstResponder), to: nil, from: nil, for: nil)
+            NotificationCenter.default.addObserver(textInput, selector: #selector(LGAlertView.keyboardWillChange(_:)), name: Notification.Name.UIKeyboardWillChangeFrame, object: nil)
+            
+            return textInput
+        } else {
+            return nil
+        }
+    }
+
     func textDone(_ sender:TextFieldContainer, text:String?) {
         if sender.text().isEmpty {
             showErrorMessage("Track name can not be empty.", animated: true)

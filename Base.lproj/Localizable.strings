@@ -16,6 +16,7 @@
 "Tracker starting" = "Tracker starting";
 "Tracker not running" = "Tracker not running";
 "Can not get current location." = "You must enable geolocation access in settings";
+"Can not get current location always." = "You must enable ALWAYS geolocation access in settings";
 "Information" = "Information";
 "Error" = "Error";
 "Current track" = "Current track";
@@ -23,3 +24,6 @@
 "Photo" = "Photo";
 "Create route..." = "Create route...";
 "deleteAsk" = "Do you want to delete this photos from the track? Photos also would deleted from photo collection.";
+"trustList" = "For create trust list need registration. Do you want to continue?";
+"trustListTitle" = "Trust list";
+"myList" = "My list";

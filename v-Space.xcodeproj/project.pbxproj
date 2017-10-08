@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2C00AA991F8A494F003524DC /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C00AA981F8A494F003524DC /* StringExtension.swift */; };
+		2C00AA9B1F8A5140003524DC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2C00AA9A1F8A5140003524DC /* GoogleService-Info.plist */; };
+		2C00AA9E1F8A53ED003524DC /* TrustListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C00AA9D1F8A53ED003524DC /* TrustListController.swift */; };
 		2C17475C1DDB872A0018AEAB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C17475B1DDB872A0018AEAB /* AppDelegate.swift */; };
 		2C1747631DDB872A0018AEAB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2C1747611DDB872A0018AEAB /* Main.storyboard */; };
 		2C1747681DDB872A0018AEAB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2C1747661DDB872A0018AEAB /* LaunchScreen.storyboard */; };
@@ -150,6 +153,9 @@
 
 /* Begin PBXFileReference section */
 		1BBA8CD795DF34552AAE6557 /* Pods-v-Space.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-v-Space.release.xcconfig"; path = "Pods/Target Support Files/Pods-v-Space/Pods-v-Space.release.xcconfig"; sourceTree = "<group>"; };
+		2C00AA981F8A494F003524DC /* StringExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StringExtension.swift; path = Extensions/StringExtension.swift; sourceTree = "<group>"; };
+		2C00AA9A1F8A5140003524DC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		2C00AA9D1F8A53ED003524DC /* TrustListController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrustListController.swift; sourceTree = "<group>"; };
 		2C12132B1F36397B000D100C /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Main.strings; sourceTree = "<group>"; };
 		2C1747581DDB872A0018AEAB /* v-Space.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "v-Space.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2C17475B1DDB872A0018AEAB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -290,6 +296,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		2C00AA9C1F8A53C2003524DC /* Trust List */ = {
+			isa = PBXGroup;
+			children = (
+				2C00AA9D1F8A53ED003524DC /* TrustListController.swift */,
+			);
+			name = "Trust List";
+			sourceTree = "<group>";
+		};
 		2C17474F1DDB872A0018AEAB = {
 			isa = PBXGroup;
 			children = (
@@ -318,6 +332,7 @@
 		2C17475A1DDB872A0018AEAB /* v-Space */ = {
 			isa = PBXGroup;
 			children = (
+				2C00AA9C1F8A53C2003524DC /* Trust List */,
 				2C8B18A61DFB1E8A00769A12 /* Model */,
 				2C87D3151DDEE4A800F05528 /* Extensions */,
 				2C87D3181DDEF36800F05528 /* CustomViews */,
@@ -341,6 +356,7 @@
 				2C1747641DDB872A0018AEAB /* Assets.xcassets */,
 				2C1747661DDB872A0018AEAB /* LaunchScreen.storyboard */,
 				2C1747691DDB872A0018AEAB /* Info.plist */,
+				2C00AA9A1F8A5140003524DC /* GoogleService-Info.plist */,
 				2C91E06D1EAC88370067286B /* Localizable.strings */,
 				2C87D3131DDEE1E500F05528 /* iNear.entitlements */,
 			);
@@ -362,6 +378,7 @@
 			isa = PBXGroup;
 			children = (
 				2C87D31F1DDF026300F05528 /* UIViewControllerExtensions.swift */,
+				2C00AA981F8A494F003524DC /* StringExtension.swift */,
 				2C87D31D1DDEF3F000F05528 /* UIViewExtensions.swift */,
 				2C87D31B1DDEF3C200F05528 /* UIColorExtensions.swift */,
 				2C9423B21DFC6708003C4075 /* UIImageExtensions.swift */,
@@ -674,6 +691,7 @@
 				2C91E06B1EAC88370067286B /* Localizable.strings in Resources */,
 				2CE268AF1E67096A00FE8219 /* Assets.xcassets in Resources */,
 				2CBE20301E8DA170002EF13C /* TextInput.xib in Resources */,
+				2C00AA9B1F8A5140003524DC /* GoogleService-Info.plist in Resources */,
 				2CC50C361DECC8D900D27456 /* ActionSheet.xib in Resources */,
 				2C87D3321DDF1A5C00F05528 /* LGProgressAlertView.xib in Resources */,
 				2C87D3301DDF1A5C00F05528 /* LGAlertView.xib in Resources */,
@@ -720,10 +738,6 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-v-Space/Pods-v-Space-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/AFNetworking/AFNetworking.framework",
-				"${BUILT_PRODUCTS_DIR}/Bolts/Bolts.framework",
-				"${BUILT_PRODUCTS_DIR}/FBSDKCoreKit/FBSDKCoreKit.framework",
-				"${BUILT_PRODUCTS_DIR}/FBSDKLoginKit/FBSDKLoginKit.framework",
-				"${BUILT_PRODUCTS_DIR}/FBSDKShareKit/FBSDKShareKit.framework",
 				"${BUILT_PRODUCTS_DIR}/GTMOAuth2/GTMOAuth2.framework",
 				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
 				"${BUILT_PRODUCTS_DIR}/GoogleAPIClientForREST/GoogleAPIClientForREST.framework",
@@ -738,10 +752,6 @@
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AFNetworking.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Bolts.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKCoreKit.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKLoginKit.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKShareKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMOAuth2.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleAPIClientForREST.framework",
@@ -822,6 +832,7 @@
 				2C2B3FBC1E3BB6AD003FE095 /* TrackController.swift in Sources */,
 				2C87D31A1DDEF37900F05528 /* TextFieldContainer.swift in Sources */,
 				2CE268BE1E6716BE00FE8219 /* Location+CoreDataProperties.swift in Sources */,
+				2C00AA991F8A494F003524DC /* StringExtension.swift in Sources */,
 				2C87D3201DDF026300F05528 /* UIViewControllerExtensions.swift in Sources */,
 				2C362BDB1EB495C500749C46 /* Place+CoreDataProperties.swift in Sources */,
 				2CE268B71E67156400FE8219 /* LocationModel.xcdatamodeld in Sources */,
@@ -841,6 +852,7 @@
 				2CBE20191E8D61AF002EF13C /* SavedTrackCell.swift in Sources */,
 				2C91E0641EAC809C0067286B /* Cloud.swift in Sources */,
 				2C362BDA1EB495C500749C46 /* Place+CoreDataClass.swift in Sources */,
+				2C00AA9E1F8A53ED003524DC /* TrustListController.swift in Sources */,
 				2C17475C1DDB872A0018AEAB /* AppDelegate.swift in Sources */,
 				2CC50C371DECC8D900D27456 /* ActionSheet.swift in Sources */,
 			);
@@ -1106,8 +1118,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.vchannel.iNearby;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "15221c2b-55bf-43a5-a002-d683ff8c3a3c";
-				PROVISIONING_PROFILE_SPECIFIER = "iNear AppStore";
+				PROVISIONING_PROFILE = "6c3fbdfe-bdd2-45d1-8577-8779d1ffda0f";
+				PROVISIONING_PROFILE_SPECIFIER = "v-Space Production";
 				SWIFT_OBJC_BRIDGING_HEADER = "vSpace-Bridging-Header.h";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
@@ -1147,8 +1159,8 @@
 				INFOPLIST_FILE = Watch/Info.plist;
 				PRODUCT_BUNDLE_IDENTIFIER = com.vchannel.iNearby.watchkitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "44c06d15-f574-4b14-89d4-a9b1850bb392";
-				PROVISIONING_PROFILE_SPECIFIER = "iNear WatchKit AppStore";
+				PROVISIONING_PROFILE = "e23913a8-8b44-4490-8534-6a9193c645d1";
+				PROVISIONING_PROFILE_SPECIFIER = "v-Space WatchKit";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 3.0;
@@ -1191,8 +1203,8 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.vchannel.iNearby.watchkitapp.watchkitextension;
 				PRODUCT_NAME = "${TARGET_NAME}";
-				PROVISIONING_PROFILE = "0d32778b-0309-4aed-8af9-993c51199a41";
-				PROVISIONING_PROFILE_SPECIFIER = "iNear WatchKit Extension AppStore";
+				PROVISIONING_PROFILE = "4df419d2-03f0-427b-bb25-554f6e5c9616";
+				PROVISIONING_PROFILE_SPECIFIER = "v-Space WatchKit Extension";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
@@ -1233,8 +1245,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.vchannel.iNearby.Today;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "c94fc3da-80ba-4373-80fd-6176dd019e3b";
-				PROVISIONING_PROFILE_SPECIFIER = "iNear Today AppStore";
+				PROVISIONING_PROFILE = "b6756557-46de-4687-9f85-024bd023b519";
+				PROVISIONING_PROFILE_SPECIFIER = "v-Space Today";
 				SKIP_INSTALL = YES;
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;

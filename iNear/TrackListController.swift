@@ -12,6 +12,8 @@ import SVProgressHUD
 import GoogleMaps
 import GooglePlaces
 import GooglePlacePicker
+import GoogleSignIn
+import Firebase
 
 class CustomGMSPlacePickerViewController : GMSPlacePickerViewController {
     
@@ -22,6 +24,7 @@ class CustomGMSPlacePickerViewController : GMSPlacePickerViewController {
         } else {
             setupTitle(NSLocalizedString("Places nearby", comment: ""))
         }
+
         if !IS_PAD() {
             self.navigationItem.rightBarButtonItem?.tintColor = UIColor.white
             self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "backButton"), style: .plain, target: nil, action: nil)
@@ -33,7 +36,7 @@ class CustomGMSPlacePickerViewController : GMSPlacePickerViewController {
     }
 }
 
-class TrackListController: UITableViewController, LastTrackCellDelegate, PHPhotoLibraryChangeObserver, GMSPlacePickerViewControllerDelegate {
+class TrackListController: UITableViewController, LastTrackCellDelegate, PHPhotoLibraryChangeObserver, GMSPlacePickerViewControllerDelegate, GIDSignInDelegate, GIDSignInUIDelegate {
 
     var tracks:[Track] = []
     var places:[Place] = []
@@ -48,6 +51,10 @@ class TrackListController: UITableViewController, LastTrackCellDelegate, PHPhoto
         super.viewDidLoad()
         setupTitle("v-Space")
         
+        GIDSignIn.sharedInstance().clientID = FirebaseApp.app()?.options.clientID
+        GIDSignIn.sharedInstance().delegate = self
+        GIDSignIn.sharedInstance().uiDelegate = self
+
         if IS_PAD() {
             if Model.shared.trackerIsRunning() {
                 performSegue(withIdentifier: "showDetail", sender: nil)
@@ -93,7 +100,7 @@ class TrackListController: UITableViewController, LastTrackCellDelegate, PHPhoto
     // MARK: - LastTrackCell delegate
 
     func accessDenied() {
-        self.showMessage(NSLocalizedString("Can not get current location.", comment: ""), messageType: .error)
+        self.showMessage(NSLocalizedString("Can not get current location always.", comment: ""), messageType: .error)
     }
 
     func saveLastTrack() {
@@ -339,6 +346,17 @@ class TrackListController: UITableViewController, LastTrackCellDelegate, PHPhoto
         }
     }
     
+    @IBAction func saveList(_ sender: Any) {
+        if Auth.auth().currentUser != nil {
+            self.performSegue(withIdentifier: "trustList", sender: nil)
+        } else {
+            let ask = createQuestion(LOCALIZE("trustList"), acceptTitle: "Ok", cancelTitle: "Cancel", acceptHandler: {
+                GIDSignIn.sharedInstance().signIn()
+            })
+            ask?.show()
+        }
+    }
+    
     // MARK: - Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -354,5 +372,29 @@ class TrackListController: UITableViewController, LastTrackCellDelegate, PHPhoto
             controller.myCoordinate = LocationManager.shared.currentLocation?.coordinate
         }
     }
-
+    
+    // MARK: - Google+ Auth
+    
+    func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
+        if error != nil {
+            showMessage(error.localizedDescription, messageType: .error)
+            return
+        }
+        let authentication = user.authentication
+        let credential = GoogleAuthProvider.credential(withIDToken: (authentication?.idToken)!,
+                                                       accessToken: (authentication?.accessToken)!)
+        SVProgressHUD.show(withStatus: "Login...")
+        Auth.auth().signIn(with: credential, completion: { firUser, error in
+            SVProgressHUD.dismiss()
+            if error != nil {
+                self.showMessage((error as NSError?)!.localizedDescription, messageType: .error)
+            } else {
+                self.performSegue(withIdentifier: "trustList", sender: nil)
+            }
+        })
+    }
+    
+    func sign(_ signIn: GIDSignIn!, didDisconnectWith user: GIDGoogleUser!, withError error: Error!) {
+        try? Auth.auth().signOut()
+    }
 }
