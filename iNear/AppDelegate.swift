@@ -193,8 +193,9 @@ extension AppDelegate : MessagingDelegate {
     
     func messaging(_ messaging: Messaging, didRefreshRegistrationToken fcmToken: String) {
         Messaging.messaging().shouldEstablishDirectChannel = true
-    }
-    
+        UserDefaults.standard.set(fcmToken, forKey: "token")
+        _ = AuthModel.shared.updatePerson(Auth.auth().currentUser)
+    }    
 }
 
 // MARK: - WCSession delegate

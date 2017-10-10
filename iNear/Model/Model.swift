@@ -51,6 +51,7 @@ func textTimeFormatter() -> DateFormatter {
 let newPointNotification = Notification.Name("NEW_POINT")
 let newPlaceNotification = Notification.Name("NEW_PLACE")
 
+
 class Model: NSObject {
     
     static let shared = Model()

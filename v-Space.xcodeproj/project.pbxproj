@@ -26,6 +26,7 @@
 		2C3ED2111EB1FB2900463199 /* WebController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C3ED2101EB1FB2900463199 /* WebController.swift */; };
 		2C3ED2131EB2046200463199 /* RouteController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C3ED2121EB2046200463199 /* RouteController.swift */; };
 		2C3F368D1E6C132900021B10 /* Credentials.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C3F368C1E6C132900021B10 /* Credentials.swift */; };
+		2C51F7331F8CD693008A0678 /* AuthModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C51F7321F8CD693008A0678 /* AuthModel.swift */; };
 		2C54EB7A1E8ADC49009C4A27 /* TrackListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C54EB791E8ADC49009C4A27 /* TrackListController.swift */; };
 		2C79D49F1E92C5CA00EF4954 /* Photo+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C79D49D1E92C5CA00EF4954 /* Photo+CoreDataClass.swift */; };
 		2C79D4A01E92C5CA00EF4954 /* Photo+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C79D49E1E92C5CA00EF4954 /* Photo+CoreDataProperties.swift */; };
@@ -156,7 +157,6 @@
 		2C00AA981F8A494F003524DC /* StringExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StringExtension.swift; path = Extensions/StringExtension.swift; sourceTree = "<group>"; };
 		2C00AA9A1F8A5140003524DC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		2C00AA9D1F8A53ED003524DC /* TrustListController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrustListController.swift; sourceTree = "<group>"; };
-		2C12132B1F36397B000D100C /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Main.strings; sourceTree = "<group>"; };
 		2C1747581DDB872A0018AEAB /* v-Space.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "v-Space.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2C17475B1DDB872A0018AEAB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2C1747621DDB872A0018AEAB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -178,6 +178,8 @@
 		2C3F368C1E6C132900021B10 /* Credentials.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Credentials.swift; sourceTree = SOURCE_ROOT; };
 		2C4E00AD1EADACB000BB935F /* LocationModel 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "LocationModel 4.xcdatamodel"; sourceTree = "<group>"; };
 		2C500F051F2875B900D04B69 /* LocationModel 6.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "LocationModel 6.xcdatamodel"; sourceTree = "<group>"; };
+		2C51F7321F8CD693008A0678 /* AuthModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthModel.swift; sourceTree = "<group>"; };
+		2C51F7351F8D2F97008A0678 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Main.strings; sourceTree = "<group>"; };
 		2C54EB791E8ADC49009C4A27 /* TrackListController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackListController.swift; sourceTree = "<group>"; };
 		2C79D49D1E92C5CA00EF4954 /* Photo+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Photo+CoreDataClass.swift"; path = "Model/Photo+CoreDataClass.swift"; sourceTree = "<group>"; };
 		2C79D49E1E92C5CA00EF4954 /* Photo+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Photo+CoreDataProperties.swift"; path = "Model/Photo+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -341,6 +343,7 @@
 				2C33C7061F30C4650031241F /* Sync */,
 				2C3684421F307C6C00A5AD4E /* LocationManager.swift */,
 				2CE268C11E672F7C00FE8219 /* Model.swift */,
+				2C51F7321F8CD693008A0678 /* AuthModel.swift */,
 				2C17475B1DDB872A0018AEAB /* AppDelegate.swift */,
 				2C3F368C1E6C132900021B10 /* Credentials.swift */,
 				2C17476F1DDB93660018AEAB /* Resources */,
@@ -845,6 +848,7 @@
 				2C33C7091F30C4F30031241F /* Reachability.m in Sources */,
 				2CBE20291E8D9799002EF13C /* Track+CoreDataClass.swift in Sources */,
 				2CBE202A1E8D9799002EF13C /* Track+CoreDataProperties.swift in Sources */,
+				2C51F7331F8CD693008A0678 /* AuthModel.swift in Sources */,
 				2C3ED20F1EB1F0E300463199 /* PlaceInfoController.swift in Sources */,
 				2C54EB7A1E8ADC49009C4A27 /* TrackListController.swift in Sources */,
 				2C33C70F1F3112980031241F /* PhotoCell.swift in Sources */,
@@ -915,7 +919,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				2C1747621DDB872A0018AEAB /* Base */,
-				2C12132B1F36397B000D100C /* ru */,
+				2C51F7351F8D2F97008A0678 /* ru */,
 			);
 			name = Main.storyboard;
 			path = iNear;

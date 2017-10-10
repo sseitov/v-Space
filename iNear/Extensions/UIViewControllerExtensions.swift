@@ -69,9 +69,9 @@ extension UIViewController {
         case .success:
             title = ""
         case .information:
-            title = NSLocalizedString("Information", comment: "")
+            title = LOCALIZE("Information").uppercased()
         default:
-            title = NSLocalizedString("Error", comment: "")
+            title = LOCALIZE("Error").uppercased()
         }
         let alert = LGAlertView.decoratedAlert(withTitle:title.uppercased(), message: error, cancelButtonTitle: "OK", cancelButtonBlock: { alert in
             if messageHandler != nil {
@@ -85,7 +85,7 @@ extension UIViewController {
     func createQuestion(_ question:String, acceptTitle:String, cancelTitle:String, acceptHandler:@escaping () -> (), cancelHandler: (() -> ())? = nil) -> LGAlertView? {
         
         let alert = LGAlertView.alert(
-            withTitle: "Attention!".uppercased(),
+            withTitle: LOCALIZE("Attention").uppercased(),
             message: question,
             cancelButtonTitle: cancelTitle,
             otherButtonTitle: acceptTitle,

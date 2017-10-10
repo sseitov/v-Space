@@ -12,7 +12,6 @@
     <customFonts key="customFonts">
         <array key="HelveticaNeue.ttc">
             <string>HelveticaNeue</string>
-            <string>HelveticaNeue-Bold</string>
         </array>
         <array key="HelveticaNeueExtras.ttc">
             <string>HelveticaNeue-CondensedBold</string>
@@ -271,36 +270,17 @@
                             <rect key="frame" x="0.0" y="0.0" width="320" height="80"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
-                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="9VL-eC-WgP">
-                                    <rect key="frame" x="10" y="10" width="60" height="60"/>
-                                    <constraints>
-                                        <constraint firstAttribute="width" constant="60" id="FDe-tv-JTC"/>
-                                        <constraint firstAttribute="height" constant="60" id="efD-28-bKm"/>
-                                    </constraints>
-                                </imageView>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eer-Ht-D6k">
-                                    <rect key="frame" x="70" y="10" width="180" height="40"/>
-                                    <constraints>
-                                        <constraint firstAttribute="height" constant="40" id="dnf-7k-gPf"/>
-                                    </constraints>
-                                    <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="17"/>
-                                    <nil key="textColor"/>
-                                    <nil key="highlightedColor"/>
-                                </label>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fdu-sg-Fqa">
-                                    <rect key="frame" x="70" y="50" width="180" height="20"/>
-                                    <constraints>
-                                        <constraint firstAttribute="height" constant="20" id="Lzf-8h-Zsp"/>
-                                    </constraints>
-                                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="13"/>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You can look location of users from this list and they can see your." textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FTe-nP-TCL">
+                                    <rect key="frame" x="10" y="0.0" width="240" height="80"/>
+                                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
                                     <nil key="textColor"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zWL-al-A0D">
                                     <rect key="frame" x="250" y="10" width="60" height="60"/>
                                     <constraints>
-                                        <constraint firstAttribute="height" constant="60" id="bo9-yp-qru"/>
-                                        <constraint firstAttribute="width" constant="60" id="tbA-wi-4Mo"/>
+                                        <constraint firstAttribute="width" constant="60" id="j58-bZ-Owa"/>
+                                        <constraint firstAttribute="height" constant="60" id="lHN-sb-l1Z"/>
                                     </constraints>
                                     <state key="normal" image="invite"/>
                                     <connections>
@@ -310,16 +290,12 @@
                             </subviews>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
-                                <constraint firstItem="zWL-al-A0D" firstAttribute="leading" secondItem="eer-Ht-D6k" secondAttribute="trailing" id="5Nl-hy-egk"/>
-                                <constraint firstItem="eer-Ht-D6k" firstAttribute="leading" secondItem="9VL-eC-WgP" secondAttribute="trailing" id="Kfc-CN-wNb"/>
-                                <constraint firstItem="9VL-eC-WgP" firstAttribute="top" secondItem="i9e-02-bU2" secondAttribute="top" constant="10" id="LQU-Gp-gs1"/>
-                                <constraint firstItem="9VL-eC-WgP" firstAttribute="leading" secondItem="i9e-02-bU2" secondAttribute="leading" constant="10" id="Oll-J9-XNP"/>
-                                <constraint firstItem="fdu-sg-Fqa" firstAttribute="top" secondItem="eer-Ht-D6k" secondAttribute="bottom" id="PRr-GC-ypW"/>
-                                <constraint firstAttribute="trailing" secondItem="zWL-al-A0D" secondAttribute="trailing" constant="10" id="ZQe-HZ-X0E"/>
-                                <constraint firstItem="zWL-al-A0D" firstAttribute="top" secondItem="i9e-02-bU2" secondAttribute="top" constant="10" id="biY-gH-ero"/>
-                                <constraint firstItem="eer-Ht-D6k" firstAttribute="top" secondItem="i9e-02-bU2" secondAttribute="top" constant="10" id="drR-L1-pCj"/>
-                                <constraint firstItem="fdu-sg-Fqa" firstAttribute="leading" secondItem="9VL-eC-WgP" secondAttribute="trailing" id="qza-Cb-Jqy"/>
-                                <constraint firstItem="zWL-al-A0D" firstAttribute="leading" secondItem="fdu-sg-Fqa" secondAttribute="trailing" id="rMe-yH-5JL"/>
+                                <constraint firstItem="zWL-al-A0D" firstAttribute="leading" secondItem="FTe-nP-TCL" secondAttribute="trailing" id="FWm-Nd-pU9"/>
+                                <constraint firstItem="FTe-nP-TCL" firstAttribute="leading" secondItem="i9e-02-bU2" secondAttribute="leading" constant="10" id="TOu-Od-Bt4"/>
+                                <constraint firstAttribute="bottom" secondItem="FTe-nP-TCL" secondAttribute="bottom" id="Xec-d1-l65"/>
+                                <constraint firstAttribute="trailing" secondItem="zWL-al-A0D" secondAttribute="trailing" constant="10" id="cL4-N2-xUT"/>
+                                <constraint firstItem="FTe-nP-TCL" firstAttribute="top" secondItem="i9e-02-bU2" secondAttribute="top" id="eEk-0J-tBs"/>
+                                <constraint firstItem="zWL-al-A0D" firstAttribute="top" secondItem="i9e-02-bU2" secondAttribute="top" constant="10" id="rQ0-S5-J1q"/>
                             </constraints>
                         </view>
                         <prototypes>
@@ -351,11 +327,6 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
-                    <connections>
-                        <outlet property="myEmail" destination="fdu-sg-Fqa" id="zdK-oL-b4P"/>
-                        <outlet property="myImage" destination="9VL-eC-WgP" id="Oxw-RI-eS6"/>
-                        <outlet property="myName" destination="eer-Ht-D6k" id="RQ9-Ut-e4K"/>
-                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Lk6-Wq-JCs" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

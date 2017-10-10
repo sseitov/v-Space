@@ -6,22 +6,28 @@
 "8PP-3y-LoX.text" = "23:59";
 
 /* Class = "UILabel"; text = "SPEED, km/h"; ObjectID = "CIY-Y5-zz7"; */
-"CIY-Y5-zz7.text" = "СКОРОСТЬ, км/ч";
+"CIY-Y5-zz7.text" = "СКОРОСТЬ, km/h";
+
+/* Class = "UILabel"; text = "You can look location of users from this list and they can see your."; ObjectID = "FTe-nP-TCL"; */
+"FTe-nP-TCL.text" = "Вы можете посмотреть местоположение пользователей из этого списка, а они могут видеть Ваше.";
+
+/* Class = "UIBarButtonItem"; title = "Item"; ObjectID = "GwR-US-3RB"; */
+"GwR-US-3RB.title" = "Item";
 
 /* Class = "UILabel"; text = "DISTANCE, km"; ObjectID = "JTU-o1-hpE"; */
-"JTU-o1-hpE.text" = "РАССТОЯНИЕ, км";
+"JTU-o1-hpE.text" = "РАССТОЯНИЕ, km";
 
 /* Class = "UINavigationController"; title = "Master"; ObjectID = "RMx-3f-FxP"; */
 "RMx-3f-FxP.title" = "Master";
 
-/* Class = "UILabel"; text = "999.99"; ObjectID = "a89-PL-rdU"; */
-"a89-PL-rdU.text" = "999.99";
+/* Class = "UIBarButtonItem"; title = "Item"; ObjectID = "TbT-5N-91Z"; */
+"TbT-5N-91Z.title" = "Item";
+
+/* Class = "UIBarButtonItem"; title = "Item"; ObjectID = "YFX-nY-jTD"; */
+"YFX-nY-jTD.title" = "Item";
 
 /* Class = "UILabel"; text = "Tracker not running"; ObjectID = "c5U-5p-2li"; */
-"c5U-5p-2li.text" = "Tracker not running";
-
-/* Class = "UILabel"; text = "999.9"; ObjectID = "dCM-IX-had"; */
-"dCM-IX-had.text" = "999.9";
+"c5U-5p-2li.text" = "Трэкер не запущеню";
 
 /* Class = "UILabel"; text = "Label"; ObjectID = "dcH-uo-wPE"; */
 "dcH-uo-wPE.text" = "Label";

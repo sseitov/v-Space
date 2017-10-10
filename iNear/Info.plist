@@ -54,6 +54,8 @@
 	<string>v-Space will be collect your geolocation points into track and show places nearby.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>v-Space needs your photo library for sync photos with your tracks.</string>
+    <key>NSContactsUsageDescription</key>
+    <string>v-Space needs access to your contacts to send invitations.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>location</string>

@@ -18,6 +18,7 @@
 "Can not get current location." = "You must enable geolocation access in settings";
 "Can not get current location always." = "You must enable ALWAYS geolocation access in settings";
 "Information" = "Information";
+"Attention" = "Attention";
 "Error" = "Error";
 "Current track" = "Current track";
 "iCloud unavailable" = "iCloud unavailable. Try again later.";
@@ -27,3 +28,7 @@
 "trustList" = "For create trust list need registration. Do you want to continue?";
 "trustListTitle" = "Trust list";
 "myList" = "My list";
+"SignOut" = "Do you want to unregister? Your Trust list will be deleted too.";
+"alreadyInList" = "This user is already in list.";
+"askNotRegistered" = "This user not registered in v-Space. Do you want to send him invitation?";
+"notRegistered" = "This user not registered in v-Space";

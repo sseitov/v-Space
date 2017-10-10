@@ -10,28 +10,35 @@ import UIKit
 import GoogleSignIn
 import Firebase
 import SDWebImage
+import SVProgressHUD
 
-class TrustListController: UITableViewController {
+enum InviteError {
+    case none
+    case notFound
+    case alreadyInList
+}
 
-    @IBOutlet weak var myImage: UIImageView!
-    @IBOutlet weak var myName: UILabel!
-    @IBOutlet weak var myEmail: UILabel!
+class TrustListController: UITableViewController, GIDSignInDelegate {
     
+    private var friends:[String] = []
+    private var inviteEnabled = false
+
     override func viewDidLoad() {
-        super.viewDidLoad()
-        
+        super.viewDidLoad()        
         setupTitle(LOCALIZE("trustListTitle"))
-        myName.text = Auth.auth().currentUser?.displayName
-        myEmail.text = Auth.auth().currentUser?.email
-        myImage.setupCircle()
-        let guest = UIImage(named:"avatar")
-        if let url = Auth.auth().currentUser?.photoURL {
-            myImage.sd_setImage(with: url, placeholderImage: guest, options: [], completed: nil)
-        } else {
-            myImage.image = guest
-        }
+        
+        GIDSignIn.sharedInstance().clientID = "1027279802021-j65vtq40vuqvhknel6j72iqqiethlqau.apps.googleusercontent.com"
+        GIDSignIn.sharedInstance().delegate = self
+        GIDSignIn.sharedInstance().signInSilently()
+
     }
     
+    func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
+        if user != nil {
+            inviteEnabled = true
+        }
+    }
+
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -51,73 +58,111 @@ class TrustListController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return 0
+        return friends.count
     }
 
-    /*
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
-
-        // Configure the cell...
-
+//        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
+        let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
+        cell.textLabel?.text = friends[indexPath.row]
         return cell
     }
-    */
 
-    /*
-    // Override to support conditional editing of the table view.
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
         return true
     }
-    */
 
-    /*
-    // Override to support editing the table view.
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
+            tableView.beginUpdates()
+            friends.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .top)
+            tableView.endUpdates()
+        }
     }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
     
     @IBAction func close(_ sender: Any) {
         dismiss(animated: true, completion: nil)
     }
     
     @IBAction func signOut(_ sender: Any) {
-        let ask = createQuestion(LOCALIZE(""), acceptTitle: "Ok", cancelTitle: "Cancel", acceptHandler: {
-            GIDSignIn.sharedInstance().signOut()
-            try? Auth.auth().signOut()
-            self.dismiss(animated: true, completion: nil)
+        let ask = createQuestion(LOCALIZE("SignOut"), acceptTitle: "Ok", cancelTitle: "Cancel", acceptHandler: {
+            SVProgressHUD.show(withStatus: "SignOut")
+            AuthModel.shared.signOut {
+                SVProgressHUD.dismiss()
+                self.dismiss(animated: true, completion: nil)
+            }
         })
         ask?.show()
     }
     
     @IBAction func addFriend(_ sender: Any) {
         let ask = TextInput.getEmail(cancelHandler: {}, acceptHandler: { email in
-            
+            self.findUser(email, result: { uid, error in
+                if uid != nil {
+                    let indexPath = IndexPath(row: self.friends.count, section: 0)
+                    self.friends.append(uid!)
+                    self.tableView.beginUpdates()
+                    self.tableView.insertRows(at: [indexPath], with: .bottom)
+                    self.tableView.endUpdates()
+                } else {
+                    if error == .alreadyInList {
+                        self.showMessage(LOCALIZE("alreadyInList"), messageType: .information)
+                    } else {
+                        if self.inviteEnabled {
+                            let ask = self.createQuestion(LOCALIZE("askNotRegistered"), acceptTitle: "Send", cancelTitle: "Cancel", acceptHandler:
+                            {
+                                self.sendInvite()
+                            })
+                            ask?.show()
+                        } else {
+                            self.showMessage(LOCALIZE("notRegistered"), messageType: .error)
+                        }
+                    }
+                }
+            })
         })
         ask?.show()
+    }
+    
+    private func sendInvite() {
+        if let invite = Invites.inviteDialog() {
+            invite.setInviteDelegate(self)
+            let message = "\(Auth.auth().currentUser!.displayName!) invite you into v-Space!"
+            invite.setMessage(message)
+            invite.setTitle("Invite")
+            invite.setDeepLink(deepLink)
+            invite.setCallToActionText("Install")
+            invite.open()
+        }
+    }
+
+    func findUser(_ email:String, result: @escaping(String?, InviteError) -> ()) {
+        SVProgressHUD.show(withStatus: "Search...")
+        let ref = Database.database().reference()
+        let myUid = Auth.auth().currentUser!.uid
+        ref.child("users").queryOrdered(byChild: "email").queryEqual(toValue: email).observeSingleEvent(of: .value, with: { snapshot in
+            if let values = snapshot.value as? [String:Any] {
+                for uid in values.keys {
+                    if uid == myUid {
+                        continue
+                    } else {
+                        SVProgressHUD.dismiss()
+                        if self.friends.contains(uid) {
+                            result(nil, .alreadyInList)
+                        } else {
+                            result(uid, .none)
+                        }
+                        return
+                    }
+                }
+                SVProgressHUD.dismiss()
+                result(nil, .notFound)
+            } else {
+                SVProgressHUD.dismiss()
+                result(nil, .notFound)
+            }
+        })
     }
     
     /*
@@ -130,4 +175,19 @@ class TrustListController: UITableViewController {
     }
     */
 
+}
+
+extension TrustListController : InviteDelegate {
+    
+    func inviteFinished(withInvitations invitationIds: [String], error: Error?) {
+        if let error = error {
+            if error.localizedDescription != "Canceled by User" {
+                let message = "Can not send invite. Error: \(error.localizedDescription)"
+                showMessage(message, messageType: .error)
+            }
+        } else {
+            let message = "\(invitationIds.count) invites sent."
+            showMessage(message, messageType: .information)
+        }
+    }
 }

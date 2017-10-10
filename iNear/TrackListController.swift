@@ -385,11 +385,19 @@ class TrackListController: UITableViewController, LastTrackCellDelegate, PHPhoto
                                                        accessToken: (authentication?.accessToken)!)
         SVProgressHUD.show(withStatus: "Login...")
         Auth.auth().signIn(with: credential, completion: { firUser, error in
-            SVProgressHUD.dismiss()
             if error != nil {
+                SVProgressHUD.dismiss()
                 self.showMessage((error as NSError?)!.localizedDescription, messageType: .error)
             } else {
-                self.performSegue(withIdentifier: "trustList", sender: nil)
+                if AuthModel.shared.updatePerson(Auth.auth().currentUser) {
+                    SVProgressHUD.dismiss()
+                    self.performSegue(withIdentifier: "trustList", sender: nil)
+                } else {
+                    AuthModel.shared.signOut {
+                        SVProgressHUD.dismiss()
+                        self.showMessage("Can not upload profile data.", messageType: .error)
+                    }
+                }
             }
         })
     }
