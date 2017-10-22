@@ -59,6 +59,7 @@
 		2CB65EE31DFD5CA8002A9D29 /* ExtensionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB65EE21DFD5CA8002A9D29 /* ExtensionDelegate.swift */; };
 		2CB65EE51DFD5CA8002A9D29 /* Extensions-Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2CB65EE41DFD5CA8002A9D29 /* Extensions-Assets.xcassets */; };
 		2CB65EE91DFD5CA8002A9D29 /* Watch.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 2CB65ECF1DFD5CA7002A9D29 /* Watch.app */; };
+		2CBC8DF31F9C8FFF00C918FD /* PushManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CBC8DF21F9C8FFF00C918FD /* PushManager.swift */; };
 		2CBE20151E8D5EEB002EF13C /* NotificationCenter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2CBE20131E8D5EBB002EF13C /* NotificationCenter.framework */; };
 		2CBE20171E8D6151002EF13C /* LastTrackCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CBE20161E8D6151002EF13C /* LastTrackCell.swift */; };
 		2CBE20191E8D61AF002EF13C /* SavedTrackCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CBE20181E8D61AF002EF13C /* SavedTrackCell.swift */; };
@@ -221,6 +222,7 @@
 		2CB65EE61DFD5CA8002A9D29 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2CB65EF21DFD714E002A9D29 /* Watch.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Watch.entitlements; sourceTree = "<group>"; };
 		2CB65EF31DFD715C002A9D29 /* Watch Extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Watch Extension.entitlements"; sourceTree = "<group>"; };
+		2CBC8DF21F9C8FFF00C918FD /* PushManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushManager.swift; sourceTree = "<group>"; };
 		2CBE20131E8D5EBB002EF13C /* NotificationCenter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NotificationCenter.framework; path = System/Library/Frameworks/NotificationCenter.framework; sourceTree = SDKROOT; };
 		2CBE20161E8D6151002EF13C /* LastTrackCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LastTrackCell.swift; sourceTree = "<group>"; };
 		2CBE20181E8D61AF002EF13C /* SavedTrackCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SavedTrackCell.swift; sourceTree = "<group>"; };
@@ -344,6 +346,7 @@
 				2C3684421F307C6C00A5AD4E /* LocationManager.swift */,
 				2CE268C11E672F7C00FE8219 /* Model.swift */,
 				2C51F7321F8CD693008A0678 /* AuthModel.swift */,
+				2CBC8DF21F9C8FFF00C918FD /* PushManager.swift */,
 				2C17475B1DDB872A0018AEAB /* AppDelegate.swift */,
 				2C3F368C1E6C132900021B10 /* Credentials.swift */,
 				2C17476F1DDB93660018AEAB /* Resources */,
@@ -830,6 +833,7 @@
 				2C87D31E1DDEF3F000F05528 /* UIViewExtensions.swift in Sources */,
 				2C79D49F1E92C5CA00EF4954 /* Photo+CoreDataClass.swift in Sources */,
 				2CDFA7FE1E6ACC13007D9FF0 /* MKMapRectExtension.swift in Sources */,
+				2CBC8DF31F9C8FFF00C918FD /* PushManager.swift in Sources */,
 				2C87D3361DDF1A5C00F05528 /* NSPointerArray+AbstractionHelpers.m in Sources */,
 				2CE268BC1E6716BE00FE8219 /* Location+CoreDataClass.swift in Sources */,
 				2C2B3FBC1E3BB6AD003FE095 /* TrackController.swift in Sources */,
@@ -1090,10 +1094,11 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = iNear/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.vchannel.iNearby;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "0c279b5c-6eaf-40df-868e-d46c7e2e95ec";
+				PROVISIONING_PROFILE = "24eaba94-0c30-4b55-8bc3-2bce58c410e9";
 				PROVISIONING_PROFILE_SPECIFIER = "v-Space Development";
 				SWIFT_OBJC_BRIDGING_HEADER = "vSpace-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -1119,6 +1124,7 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = iNear/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.vchannel.iNearby;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1225,7 +1231,7 @@
 				CODE_SIGN_ENTITLEMENTS = Today/Today.entitlements;
 				DEVELOPMENT_TEAM = 7TSVKXZ79P;
 				INFOPLIST_FILE = Today/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.vchannel.iNearby.Today;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1245,7 +1251,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				DEVELOPMENT_TEAM = 7TSVKXZ79P;
 				INFOPLIST_FILE = Today/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.vchannel.iNearby.Today;
 				PRODUCT_NAME = "$(TARGET_NAME)";

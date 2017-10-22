@@ -32,3 +32,4 @@
 "alreadyInList" = "This user is already in list.";
 "askNotRegistered" = "This user not registered in v-Space. Do you want to send him invitation?";
 "notRegistered" = "This user not registered in v-Space";
+"invite" = "invite you into Ring of Trust.";

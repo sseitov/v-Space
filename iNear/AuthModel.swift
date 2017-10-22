@@ -60,5 +60,5 @@ class AuthModel: NSObject {
             return false
         }
     }
-
+    
 }

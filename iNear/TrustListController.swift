@@ -97,32 +97,48 @@ class TrustListController: UITableViewController, GIDSignInDelegate {
     }
     
     @IBAction func addFriend(_ sender: Any) {
-        let ask = TextInput.getEmail(cancelHandler: {}, acceptHandler: { email in
-            self.findUser(email, result: { uid, error in
-                if uid != nil {
-                    let indexPath = IndexPath(row: self.friends.count, section: 0)
-                    self.friends.append(uid!)
-                    self.tableView.beginUpdates()
-                    self.tableView.insertRows(at: [indexPath], with: .bottom)
-                    self.tableView.endUpdates()
-                } else {
-                    if error == .alreadyInList {
-                        self.showMessage(LOCALIZE("alreadyInList"), messageType: .information)
-                    } else {
-                        if self.inviteEnabled {
-                            let ask = self.createQuestion(LOCALIZE("askNotRegistered"), acceptTitle: "Send", cancelTitle: "Cancel", acceptHandler:
-                            {
-                                self.sendInvite()
-                            })
-                            ask?.show()
-                        } else {
-                            self.showMessage(LOCALIZE("notRegistered"), messageType: .error)
-                        }
-                    }
+        SVProgressHUD.show(withStatus: "Update location...")
+        LocationManager.shared.getCurrentLocation({ location in
+            SVProgressHUD.dismiss()
+            if location == nil {
+                self.showMessage("You must enable location access for v-Space in device settings.", messageType: .error)
+            } else {
+                if let currentUid = Auth.auth().currentUser?.uid {
+                    let update = ["latitude" : location!.coordinate.latitude,
+                                  "longitude" : location!.coordinate.longitude,
+                                  "date" : Date().timeIntervalSince1970]
+                    let ref = Database.database().reference()
+                    ref.child("locations").child(currentUid).setValue(update)
                 }
-            })
+
+                let ask = TextInput.getEmail(cancelHandler: {}, acceptHandler: { email in
+                    self.findUser(email, result: { uid, token, error in
+                        if token != nil {
+                            PushManager.shared.pushInvite(token!, success: { result in
+                                if !result {
+                                    self.showMessage("Can not send invite.", messageType: .error)
+                                }
+                            })
+                        } else {
+                            if error == .alreadyInList {
+                                self.showMessage(LOCALIZE("alreadyInList"), messageType: .information)
+                            } else {
+                                if self.inviteEnabled {
+                                    let ask = self.createQuestion(LOCALIZE("askNotRegistered"), acceptTitle: "Send", cancelTitle: "Cancel", acceptHandler:
+                                    {
+                                        self.sendInvite()
+                                    })
+                                    ask?.show()
+                                } else {
+                                    self.showMessage(LOCALIZE("notRegistered"), messageType: .error)
+                                }
+                            }
+                        }
+                    })
+                })
+                ask?.show()
+            }
         })
-        ask?.show()
     }
     
     private func sendInvite() {
@@ -137,7 +153,7 @@ class TrustListController: UITableViewController, GIDSignInDelegate {
         }
     }
 
-    func findUser(_ email:String, result: @escaping(String?, InviteError) -> ()) {
+    func findUser(_ email:String, result: @escaping(String?, String?, InviteError) -> ()) {
         SVProgressHUD.show(withStatus: "Search...")
         let ref = Database.database().reference()
         let myUid = Auth.auth().currentUser!.uid
@@ -149,18 +165,22 @@ class TrustListController: UITableViewController, GIDSignInDelegate {
                     } else {
                         SVProgressHUD.dismiss()
                         if self.friends.contains(uid) {
-                            result(nil, .alreadyInList)
+                            result(nil, nil, .alreadyInList)
                         } else {
-                            result(uid, .none)
+                            if let user = values[uid] as? [String:Any], let token = user["token"] as? String {
+                                result(uid, token, .none)
+                            } else {
+                                result(nil, nil, .notFound)
+                            }
                         }
                         return
                     }
                 }
                 SVProgressHUD.dismiss()
-                result(nil, .notFound)
+                result(nil, nil, .notFound)
             } else {
                 SVProgressHUD.dismiss()
-                result(nil, .notFound)
+                result(nil, nil, .notFound)
             }
         })
     }

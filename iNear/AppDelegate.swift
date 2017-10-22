@@ -33,21 +33,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
 
         
         // Register_for_notifications
-        if #available(iOS 10.0, *) {
-            let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
-            UNUserNotificationCenter.current().requestAuthorization(
-                options: authOptions,
-                completionHandler: {_, _ in })
+        UNUserNotificationCenter.current().delegate = self
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
             
-            UNUserNotificationCenter.current().delegate = self
+            guard error == nil else {
+                //Display Error.. Handle Error.. etc..
+                return
+            }
             
-        } else {
-            let settings: UIUserNotificationSettings =
-                UIUserNotificationSettings(types: [.alert, .badge, .sound], categories: nil)
-            application.registerUserNotificationSettings(settings)
+            if granted {
+                DispatchQueue.main.async {
+                    //Register for RemoteNotifications. Your Remote Notifications can display alerts now :)
+                    application.registerForRemoteNotifications()
+                }
+            }
+            else {
+                //Handle user denying permissions..
+            }
         }
-        
-        application.registerForRemoteNotifications()
         
         Messaging.messaging().delegate = self
 
@@ -101,8 +104,54 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
         }
     }
 
+    private func pushType(_ userInfo: [AnyHashable: Any]) -> PushType {
+        if let pushTypeStr = userInfo["pushType"] as? String, let type = Int(pushTypeStr), let pt = PushType(rawValue: type) {
+            return pt
+        }
+        return .unknown
+    }
+    
+    private func acceptInvite(_ userInfo: [AnyHashable: Any]) {
+        if let requester = userInfo["requester"] as? String,
+            let aps = userInfo["aps"] as? [String:Any],
+            let alert = aps["alert"] as? [String:Any],
+            let body = alert["body"] as? String
+        {
+            LocationManager.shared.getCurrentLocation({location in
+                if location != nil {
+                    if let currentUid = Auth.auth().currentUser?.uid {
+                        let update = ["latitude" : location!.coordinate.latitude,
+                                      "longitude" : location!.coordinate.longitude,
+                                      "date" : Date().timeIntervalSince1970]
+                        let ref = Database.database().reference()
+                        ref.child("locations").child(currentUid).setValue(update)
+                    }
+                    let ask = self.window?.topMostWindowController?.createQuestion(body,
+                                                                              acceptTitle: "Accept",
+                                                                              cancelTitle: "Reject",
+                                                                              acceptHandler:
+                        {
+                            if let currentUid = Auth.auth().currentUser?.uid {
+                                let update = [currentUid, requester]
+                                let ref = Database.database().reference()
+                                ref.child("friends").childByAutoId().setValue(update)
+                            }
+                    })
+                    ask?.show()
+                } else {
+                    self.window?.topMostWindowController?.showMessage("You must enable location access for v-Space in device settings.", messageType: .error)
+                }
+            })
+        }
+    }
+    
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any],
                      fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+        if pushType(userInfo) == .invite {
+            if application.applicationState == .active {
+                acceptInvite(userInfo)
+            }
+        }
         completionHandler(.newData)
     }
     
@@ -174,24 +223,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
 
 // MARK: - NotificationCenter delegate
 
-@available(iOS 10, *)
 extension AppDelegate : UNUserNotificationCenterDelegate {
     
     // Receive displayed notifications for iOS 10 devices.
     func userNotificationCenter(_ center: UNUserNotificationCenter,
                                 willPresent notification: UNNotification,
-                                withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+                                withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void)
+    {
     }
     
     func userNotificationCenter(_ center: UNUserNotificationCenter,
                                 didReceive response: UNNotificationResponse,
-                                withCompletionHandler completionHandler: @escaping () -> Void) {
+                                withCompletionHandler completionHandler: @escaping () -> Void)
+    {
+        if pushType(response.notification.request.content.userInfo) == .invite {
+            acceptInvite(response.notification.request.content.userInfo)
+        }
+        completionHandler()
     }
 }
 
 extension AppDelegate : MessagingDelegate {
     
     func messaging(_ messaging: Messaging, didRefreshRegistrationToken fcmToken: String) {
+        print("============== fcmToken \(fcmToken)")
         Messaging.messaging().shouldEstablishDirectChannel = true
         UserDefaults.standard.set(fcmToken, forKey: "token")
         _ = AuthModel.shared.updatePerson(Auth.auth().currentUser)
