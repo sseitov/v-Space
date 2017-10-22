@@ -60,6 +60,7 @@
 		2CB65EE51DFD5CA8002A9D29 /* Extensions-Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2CB65EE41DFD5CA8002A9D29 /* Extensions-Assets.xcassets */; };
 		2CB65EE91DFD5CA8002A9D29 /* Watch.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 2CB65ECF1DFD5CA7002A9D29 /* Watch.app */; };
 		2CBC8DF31F9C8FFF00C918FD /* PushManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CBC8DF21F9C8FFF00C918FD /* PushManager.swift */; };
+		2CBC8DF51F9D040500C918FD /* UserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CBC8DF41F9D040500C918FD /* UserCell.swift */; };
 		2CBE20151E8D5EEB002EF13C /* NotificationCenter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2CBE20131E8D5EBB002EF13C /* NotificationCenter.framework */; };
 		2CBE20171E8D6151002EF13C /* LastTrackCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CBE20161E8D6151002EF13C /* LastTrackCell.swift */; };
 		2CBE20191E8D61AF002EF13C /* SavedTrackCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CBE20181E8D61AF002EF13C /* SavedTrackCell.swift */; };
@@ -223,6 +224,7 @@
 		2CB65EF21DFD714E002A9D29 /* Watch.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Watch.entitlements; sourceTree = "<group>"; };
 		2CB65EF31DFD715C002A9D29 /* Watch Extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Watch Extension.entitlements"; sourceTree = "<group>"; };
 		2CBC8DF21F9C8FFF00C918FD /* PushManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushManager.swift; sourceTree = "<group>"; };
+		2CBC8DF41F9D040500C918FD /* UserCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCell.swift; sourceTree = "<group>"; };
 		2CBE20131E8D5EBB002EF13C /* NotificationCenter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NotificationCenter.framework; path = System/Library/Frameworks/NotificationCenter.framework; sourceTree = SDKROOT; };
 		2CBE20161E8D6151002EF13C /* LastTrackCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LastTrackCell.swift; sourceTree = "<group>"; };
 		2CBE20181E8D61AF002EF13C /* SavedTrackCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SavedTrackCell.swift; sourceTree = "<group>"; };
@@ -304,6 +306,7 @@
 			isa = PBXGroup;
 			children = (
 				2C00AA9D1F8A53ED003524DC /* TrustListController.swift */,
+				2CBC8DF41F9D040500C918FD /* UserCell.swift */,
 			);
 			name = "Trust List";
 			sourceTree = "<group>";
@@ -842,6 +845,7 @@
 				2C00AA991F8A494F003524DC /* StringExtension.swift in Sources */,
 				2C87D3201DDF026300F05528 /* UIViewControllerExtensions.swift in Sources */,
 				2C362BDB1EB495C500749C46 /* Place+CoreDataProperties.swift in Sources */,
+				2CBC8DF51F9D040500C918FD /* UserCell.swift in Sources */,
 				2CE268B71E67156400FE8219 /* LocationModel.xcdatamodeld in Sources */,
 				2C3684431F307C6C00A5AD4E /* LocationManager.swift in Sources */,
 				2C79D4A01E92C5CA00EF4954 /* Photo+CoreDataProperties.swift in Sources */,

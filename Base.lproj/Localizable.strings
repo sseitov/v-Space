@@ -26,9 +26,9 @@
 "Create route..." = "Create route...";
 "deleteAsk" = "Do you want to delete this photos from the track? Photos also would deleted from photo collection.";
 "trustList" = "For create trust list need registration. Do you want to continue?";
-"trustListTitle" = "Trust list";
+"trustListTitle" = "Ring of Trust";
 "myList" = "My list";
-"SignOut" = "Do you want to unregister? Your Trust list will be deleted too.";
+"SignOut" = "Do you want to unregister? Your Ring of Trust will be deleted too.";
 "alreadyInList" = "This user is already in list.";
 "askNotRegistered" = "This user not registered in v-Space. Do you want to send him invitation?";
 "notRegistered" = "This user not registered in v-Space";

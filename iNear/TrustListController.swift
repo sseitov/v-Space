@@ -18,9 +18,22 @@ enum InviteError {
     case alreadyInList
 }
 
+struct FriendPair {
+    let uid:String
+    let pair:[String]
+    func friend() -> String {
+        let currentUid = Auth.auth().currentUser!.uid
+        if currentUid == pair[0] {
+            return pair[1]
+        } else {
+            return pair[0]
+        }
+    }
+}
+
 class TrustListController: UITableViewController, GIDSignInDelegate {
     
-    private var friends:[String] = []
+    private var friendPairs:[FriendPair] = []
     private var inviteEnabled = false
 
     override func viewDidLoad() {
@@ -31,6 +44,10 @@ class TrustListController: UITableViewController, GIDSignInDelegate {
         GIDSignIn.sharedInstance().delegate = self
         GIDSignIn.sharedInstance().signInSilently()
 
+        updateFriendList({ list in
+            self.friendPairs = list
+            self.tableView.reloadData()
+        })
     }
     
     func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
@@ -39,8 +56,35 @@ class TrustListController: UITableViewController, GIDSignInDelegate {
         }
     }
 
+    func updateFriendList(_ list: @escaping([FriendPair]) -> ()) {
+        var result:[FriendPair] = []
+        let currentUid = Auth.auth().currentUser!.uid
+        let ref = Database.database().reference()
+        ref.child("friends").observeSingleEvent(of: .value, with: { snapshot in
+            if let values = snapshot.value as? [String:Any] {
+                for (key, value) in values {
+                    if let pair = value as? [String] {
+                        if pair[0] == currentUid || pair[1] == currentUid {
+                            let friend = FriendPair(uid: key, pair: pair)
+                            result.append(friend)
+                        }
+                    }
+                }
+            }
+            list(result)
+        })
+    }
+    
     // MARK: - Table view data source
 
+    @IBAction func refresh(_ sender: UIRefreshControl) {
+        updateFriendList({ list in
+            self.friendPairs = list
+            sender.endRefreshing()
+            self.tableView.reloadData()
+        })
+    }
+    
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
@@ -58,13 +102,13 @@ class TrustListController: UITableViewController, GIDSignInDelegate {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return friends.count
+        return friendPairs.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
-        let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
-        cell.textLabel?.text = friends[indexPath.row]
+        let cell = tableView.dequeueReusableCell(withIdentifier: "user", for: indexPath) as! UserCell
+        let friend = friendPairs[indexPath.row]
+        cell.uid = friend.friend()
         return cell
     }
 
@@ -75,12 +119,15 @@ class TrustListController: UITableViewController, GIDSignInDelegate {
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             tableView.beginUpdates()
-            friends.remove(at: indexPath.row)
+            let friend = friendPairs[indexPath.row]
+            let ref = Database.database().reference()
+            ref.child("friends").child(friend.uid).removeValue()
+            friendPairs.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .top)
             tableView.endUpdates()
         }
     }
-    
+  
     @IBAction func close(_ sender: Any) {
         dismiss(animated: true, completion: nil)
     }
@@ -142,17 +189,28 @@ class TrustListController: UITableViewController, GIDSignInDelegate {
     }
     
     private func sendInvite() {
-        if let invite = Invites.inviteDialog() {
-            invite.setInviteDelegate(self)
-            let message = "\(Auth.auth().currentUser!.displayName!) invite you into v-Space!"
-            invite.setMessage(message)
-            invite.setTitle("Invite")
-            invite.setDeepLink(deepLink)
-            invite.setCallToActionText("Install")
-            invite.open()
+        DispatchQueue.main.async {
+            if let invite = Invites.inviteDialog() {
+                invite.setInviteDelegate(self)
+                let message = "\(Auth.auth().currentUser!.displayName!) invite you into v-Space!"
+                invite.setMessage(message)
+                invite.setTitle("Invite")
+                invite.setDeepLink(deepLink)
+                invite.setCallToActionText("Install")
+                invite.open()
+            }
         }
     }
 
+    private func friendExist(_ uid:String) -> Bool {
+        for friend in friendPairs {
+            if friend.friend() == uid {
+                return true
+            }
+        }
+        return false
+    }
+    
     func findUser(_ email:String, result: @escaping(String?, String?, InviteError) -> ()) {
         SVProgressHUD.show(withStatus: "Search...")
         let ref = Database.database().reference()
@@ -164,7 +222,7 @@ class TrustListController: UITableViewController, GIDSignInDelegate {
                         continue
                     } else {
                         SVProgressHUD.dismiss()
-                        if self.friends.contains(uid) {
+                        if self.friendExist(uid) {
                             result(nil, nil, .alreadyInList)
                         } else {
                             if let user = values[uid] as? [String:Any], let token = user["token"] as? String {

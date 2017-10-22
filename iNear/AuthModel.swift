@@ -61,4 +61,12 @@ class AuthModel: NSObject {
         }
     }
     
+    func userData(_ uid:String, data : @escaping([String:Any]?) -> ()) {
+        let ref = Database.database().reference()
+        ref.child("users").child(uid).observeSingleEvent(of: .value, with: { snapshot in
+            if let result = snapshot.value as? [String:Any] {
+                data(result)
+            }
+        })
+    }
 }
