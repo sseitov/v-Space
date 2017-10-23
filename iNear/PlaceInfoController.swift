@@ -15,7 +15,8 @@ class PlaceInfoController: UITableViewController {
 
     var gmsPlace:GMSPlace?
     var place:Place?
-    var myCoordinate:CLLocationCoordinate2D?
+    
+    private var myCoordinate:CLLocationCoordinate2D?
  
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -145,16 +146,12 @@ class PlaceInfoController: UITableViewController {
             if myCoordinate != nil {
                 performSegue(withIdentifier: "route", sender: nil)
             } else {
-                LocationManager.shared.registeredInUse({ enable in
-                    if enable {
-                        SVProgressHUD.show(withStatus: "Get location...")
-                        LocationManager.shared.getCurrentLocation({ location in
-                            SVProgressHUD.dismiss()
-                            if location != nil {
-                                self.myCoordinate = location!.coordinate
-                                self.performSegue(withIdentifier: "route", sender: nil)
-                            }
-                        })
+                SVProgressHUD.show(withStatus: "Get location...")
+                LocationManager.shared.getCurrentLocation({ location in
+                    SVProgressHUD.dismiss()
+                    if location != nil {
+                        self.myCoordinate = location!.coordinate
+                        self.performSegue(withIdentifier: "route", sender: nil)
                     } else {
                         self.showMessage(NSLocalizedString("Can not get current location.", comment: ""), messageType: .error)
                     }

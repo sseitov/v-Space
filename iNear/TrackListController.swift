@@ -369,7 +369,6 @@ class TrackListController: UITableViewController, LastTrackCellDelegate, PHPhoto
             let controller = nav.topViewController as! PlaceInfoController
             controller.gmsPlace = sender as? GMSPlace
             controller.place = sender as? Place
-            controller.myCoordinate = LocationManager.shared.currentLocation?.coordinate
         }
     }
     

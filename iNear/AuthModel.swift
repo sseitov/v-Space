@@ -28,6 +28,7 @@ class AuthModel: NSObject {
     func signOut(_ completion: @escaping() -> ()) {
         if let uid = Auth.auth().currentUser?.uid {
             let ref = Database.database().reference()
+            ref.child("locations").child(uid).removeValue()
             ref.child("users").child(uid).removeValue(completionBlock: { _, _ in
                 GIDSignIn.sharedInstance().signOut()
                 try? Auth.auth().signOut()

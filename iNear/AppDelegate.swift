@@ -25,7 +25,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
 
     var window: UIWindow?
     var watchSession:WCSession?
-    private var isUpdateLocation = false
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
 
@@ -153,26 +152,40 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
         }
     }
     
+    private func updateLocation(_ userInfo: [AnyHashable: Any]) {
+        if let aps = userInfo["aps"] as? [String:Any],
+            let alert = aps["alert"] as? [String:Any],
+            let body = alert["body"] as? String
+        {
+            let ask = self.window?.topMostWindowController?.createQuestion(body,
+                                                                           acceptTitle: "Show",
+                                                                           cancelTitle: "Hide",
+                                                                           acceptHandler:
+                {
+                    LocationManager.shared.getCurrentLocation({ location in
+                        if location != nil {
+                            if let currentUid = Auth.auth().currentUser?.uid {
+                                let update = ["latitude" : location!.coordinate.latitude,
+                                              "longitude" : location!.coordinate.longitude,
+                                              "date" : Date().timeIntervalSince1970]
+                                let ref = Database.database().reference()
+                                ref.child("locations").child(currentUid).setValue(update)
+                            }
+                        }
+                    })
+            })
+            ask?.show()
+        }
+    }
+    
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any],
                      fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-        if pushType(userInfo) == .invite {
-            if application.applicationState == .active {
+        if application.applicationState == .active {
+            if pushType(userInfo) == .invite {
                 acceptInvite(userInfo)
+            } else {
+                updateLocation(userInfo)
             }
-        } else if !isUpdateLocation {
-            isUpdateLocation = true
-            LocationManager.shared.getBackgroundLocation({ location in
-                self.isUpdateLocation = false
-                if location != nil {
-                    if let currentUid = Auth.auth().currentUser?.uid {
-                        let update = ["latitude" : location!.coordinate.latitude,
-                                      "longitude" : location!.coordinate.longitude,
-                                      "date" : Date().timeIntervalSince1970]
-                        let ref = Database.database().reference()
-                        ref.child("locations").child(currentUid).setValue(update)
-                    }
-                }
-            })
         }
         completionHandler(.newData)
     }
@@ -261,7 +274,10 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
     {
         if pushType(response.notification.request.content.userInfo) == .invite {
             acceptInvite(response.notification.request.content.userInfo)
+        } else {
+            updateLocation(response.notification.request.content.userInfo)
         }
+        
         completionHandler()
     }
 }
@@ -307,15 +323,15 @@ extension AppDelegate : WCSessionDelegate {
         if let command = message["command"] as? String {
             if command == "status" {
                 replyHandler(
-                    ["isRunning" : !LocationManager.shared.isPaused,
+                    ["isRunning" : !Tracker.shared.isPaused,
                      "distance" : Model.shared.lastTrackDistance(),
                      "speed" : Model.shared.lastTrackSpeed()])
             } else if command == "start" {
-                LocationManager.shared.startInBackground()
-                replyHandler(["result": !LocationManager.shared.isPaused])
+                Tracker.shared.startInBackground()
+                replyHandler(["result": !Tracker.shared.isPaused])
             } else if command == "stop" {
-                LocationManager.shared.stop()
-                replyHandler(["result": !LocationManager.shared.isPaused])
+                Tracker.shared.stop()
+                replyHandler(["result": !Tracker.shared.isPaused])
             }
         }
     }

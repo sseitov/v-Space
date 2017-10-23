@@ -143,6 +143,10 @@ class TrustListController: UITableViewController, GIDSignInDelegate {
     @IBAction func signOut(_ sender: Any) {
         let ask = createQuestion(LOCALIZE("SignOut"), acceptTitle: "Ok", cancelTitle: "Cancel", acceptHandler: {
             SVProgressHUD.show(withStatus: "SignOut")
+            let ref = Database.database().reference()
+            for friend in self.friendPairs {
+                ref.child("friends").child(friend.uid).removeValue()
+            }
             AuthModel.shared.signOut {
                 SVProgressHUD.dismiss()
                 self.dismiss(animated: true, completion: nil)

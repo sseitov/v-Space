@@ -53,14 +53,19 @@ class PushManager: NSObject {
     }
     
     func askLocation(_ token:String) {
-        let notification:[String:Any] = [
-            "content_available": true]
-        let data:[String:Any] = ["pushType" : PushType.askLocation.rawValue]
-        let message:[String:Any] = ["to" : token, "priority" : "high", "notification" : notification, "data" : data]
-        httpManager.post("send", parameters: message, progress: nil, success: { task, response in
-            print("SUCCESS")
-        }, failure: { task, error in
-            print("SEND PUSH CALL ERROR: \(error)")
-        })
+        if let name = Auth.auth().currentUser?.displayName {
+            let notification:[String:Any] = [
+                "title" : "v-Space",
+                "sound" : "default",
+                "body" : "\(name) \(LOCALIZE("askLocation"))",
+                "content_available": true]
+            let data:[String:Any] = ["pushType" : PushType.askLocation.rawValue]
+            let message:[String:Any] = ["to" : token, "priority" : "high", "notification" : notification, "data" : data]
+            httpManager.post("send", parameters: message, progress: nil, success: { task, response in
+                print("SUCCESS")
+            }, failure: { task, error in
+                print("SEND PUSH CALL ERROR: \(error)")
+            })
+        }
     }
 }
