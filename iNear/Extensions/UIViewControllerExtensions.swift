@@ -12,42 +12,21 @@ enum MessageType {
     case error, success, information
 }
 
-class TitleView : UILabel {
-    var prompt:UILabel?
-   
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        if prompt != nil {
-            prompt!.frame = CGRect(x: 0, y: -20, width: Int(frame.size.width), height: 20)
-        }
-    }
-}
-
 extension UIViewController {
-    
-    func setupTitle(_ text:String, color:UIColor = UIColor.white, promptText:String? = nil) {
-        let label = TitleView(frame: CGRect(x: 0, y: 0, width: 200, height: 44))
+ 
+    func setupTitle(_ text:String, color:UIColor = UIColor.white) {
+        let label = UILabel(frame: CGRect(x: 0, y: 0, width: 200, height: 44))
         label.textAlignment = .center
         label.font = UIFont(name: "HelveticaNeue-CondensedBold", size: 15)
         label.text = text
         label.textColor = color
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
-        if promptText != nil {
-            navigationItem.prompt = ""
-            label.clipsToBounds = false
-            label.prompt = UILabel(frame: CGRect(x: 0, y: -20, width: label.frame.size.width, height: 20))
-            label.prompt!.textAlignment = .center
-            label.prompt!.font = UIFont(name: "HelveticaNeue-CondensedBold", size: 15)
-            label.prompt!.textColor = UIColor.white
-            label.prompt!.text = promptText!
-            label.addSubview(label.prompt!)
-        }
         navigationItem.titleView = label
     }
-    
+
     func changeTitle(_ text:String) {
-        if let title = navigationItem.titleView as? TitleView {
+        if let title = navigationItem.titleView as? UILabel {
             title.text = text
         }
     }

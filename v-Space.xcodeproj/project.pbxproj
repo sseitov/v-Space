@@ -28,6 +28,7 @@
 		2C3F368D1E6C132900021B10 /* Credentials.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C3F368C1E6C132900021B10 /* Credentials.swift */; };
 		2C51F7331F8CD693008A0678 /* AuthModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C51F7321F8CD693008A0678 /* AuthModel.swift */; };
 		2C54EB7A1E8ADC49009C4A27 /* TrackListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C54EB791E8ADC49009C4A27 /* TrackListController.swift */; };
+		2C6E7D7C1F9DDE2D004B4D68 /* LocationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C6E7D7B1F9DDE2D004B4D68 /* LocationController.swift */; };
 		2C79D49F1E92C5CA00EF4954 /* Photo+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C79D49D1E92C5CA00EF4954 /* Photo+CoreDataClass.swift */; };
 		2C79D4A01E92C5CA00EF4954 /* Photo+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C79D49E1E92C5CA00EF4954 /* Photo+CoreDataProperties.swift */; };
 		2C79D4A11E92C73400EF4954 /* Photo+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C79D49D1E92C5CA00EF4954 /* Photo+CoreDataClass.swift */; };
@@ -183,6 +184,7 @@
 		2C51F7321F8CD693008A0678 /* AuthModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthModel.swift; sourceTree = "<group>"; };
 		2C51F7351F8D2F97008A0678 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Main.strings; sourceTree = "<group>"; };
 		2C54EB791E8ADC49009C4A27 /* TrackListController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackListController.swift; sourceTree = "<group>"; };
+		2C6E7D7B1F9DDE2D004B4D68 /* LocationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationController.swift; sourceTree = "<group>"; };
 		2C79D49D1E92C5CA00EF4954 /* Photo+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Photo+CoreDataClass.swift"; path = "Model/Photo+CoreDataClass.swift"; sourceTree = "<group>"; };
 		2C79D49E1E92C5CA00EF4954 /* Photo+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Photo+CoreDataProperties.swift"; path = "Model/Photo+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		2C79D4A31E92DE9F00EF4954 /* PhotoController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoController.swift; sourceTree = "<group>"; };
@@ -307,6 +309,7 @@
 			children = (
 				2C00AA9D1F8A53ED003524DC /* TrustListController.swift */,
 				2CBC8DF41F9D040500C918FD /* UserCell.swift */,
+				2C6E7D7B1F9DDE2D004B4D68 /* LocationController.swift */,
 			);
 			name = "Trust List";
 			sourceTree = "<group>";
@@ -844,6 +847,7 @@
 				2CE268BE1E6716BE00FE8219 /* Location+CoreDataProperties.swift in Sources */,
 				2C00AA991F8A494F003524DC /* StringExtension.swift in Sources */,
 				2C87D3201DDF026300F05528 /* UIViewControllerExtensions.swift in Sources */,
+				2C6E7D7C1F9DDE2D004B4D68 /* LocationController.swift in Sources */,
 				2C362BDB1EB495C500749C46 /* Place+CoreDataProperties.swift in Sources */,
 				2CBC8DF51F9D040500C918FD /* UserCell.swift in Sources */,
 				2CE268B71E67156400FE8219 /* LocationModel.xcdatamodeld in Sources */,
@@ -1098,7 +1102,7 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = iNear/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.vchannel.iNearby;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1108,7 +1112,7 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
-				VALID_ARCHS = arm64;
+				VALID_ARCHS = "arm64 armv7";
 			};
 			name = Debug;
 		};
@@ -1128,7 +1132,7 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = iNear/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.vchannel.iNearby;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1137,7 +1141,7 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "vSpace-Bridging-Header.h";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
-				VALID_ARCHS = arm64;
+				VALID_ARCHS = "arm64 armv7";
 			};
 			name = Release;
 		};

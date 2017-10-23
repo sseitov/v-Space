@@ -51,4 +51,16 @@ class PushManager: NSObject {
             success(false)
         }
     }
+    
+    func askLocation(_ token:String) {
+        let notification:[String:Any] = [
+            "content_available": true]
+        let data:[String:Any] = ["pushType" : PushType.askLocation.rawValue]
+        let message:[String:Any] = ["to" : token, "priority" : "high", "notification" : notification, "data" : data]
+        httpManager.post("send", parameters: message, progress: nil, success: { task, response in
+            print("SUCCESS")
+        }, failure: { task, error in
+            print("SEND PUSH CALL ERROR: \(error)")
+        })
+    }
 }

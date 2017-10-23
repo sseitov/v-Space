@@ -25,7 +25,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
 
     var window: UIWindow?
     var watchSession:WCSession?
-
+    private var isUpdateLocation = false
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
 
         // Use Firebase library to configure APIs
@@ -33,23 +34,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
 
         
         // Register_for_notifications
-        UNUserNotificationCenter.current().delegate = self
-        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
-            
-            guard error == nil else {
-                //Display Error.. Handle Error.. etc..
-                return
-            }
-            
-            if granted {
-                DispatchQueue.main.async {
-                    //Register for RemoteNotifications. Your Remote Notifications can display alerts now :)
-                    application.registerForRemoteNotifications()
+        if #available(iOS 10.0, *) {
+            UNUserNotificationCenter.current().delegate = self
+            UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
+                
+                guard error == nil else {
+                    //Display Error.. Handle Error.. etc..
+                    return
+                }
+                
+                if granted {
+                    DispatchQueue.main.async {
+                        //Register for RemoteNotifications. Your Remote Notifications can display alerts now :)
+                        application.registerForRemoteNotifications()
+                    }
+                }
+                else {
+                    //Handle user denying permissions..
                 }
             }
-            else {
-                //Handle user denying permissions..
-            }
+        } else {
+            let settings: UIUserNotificationSettings =
+                UIUserNotificationSettings(types: [.alert, .badge, .sound], categories: nil)
+            application.registerUserNotificationSettings(settings)
+            application.registerForRemoteNotifications()
         }
         
         Messaging.messaging().delegate = self
@@ -151,6 +159,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
             if application.applicationState == .active {
                 acceptInvite(userInfo)
             }
+        } else if !isUpdateLocation {
+            isUpdateLocation = true
+            LocationManager.shared.getBackgroundLocation({ location in
+                self.isUpdateLocation = false
+                if location != nil {
+                    if let currentUid = Auth.auth().currentUser?.uid {
+                        let update = ["latitude" : location!.coordinate.latitude,
+                                      "longitude" : location!.coordinate.longitude,
+                                      "date" : Date().timeIntervalSince1970]
+                        let ref = Database.database().reference()
+                        ref.child("locations").child(currentUid).setValue(update)
+                    }
+                }
+            })
         }
         completionHandler(.newData)
     }
@@ -223,6 +245,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
 
 // MARK: - NotificationCenter delegate
 
+@available(iOS 10, *)
 extension AppDelegate : UNUserNotificationCenterDelegate {
     
     // Receive displayed notifications for iOS 10 devices.

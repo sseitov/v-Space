@@ -4,6 +4,7 @@
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
+        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -356,15 +357,63 @@
                         </barButtonItem>
                     </navigationItem>
                     <refreshControl key="refreshControl" opaque="NO" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="bxf-vC-Xw7">
+                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <connections>
                             <action selector="refresh:" destination="8Q9-qi-9uh" eventType="valueChanged" id="YWU-5u-1vd"/>
                         </connections>
                     </refreshControl>
+                    <connections>
+                        <segue destination="CEA-ah-sdj" kind="show" identifier="map" id="uZI-Z1-4YR"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Lk6-Wq-JCs" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2604" y="-336"/>
+        </scene>
+        <!--Location Controller-->
+        <scene sceneID="7r8-6e-lqM">
+            <objects>
+                <viewController id="CEA-ah-sdj" customClass="LocationController" customModule="v_Space" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="U8G-oB-xRV"/>
+                        <viewControllerLayoutGuide type="bottom" id="yiF-bp-Nkx"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Xd9-bW-4k4">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dUH-OA-1CZ" customClass="GMSMapView">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="dUH-OA-1CZ" secondAttribute="trailing" id="Dv1-kl-uj5"/>
+                            <constraint firstItem="yiF-bp-Nkx" firstAttribute="top" secondItem="dUH-OA-1CZ" secondAttribute="bottom" id="YIp-y1-9gb"/>
+                            <constraint firstItem="dUH-OA-1CZ" firstAttribute="top" secondItem="U8G-oB-xRV" secondAttribute="bottom" id="YwD-Yt-QGF"/>
+                            <constraint firstItem="dUH-OA-1CZ" firstAttribute="leading" secondItem="Xd9-bW-4k4" secondAttribute="leading" id="qMH-Rb-i74"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="gKa-bT-XC4">
+                        <barButtonItem key="leftBarButtonItem" title="Item" image="backButton" id="xq9-sK-RgE">
+                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" systemItem="refresh" id="UfA-N1-iJN">
+                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <connections>
+                                <action selector="refresh" destination="CEA-ah-sdj" id="dFH-yA-LXw"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="map" destination="dUH-OA-1CZ" id="f3X-p6-Igy"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="OfY-Dw-f0Q" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3395.625" y="-333.80281690140845"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="IHH-2y-NqB">
@@ -731,7 +780,7 @@
         <image name="time" width="24" height="24"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="qQk-mS-dnv"/>
+        <segue reference="0JP-9t-1Ml"/>
         <segue reference="7g7-Mu-uwC"/>
     </inferredMetricsTieBreakers>
 </document>

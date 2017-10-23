@@ -127,7 +127,15 @@ class TrustListController: UITableViewController, GIDSignInDelegate {
             tableView.endUpdates()
         }
     }
-  
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if let cell = tableView.cellForRow(at: indexPath) as? UserCell {
+            performSegue(withIdentifier: "map", sender: cell)
+        }
+    }
+    
+    // MARK: - Commands
+
     @IBAction func close(_ sender: Any) {
         dismiss(animated: true, completion: nil)
     }
@@ -243,15 +251,19 @@ class TrustListController: UITableViewController, GIDSignInDelegate {
         })
     }
     
-    /*
     // MARK: - Navigation
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+        if segue.identifier == "map" {
+            let next = segue.destination as! LocationController
+            if let cell = sender as? UserCell {
+                next.friendUid = cell.uid
+                next.friendName = cell.userName.text
+                next.friendImage = cell.userImage.image
+                next.friendToken = cell.token
+            }
+        }
     }
-    */
 
 }
 

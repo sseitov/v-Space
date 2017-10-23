@@ -39,8 +39,8 @@ class LocationManager: NSObject {
                     self.locationCondition?.lock()
                     self.locationCondition?.wait()
                     self.locationCondition?.unlock()
+                    self.locationCondition = nil
                     DispatchQueue.main.async {
-                        self.locationCondition = nil
                         location(self.currentLocation)
                         self.currentLocation = nil
                     }
@@ -50,7 +50,29 @@ class LocationManager: NSObject {
             }
         })
     }
-    
+
+    func getBackgroundLocation(_ location: @escaping(CLLocation?) -> ()) {
+        if CLLocationManager.locationServicesEnabled() {
+            let status = CLLocationManager.authorizationStatus()
+            if (status == .authorizedAlways || status == .authorizedWhenInUse) {
+                self.currentLocation = nil
+                self.locationCondition = NSCondition()
+                self.locationManager.allowsBackgroundLocationUpdates = true
+                self.locationManager.startUpdatingLocation()
+                DispatchQueue.global().async {
+                    self.locationCondition?.lock()
+                    self.locationCondition?.wait()
+                    self.locationCondition?.unlock()
+                    self.locationCondition = nil
+                    DispatchQueue.main.async {
+                        location(self.currentLocation)
+                        self.currentLocation = nil
+                    }
+                }
+            }
+        }
+    }
+  
     func registeredInUse(_  isRegistered: @escaping(Bool) -> ()) {
         if CLLocationManager.locationServicesEnabled() {
             switch CLLocationManager.authorizationStatus() {
@@ -142,7 +164,7 @@ extension LocationManager : CLLocationManagerDelegate {
                 self.currentLocation = location
                 self.locationCondition?.signal()
                 self.locationCondition?.unlock()
-            } else {
+            } else if !isPaused {
                 Model.shared.addCoordinate(location.coordinate, at:NSDate().timeIntervalSince1970)
             }
         }

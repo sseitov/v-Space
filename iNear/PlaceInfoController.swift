@@ -131,7 +131,11 @@ class PlaceInfoController: UITableViewController {
                 if canMakePhoneCall() {
                     let number = "tel://\(phoneNumber!)".replacingOccurrences(of: " ", with: "")
                     if let url = URL(string: number) {
-                        UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                        if #available(iOS 10.0, *) {
+                            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                        } else {
+                            UIApplication.shared.openURL(url)
+                        }
                     }
                 } else {
                     self.showMessage("Your device can not make phone call.", messageType: .error)
