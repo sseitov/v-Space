@@ -18,14 +18,14 @@
 	<string>5.0</string>
 	<key>CFBundleURLTypes</key>
 	<array>
-        <dict>
-            <key>CFBundleTypeRole</key>
-            <string>Editor</string>
-            <key>CFBundleURLSchemes</key>
-            <array>
-                <string>com.googleusercontent.apps.1027279802021-j65vtq40vuqvhknel6j72iqqiethlqau</string>
-            </array>
-        </dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.1027279802021-j65vtq40vuqvhknel6j72iqqiethlqau</string>
+			</array>
+		</dict>
 		<dict>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
@@ -36,7 +36,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>2</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -46,6 +46,8 @@
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>v-Space needs your camera for take photos and put their on your tracks.</string>
+	<key>NSContactsUsageDescription</key>
+	<string>v-Space needs access to your contacts to send invitations.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>v-Space will be collect your geolocation points into track and show places nearby.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
@@ -54,8 +56,6 @@
 	<string>v-Space will be collect your geolocation points into track and show places nearby.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>v-Space needs your photo library for sync photos with your tracks.</string>
-    <key>NSContactsUsageDescription</key>
-    <string>v-Space needs access to your contacts to send invitations.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>location</string>
