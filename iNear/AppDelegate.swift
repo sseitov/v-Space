@@ -38,7 +38,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
             UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
                 
                 guard error == nil else {
-                    //Display Error.. Handle Error.. etc..
+                    print("============ Display Error.. Handle Error.. etc..")
                     return
                 }
                 
@@ -49,7 +49,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
                     }
                 }
                 else {
-                    //Handle user denying permissions..
+                    print("======== user denying permissions..")
                 }
             }
         } else {
@@ -96,6 +96,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
         }
         IQKeyboardManager.shared().isEnableAutoToolbar = false
         
+        if currentUid() != nil {
+            AuthModel.shared.startObservers()
+        }
+        
         return true
     }
     
@@ -126,22 +130,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
         {
             LocationManager.shared.getCurrentLocation({location in
                 if location != nil {
-                    if let currentUid = Auth.auth().currentUser?.uid {
-                        let update = ["latitude" : location!.coordinate.latitude,
-                                      "longitude" : location!.coordinate.longitude,
-                                      "date" : Date().timeIntervalSince1970]
-                        let ref = Database.database().reference()
-                        ref.child("locations").child(currentUid).setValue(update)
-                    }
                     let ask = self.window?.topMostWindowController?.createQuestion(body,
                                                                               acceptTitle: "Accept",
                                                                               cancelTitle: "Reject",
                                                                               acceptHandler:
                         {
-                            if let currentUid = Auth.auth().currentUser?.uid {
-                                let update = [currentUid, requester]
+                            if currentUid() != nil {
+                                let update = ["latitude" : location!.coordinate.latitude,
+                                              "longitude" : location!.coordinate.longitude,
+                                              "date" : Date().timeIntervalSince1970]
                                 let ref = Database.database().reference()
-                                ref.child("friends").childByAutoId().setValue(update)
+                                ref.child("locations").child(currentUid()!).setValue(update)
+                                
+                                let update2 = [currentUid()!, requester]
+                                ref.child("friends").childByAutoId().setValue(update2)
                             }
                     })
                     ask?.show()
@@ -152,30 +154,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
         }
     }
     
-    private func updateLocation(_ userInfo: [AnyHashable: Any]) {
-        if let aps = userInfo["aps"] as? [String:Any],
-            let alert = aps["alert"] as? [String:Any],
-            let body = alert["body"] as? String
-        {
-            let ask = self.window?.topMostWindowController?.createQuestion(body,
-                                                                           acceptTitle: "Show",
-                                                                           cancelTitle: "Hide",
-                                                                           acceptHandler:
-                {
-                    LocationManager.shared.getCurrentLocation({ location in
-                        if location != nil {
-                            if let currentUid = Auth.auth().currentUser?.uid {
-                                let update = ["latitude" : location!.coordinate.latitude,
-                                              "longitude" : location!.coordinate.longitude,
-                                              "date" : Date().timeIntervalSince1970]
-                                let ref = Database.database().reference()
-                                ref.child("locations").child(currentUid).setValue(update)
-                            }
-                        }
-                    })
-            })
-            ask?.show()
-        }
+    private func updateLocation() {
+        LocationManager.shared.getCurrentLocation({ location in
+            if location != nil {
+                if currentUid() != nil {
+                    let update = ["latitude" : location!.coordinate.latitude,
+                                  "longitude" : location!.coordinate.longitude,
+                                  "date" : Date().timeIntervalSince1970]
+                    let ref = Database.database().reference()
+                    ref.child("locations").child(currentUid()!).setValue(update)
+                }
+            }
+        })
     }
     
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any],
@@ -184,7 +174,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
             if pushType(userInfo) == .invite {
                 acceptInvite(userInfo)
             } else {
-                updateLocation(userInfo)
+                updateLocation()
             }
         }
         completionHandler(.newData)
@@ -275,7 +265,19 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
         if pushType(response.notification.request.content.userInfo) == .invite {
             acceptInvite(response.notification.request.content.userInfo)
         } else {
-            updateLocation(response.notification.request.content.userInfo)
+            if let aps = response.notification.request.content.userInfo["aps"] as? [String:Any],
+                let alert = aps["alert"] as? [String:Any],
+                let body = alert["body"] as? String
+            {
+                let ask = self.window?.topMostWindowController?.createQuestion(body,
+                                                                               acceptTitle: "Show",
+                                                                               cancelTitle: "Hide",
+                                                                               acceptHandler:
+                    {
+                        self.updateLocation()
+                })
+                ask?.show()
+            }
         }
         
         completionHandler()
@@ -287,7 +289,6 @@ extension AppDelegate : MessagingDelegate {
     func messaging(_ messaging: Messaging, didRefreshRegistrationToken fcmToken: String) {
         print("============== fcmToken \(fcmToken)")
         Messaging.messaging().shouldEstablishDirectChannel = true
-        UserDefaults.standard.set(fcmToken, forKey: "token")
         _ = AuthModel.shared.updatePerson(Auth.auth().currentUser)
     }    
 }

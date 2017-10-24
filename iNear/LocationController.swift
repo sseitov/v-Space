@@ -8,9 +8,9 @@
 
 import UIKit
 import Firebase
-import SVProgressHUD
 import GoogleMaps
 import AFNetworking
+import SVProgressHUD
 
 class LocationController: UIViewController {
 
@@ -27,44 +27,50 @@ class LocationController: UIViewController {
         super.viewDidLoad()
         setupBackButton()
         map.isMyLocationEnabled = true
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(LocationController.update(_:)),
+                                               name: updateLocationNotification,
+                                               object: nil)
+
         refresh()
     }
 
+    @objc func update(_ notify:Notification) {
+        if let uid = notify.object as? String, uid == friendUid!, notify.userInfo != nil {
+            if let lat = notify.userInfo!["latitude"] as? Double,
+                let lon = notify.userInfo!["longitude"] as? Double,
+                let dateVal = notify.userInfo!["date"] as? Double
+            {
+                let date = Date(timeIntervalSince1970: dateVal)
+                let dateStr = textDateFormatter().string(from: date)
+                self.setupTitle("\(self.friendName!) \n\(dateStr)")
+                
+                if self.friendMarker != nil {
+                    self.friendMarker?.map = nil
+                }
+                
+                let coord = CLLocationCoordinate2D(latitude: lat, longitude: lon)
+                self.friendMarker = GMSMarker(position: coord)
+                self.friendMarker!.icon = self.friendImage!.withSize(CGSize(width: 30, height: 30)).inCircle()
+                self.friendMarker!.groundAnchor = CGPoint(x: 0.5, y: 0.5)
+                self.friendMarker!.map = self.map
+                
+                let bounds = GMSCoordinateBounds(coordinate: map.myLocation!.coordinate, coordinate: coord)
+                let update = GMSCameraUpdate.fit(bounds, withPadding: 100)
+                self.map.moveCamera(update)
+            }
+        }
+    }
+    
     @IBAction func refresh() {
-        SVProgressHUD.show(withStatus: "Get location")
-        PushManager.shared.askLocation(friendToken!)
-        LocationManager.shared.getCurrentLocation({ location in
-            if location == nil {
-                SVProgressHUD.dismiss()
+        SVProgressHUD.show()
+        PushManager.shared.askLocation(friendToken!, success: { result in
+            SVProgressHUD.dismiss()
+            if result {
+                self.showMessage(LOCALIZE("requestSent"), messageType: .information)
             } else {
-                self.map.camera = GMSCameraPosition.camera(withTarget: location!.coordinate, zoom: 6)
-                let ref = Database.database().reference()
-                ref.child("locations").child(self.friendUid!).observeSingleEvent(of: .value, with: { snapshot in
-                    SVProgressHUD.dismiss()
-                    if let values = snapshot.value as? [String:Any] {
-                        if let dateVal = values["date"] as? Double {
-                            let date = Date(timeIntervalSince1970: dateVal)
-                            let dateStr = textDateFormatter().string(from: date)
-                            self.setupTitle("\(self.friendName!) \n\(dateStr)")
-                        }
-                        if self.friendMarker != nil {
-                            self.friendMarker?.map = nil
-                        }
-                        if let lat = values["latitude"] as? Double, let lon = values["longitude"] as? Double {
-                            let coord = CLLocationCoordinate2D(latitude: lat, longitude: lon)
-                            self.friendMarker = GMSMarker(position: coord)
-                            self.friendMarker!.icon = self.friendImage!.withSize(CGSize(width: 30, height: 30)).inCircle()
-                            self.friendMarker!.groundAnchor = CGPoint(x: 0.5, y: 0.5)
-                            self.friendMarker!.map = self.map
-                            
-                            let bounds = GMSCoordinateBounds(coordinate: location!.coordinate, coordinate: coord)
-                            let update = GMSCameraUpdate.fit(bounds, withPadding: 100)
-                            self.map.moveCamera(update)
-                        }
-                    }
-                })
+                self.showMessage(LOCALIZE("requestError"), messageType: .error)
             }
         })
-
     }
 }

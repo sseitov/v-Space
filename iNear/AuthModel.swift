@@ -22,8 +22,28 @@ struct Person : Codable {
     }
 }
 
+let updateFriendsNotification = Notification.Name("UPDATE_FRIENDS")
+let updateLocationNotification = Notification.Name("UPDATE_LOCATION")
+
+func currentUid() -> String? {
+    return Auth.auth().currentUser?.uid
+}
+
 class AuthModel: NSObject {
     static let shared = AuthModel()
+    
+    private var newFriendRefHandle: DatabaseHandle?
+    private var deleteFriendRefHandle: DatabaseHandle?
+    private var updateLocationRefHandle: DatabaseHandle?
+
+    func startObservers() {
+        if newFriendRefHandle == nil {
+            observeFriends()
+        }
+        if updateLocationRefHandle == nil {
+            observeLocations()
+        }
+    }
     
     func signOut(_ completion: @escaping() -> ()) {
         if let uid = Auth.auth().currentUser?.uid {
@@ -32,6 +52,9 @@ class AuthModel: NSObject {
             ref.child("users").child(uid).removeValue(completionBlock: { _, _ in
                 GIDSignIn.sharedInstance().signOut()
                 try? Auth.auth().signOut()
+                self.newFriendRefHandle = nil
+                self.deleteFriendRefHandle = nil
+                self.updateLocationRefHandle = nil
                 completion()
             })
         }
@@ -46,7 +69,7 @@ class AuthModel: NSObject {
             } else {
                 photoURL = ""
             }
-            var token = UserDefaults.standard.object(forKey: "token") as? String
+            var token = Messaging.messaging().fcmToken
             if token == nil {
                 token = ""
             }
@@ -70,4 +93,30 @@ class AuthModel: NSObject {
             }
         })
     }
+    
+    private func observeFriends() {
+        let ref = Database.database().reference()
+        let friendQuery = ref.child("friends").queryLimited(toLast:25)
+        
+        newFriendRefHandle = friendQuery.observe(.childAdded, with: { (snapshot) -> Void in
+            NotificationCenter.default.post(name: updateFriendsNotification, object: nil)
+        })
+        
+        deleteFriendRefHandle = friendQuery.observe(.childRemoved, with: { (snapshot) -> Void in
+            NotificationCenter.default.post(name: updateFriendsNotification, object: nil)
+        })
+
+    }
+    
+    fileprivate func observeLocations() {
+        let ref = Database.database().reference()
+        let locationQuery = ref.child("locations").queryLimited(toLast:25)
+        
+        updateLocationRefHandle = locationQuery.observe(.childChanged, with: { (snapshot) -> Void in
+            if let info = snapshot.value as? [String:Any] {
+                NotificationCenter.default.post(name: updateLocationNotification, object: snapshot.key, userInfo: info)
+            }
+        })
+    }
+
 }

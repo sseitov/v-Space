@@ -390,6 +390,7 @@ class TrackListController: UITableViewController, LastTrackCellDelegate, PHPhoto
             } else {
                 if AuthModel.shared.updatePerson(Auth.auth().currentUser) {
                     SVProgressHUD.dismiss()
+                    AuthModel.shared.startObservers()
                     self.performSegue(withIdentifier: "trustList", sender: nil)
                 } else {
                     AuthModel.shared.signOut {

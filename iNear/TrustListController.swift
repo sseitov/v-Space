@@ -22,8 +22,7 @@ struct FriendPair {
     let uid:String
     let pair:[String]
     func friend() -> String {
-        let currentUid = Auth.auth().currentUser!.uid
-        if currentUid == pair[0] {
+        if currentUid()! == pair[0] {
             return pair[1]
         } else {
             return pair[0]
@@ -48,6 +47,12 @@ class TrustListController: UITableViewController, GIDSignInDelegate {
             self.friendPairs = list
             self.tableView.reloadData()
         })
+        
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(TrustListController.update(_:)),
+                                               name: updateFriendsNotification,
+                                               object: nil)
+
     }
     
     func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
@@ -55,16 +60,22 @@ class TrustListController: UITableViewController, GIDSignInDelegate {
             inviteEnabled = true
         }
     }
+    
+    @objc func update(_ notify:Notification) {
+        updateFriendList({ list in
+            self.friendPairs = list
+            self.tableView.reloadData()
+        })
+    }
 
     func updateFriendList(_ list: @escaping([FriendPair]) -> ()) {
         var result:[FriendPair] = []
-        let currentUid = Auth.auth().currentUser!.uid
         let ref = Database.database().reference()
         ref.child("friends").observeSingleEvent(of: .value, with: { snapshot in
             if let values = snapshot.value as? [String:Any] {
                 for (key, value) in values {
                     if let pair = value as? [String] {
-                        if pair[0] == currentUid || pair[1] == currentUid {
+                        if pair[0] == currentUid()! || pair[1] == currentUid()! {
                             let friend = FriendPair(uid: key, pair: pair)
                             result.append(friend)
                         }
@@ -162,13 +173,11 @@ class TrustListController: UITableViewController, GIDSignInDelegate {
             if location == nil {
                 self.showMessage("You must enable location access for v-Space in device settings.", messageType: .error)
             } else {
-                if let currentUid = Auth.auth().currentUser?.uid {
-                    let update = ["latitude" : location!.coordinate.latitude,
-                                  "longitude" : location!.coordinate.longitude,
-                                  "date" : Date().timeIntervalSince1970]
-                    let ref = Database.database().reference()
-                    ref.child("locations").child(currentUid).setValue(update)
-                }
+                let update = ["latitude" : location!.coordinate.latitude,
+                              "longitude" : location!.coordinate.longitude,
+                              "date" : Date().timeIntervalSince1970]
+                let ref = Database.database().reference()
+                ref.child("locations").child(currentUid()!).setValue(update)
 
                 let ask = TextInput.getEmail(cancelHandler: {}, acceptHandler: { email in
                     self.findUser(email, result: { uid, token, error in
@@ -176,6 +185,8 @@ class TrustListController: UITableViewController, GIDSignInDelegate {
                             PushManager.shared.pushInvite(token!, success: { result in
                                 if !result {
                                     self.showMessage("Can not send invite.", messageType: .error)
+                                } else {
+                                    self.showMessage(LOCALIZE("inviteSent"), messageType: .information)
                                 }
                             })
                         } else {
