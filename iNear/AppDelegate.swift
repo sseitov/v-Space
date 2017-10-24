@@ -15,6 +15,7 @@ import GooglePlaces
 import Firebase
 import UserNotifications
 import GoogleSignIn
+import FBSDKLoginKit
 
 func IS_PAD() -> Bool {
     return UIDevice.current.userInterfaceIdiom == .pad
@@ -108,6 +109,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
     func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
         if url.scheme! == "iNearby" {
             return true
+        } else if url.scheme! == FACEBOOK_SCHEME {
+            return FBSDKApplicationDelegate.sharedInstance().application(app, open: url, options: options)
         } else {
             return GIDSignIn.sharedInstance().handle(url,
                                                      sourceApplication: options[.sourceApplication] as! String!,

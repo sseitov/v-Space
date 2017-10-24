@@ -13,6 +13,7 @@ import GoogleMaps
 import GooglePlaces
 import GooglePlacePicker
 import GoogleSignIn
+import FBSDKLoginKit
 import Firebase
 
 class CustomGMSPlacePickerViewController : GMSPlacePickerViewController {
@@ -351,7 +352,16 @@ class TrackListController: UITableViewController, LastTrackCellDelegate, PHPhoto
             self.performSegue(withIdentifier: "trustList", sender: nil)
         } else {
             let ask = createQuestion(LOCALIZE("trustList"), acceptTitle: "Ok", cancelTitle: "Cancel", acceptHandler: {
-                GIDSignIn.sharedInstance().signIn()
+                let askProvider = ActionSheet.create(title: "Choose provider",
+                                                     actions: ["Google+", "Facebook"],
+                                                     handler1:
+                    {
+                        GIDSignIn.sharedInstance().signIn()
+                }, handler2:
+                    {
+                        self.facebookSignIn()
+                })
+                askProvider?.show()
             })
             ask?.show()
         }
@@ -404,5 +414,44 @@ class TrackListController: UITableViewController, LastTrackCellDelegate, PHPhoto
     
     func sign(_ signIn: GIDSignIn!, didDisconnectWith user: GIDGoogleUser!, withError error: Error!) {
         try? Auth.auth().signOut()
+    }
+    
+    // MARK: - Facebook Auth
+    func facebookSignIn() { // read_custom_friendlists
+        FBSDKLoginManager().logIn(withReadPermissions: ["public_profile","email","user_friends","user_photos"], from: self, handler: { result, error in
+            if error != nil {
+                self.showMessage("Facebook authorization error.", messageType: .error)
+                return
+            }
+            
+            SVProgressHUD.show(withStatus: "Login...") // interested_in
+            let params = ["fields" : "name,email,picture.width(480).height(480)"]
+            let request = FBSDKGraphRequest(graphPath: "me", parameters: params)
+            request!.start(completionHandler: { _, result, fbError in
+                if fbError != nil {
+                    SVProgressHUD.dismiss()
+                    self.showMessage(fbError!.localizedDescription, messageType: .error)
+                } else {
+                    let credential = FacebookAuthProvider.credential(withAccessToken: FBSDKAccessToken.current().tokenString)
+                    Auth.auth().signIn(with: credential, completion: { firUser, error in
+                        if error != nil {
+                            SVProgressHUD.dismiss()
+                            self.showMessage((error as NSError?)!.localizedDescription, messageType: .error)
+                        } else {
+                            if AuthModel.shared.updatePerson(Auth.auth().currentUser) {
+                                SVProgressHUD.dismiss()
+                                AuthModel.shared.startObservers()
+                                self.performSegue(withIdentifier: "trustList", sender: nil)
+                            } else {
+                                AuthModel.shared.signOut {
+                                    SVProgressHUD.dismiss()
+                                    self.showMessage("Can not upload profile data.", messageType: .error)
+                                }
+                            }
+                        }
+                    })
+                }
+            })
+        })
     }
 }

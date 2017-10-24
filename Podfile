@@ -20,6 +20,10 @@ target 'v-Space' do
     pod 'GooglePlaces'
     pod 'GooglePlacePicker'
     pod 'GoogleSignIn'
+    
+    pod 'FBSDKCoreKit'
+    pod 'FBSDKLoginKit'
+    pod 'FBSDKShareKit'
 
     pod 'AFNetworking'
 
