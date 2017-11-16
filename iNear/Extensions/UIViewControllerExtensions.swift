@@ -79,5 +79,27 @@ extension UIViewController {
         })
         return alert
     }
+    
+    func yesNoQuestion(_ question:String, acceptLabel:String, cancelLabel:String, acceptHandler:@escaping () -> (), cancelHandler: (() -> ())? = nil) {
+        
+        let alert = LGAlertView.alert(
+            withTitle: Bundle.main.infoDictionary?["CFBundleName"] as? String,
+            message: question,
+            cancelButtonTitle: cancelLabel,
+            otherButtonTitle: acceptLabel,
+            cancelButtonBlock: { alert in
+                if cancelHandler != nil {
+                    cancelHandler!()
+                }
+        },
+            otherButtonBlock: { alert in
+                alert?.dismiss()
+                acceptHandler()
+        })
+        alert?.titleLabel.textColor = UIColor.mainColor()
+        alert?.cancelButton.backgroundColor = UIColor.gray
+        alert?.otherButton.backgroundColor = UIColor.mainColor()
+        alert?.show()
+    }
 
 }

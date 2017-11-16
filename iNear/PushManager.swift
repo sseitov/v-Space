@@ -66,14 +66,12 @@ class PushManager: NSObject {
         })
     }
     
-    func callRequest(_ callID:String, from:String, userData:[String:Any], success: @escaping(Bool) -> ()) {
-        AuthModel.shared.userEndpoint(from, endpoint: { point in
+    func callRequest(_ callID:String, from:String, toID:String, success: @escaping(Bool) -> ()) {
+        AuthModel.shared.userEndpoint(toID, endpoint: { point in
             if point != nil {
                 let message = AWSSNSPublishInput()
                 message?.targetArn = point!
-                var request = userData
-                request["callID"] = callID
-                request.removeValue(forKey: "token")
+                let request = ["callID" : callID, "user" : from]
                 if let data = try? JSONSerialization.data(withJSONObject: request, options: []) {
                     message?.message = String(data: data, encoding:.utf8)
                     AWSSNS.default().publish(message!).continueOnSuccessWith(executor: AWSExecutor.mainThread(), block: { task in

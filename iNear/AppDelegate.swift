@@ -24,6 +24,25 @@ func IS_PAD() -> Bool {
     return UIDevice.current.userInterfaceIdiom == .pad
 }
 
+func MainApp() -> AppDelegate {
+    return UIApplication.shared.delegate as! AppDelegate
+}
+
+func ShowCall(userName:String?, userID:String?, callID:String?) {
+    let call = UIStoryboard(name: "Call", bundle: nil)
+    if let nav = call.instantiateViewController(withIdentifier: "Call") as? UINavigationController {
+        nav.modalTransitionStyle = .flipHorizontal
+        if let top = MainApp().window?.topMostWindowController {
+            if let callController = nav.topViewController as? CallController {
+                callController.userName = userName
+                callController.callID = callID
+                callController.userID = userID
+            }
+            top.present(nav, animated: true, completion: nil)
+        }
+    }
+}
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDelegate {
 
@@ -370,7 +389,18 @@ extension AppDelegate : PKPushRegistryDelegate {
             } else {
                 if let data = message.data(using: .utf8), let request = try? JSONSerialization.jsonObject(with: data, options: []), let requestData = request as? [String:Any]
                 {
-                    print(requestData)
+                    if let user = requestData["user"] as? String, let callID = requestData["callID"] as? String {
+                        if UIApplication.shared.applicationState == .active {
+                            MainApp().window?.topMostWindowController?.yesNoQuestion("\(user) call you.", acceptLabel: "Accept", cancelLabel: "Reject", acceptHandler:
+                                {
+                                    ShowCall(userName: user, userID: nil, callID: callID)
+                            }, cancelHandler: {
+                            })
+                            
+                        } else {
+                            print(requestData)
+                        }
+                    }
                 }
             }
         } else {

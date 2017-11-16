@@ -281,11 +281,16 @@ class TrustListController: UITableViewController, GIDSignInDelegate, UserCellDel
     }
     
     func userDidCall(_ uid:String, data:[String:Any]) {
+        if let name = data["displayName"] as? String {
+            ShowCall(userName: name, userID: uid, callID: nil)
+        }
+/*
         PushManager.shared.callRequest("TEST CALL", from: uid, userData: data, success: { isSuccess in
             if !isSuccess {
                 self.showMessage(LOCALIZE("requestError"), messageType: .error)
             }
         })
+ */
     }
 
 }
