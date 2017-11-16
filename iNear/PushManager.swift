@@ -9,12 +9,7 @@
 import UIKit
 import AFNetworking
 import Firebase
-
-enum PushType:Int {
-    case unknown = 0
-    case invite = 1
-    case askLocation = 2
-}
+import AWSSNS
 
 class PushManager: NSObject {
     static let shared = PushManager()
@@ -39,7 +34,7 @@ class PushManager: NSObject {
                 "sound" : "default",
                 "body" : "\(name) \(LOCALIZE("invite"))",
                 "content_available": true]
-            let data:[String:Any] = ["pushType" : PushType.invite.rawValue, "requester" : Auth.auth().currentUser!.uid]
+            let data:[String:Any] = ["requester" : Auth.auth().currentUser!.uid]
             let message:[String:Any] = ["to" : token, "priority" : "high", "notification" : notification, "data" : data]
             httpManager.post("send", parameters: message, progress: nil, success: { task, response in
                 success(true)
@@ -52,23 +47,22 @@ class PushManager: NSObject {
         }
     }
     
-    func askLocation(_ token:String, success: @escaping(Bool) -> ()) {
-        if let name = Auth.auth().currentUser?.displayName {
-            let notification:[String:Any] = [
-                "title" : "v-Space",
-                "sound" : "default",
-                "body" : "\(name) \(LOCALIZE("askLocation"))",
-                "content_available": true]
-            let data:[String:Any] = ["pushType" : PushType.askLocation.rawValue]
-            let message:[String:Any] = ["to" : token, "priority" : "high", "notification" : notification, "data" : data]
-            httpManager.post("send", parameters: message, progress: nil, success: { task, response in
-                success(true)
-            }, failure: { task, error in
-                print("SEND PUSH CALL ERROR: \(error)")
+    func askLocation(_ uid:String, success: @escaping(Bool) -> ()) {
+        AuthModel.shared.userEndpoint(uid, endpoint: { point in
+            if point != nil {
+                let message = AWSSNSPublishInput()
+                message?.targetArn = point!
+                message?.message = "askLocatom"
+                AWSSNS.default().publish(message!).continueOnSuccessWith(executor: AWSExecutor.mainThread(), block: { task in
+                    if task.error != nil {
+                        print(task.error!.localizedDescription)
+                    }
+                    success(true)
+                    return nil
+                })
+            } else {
                 success(false)
-            })
-        } else {
-            success(false)
-        }
+            }
+        })
     }
 }

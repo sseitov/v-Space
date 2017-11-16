@@ -73,6 +73,9 @@ class AuthModel: NSObject {
             if token == nil {
                 token = ""
             }
+            if let endpoint = UserDefaults.standard.object(forKey: "endpoint") as? String {
+                publishEndpoint(endpoint)
+            }
             let person = Person(email: email, displayName: name, photoURL: photoURL!, token: token!)
             if let data = person.dictionary {
                 ref.child("users").child(uid).setValue(data)
@@ -118,5 +121,16 @@ class AuthModel: NSObject {
             }
         })
     }
-
+    
+    func publishEndpoint(_ endpoint:String) {
+        let ref = Database.database().reference()
+        ref.child("endponts").child(Auth.auth().currentUser!.uid).setValue(endpoint)
+    }
+    
+    func userEndpoint(_ uid:String, endpoint:@escaping(String?) -> ()) {
+        let ref = Database.database().reference()
+        ref.child("endponts").child(uid).observe(.value, with: { snapshot in
+            endpoint(snapshot.value as? String)
+        })
+    }
 }

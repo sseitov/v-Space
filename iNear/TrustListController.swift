@@ -275,7 +275,6 @@ class TrustListController: UITableViewController, GIDSignInDelegate {
                 next.friendUid = cell.uid
                 next.friendName = cell.userName.text
                 next.friendImage = cell.userImage.image
-                next.friendToken = cell.token
             }
         }
     }

@@ -16,6 +16,9 @@ import Firebase
 import UserNotifications
 import GoogleSignIn
 import FBSDKLoginKit
+import AWSCognito
+import AWSSNS
+import PushKit
 
 func IS_PAD() -> Bool {
     return UIDevice.current.userInterfaceIdiom == .pad
@@ -26,38 +29,36 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
 
     var window: UIWindow?
     var watchSession:WCSession?
+    var voipRegistry:PKPushRegistry?
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
 
         // Use Firebase library to configure APIs
         FirebaseApp.configure()
 
-        
         // Register_for_notifications
-        if #available(iOS 10.0, *) {
-            UNUserNotificationCenter.current().delegate = self
-            UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
-                
-                guard error == nil else {
-                    print("============ Display Error.. Handle Error.. etc..")
-                    return
-                }
-                
-                if granted {
-                    DispatchQueue.main.async {
-                        //Register for RemoteNotifications. Your Remote Notifications can display alerts now :)
-                        application.registerForRemoteNotifications()
-                    }
-                }
-                else {
-                    print("======== user denying permissions..")
+        UNUserNotificationCenter.current().delegate = self
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
+            
+            guard error == nil else {
+                print("============ Display Error.. Handle Error.. etc..")
+                return
+            }
+            
+            if granted {
+                DispatchQueue.main.async {                    
+                    //register for voip notifications
+                    self.voipRegistry = PKPushRegistry(queue: DispatchQueue.main)
+                    self.voipRegistry?.desiredPushTypes = Set([.voIP])
+                    self.voipRegistry?.delegate = self;
+
+                    //Register for RemoteNotifications. Your Remote Notifications can display alerts now :)
+                    application.registerForRemoteNotifications()
                 }
             }
-        } else {
-            let settings: UIUserNotificationSettings =
-                UIUserNotificationSettings(types: [.alert, .badge, .sound], categories: nil)
-            application.registerUserNotificationSettings(settings)
-            application.registerForRemoteNotifications()
+            else {
+                print("======== user denying permissions..")
+            }
         }
         
         Messaging.messaging().delegate = self
@@ -100,7 +101,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
         if currentUid() != nil {
             AuthModel.shared.startObservers()
         }
-        
+
+        // Initialize the Amazon Cognito credentials provider
+        let credentialsProvider = AWSCognitoCredentialsProvider(regionType:.USEast1,
+                                                                identityPoolId:identityPoolID)
+        let configuration = AWSServiceConfiguration(region:.USEast1, credentialsProvider:credentialsProvider)
+        AWSServiceManager.default().defaultServiceConfiguration = configuration
+
         return true
     }
     
@@ -116,13 +123,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
                                                      sourceApplication: options[.sourceApplication] as! String!,
                                                      annotation: options[.annotation])
         }
-    }
-
-    private func pushType(_ userInfo: [AnyHashable: Any]) -> PushType {
-        if let pushTypeStr = userInfo["pushType"] as? String, let type = Int(pushTypeStr), let pt = PushType(rawValue: type) {
-            return pt
-        }
-        return .unknown
     }
     
     private func acceptInvite(_ userInfo: [AnyHashable: Any]) {
@@ -157,28 +157,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
         }
     }
     
-    private func updateLocation() {
-        LocationManager.shared.getCurrentLocation({ location in
-            if location != nil {
-                if currentUid() != nil {
-                    let update = ["latitude" : location!.coordinate.latitude,
-                                  "longitude" : location!.coordinate.longitude,
-                                  "date" : Date().timeIntervalSince1970]
-                    let ref = Database.database().reference()
-                    ref.child("locations").child(currentUid()!).setValue(update)
-                }
-            }
-        })
-    }
-    
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any],
                      fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         if application.applicationState == .active {
-            if pushType(userInfo) == .invite {
-                acceptInvite(userInfo)
-            } else {
-                updateLocation()
-            }
+            acceptInvite(userInfo)
         }
         completionHandler(.newData)
     }
@@ -265,24 +247,7 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
                                 didReceive response: UNNotificationResponse,
                                 withCompletionHandler completionHandler: @escaping () -> Void)
     {
-        if pushType(response.notification.request.content.userInfo) == .invite {
-            acceptInvite(response.notification.request.content.userInfo)
-        } else {
-            if let aps = response.notification.request.content.userInfo["aps"] as? [String:Any],
-                let alert = aps["alert"] as? [String:Any],
-                let body = alert["body"] as? String
-            {
-                let ask = self.window?.topMostWindowController?.createQuestion(body,
-                                                                               acceptTitle: "Show",
-                                                                               cancelTitle: "Hide",
-                                                                               acceptHandler:
-                    {
-                        self.updateLocation()
-                })
-                ask?.show()
-            }
-        }
-        
+        acceptInvite(response.notification.request.content.userInfo)
         completionHandler()
     }
 }
@@ -342,5 +307,54 @@ extension AppDelegate : WCSessionDelegate {
     
     func sessionReachabilityDidChange(_ session: WCSession) {
         print("sessionReachabilityDidChange")
+    }
+}
+
+extension AppDelegate : PKPushRegistryDelegate {
+    
+    func pushRegistry(_ registry: PKPushRegistry, didInvalidatePushTokenFor type: PKPushType) {
+        print("token invalidated")
+    }
+    
+    func pushRegistry(_ registry: PKPushRegistry, didUpdate pushCredentials: PKPushCredentials, for type: PKPushType) {
+        let sns = AWSSNS.default()
+        let endpointRequest = AWSSNSCreatePlatformEndpointInput()
+        #if DEBUG
+            endpointRequest?.platformApplicationArn = endpointDev
+        #else
+            endpointRequest?.platformApplicationArn = endpointProd
+        #endif
+        
+        endpointRequest?.token = pushCredentials.token.hexadecimalString
+        sns.createPlatformEndpoint(endpointRequest!).continueWith(executor: AWSExecutor.mainThread(), block: { task in
+            if let response = task.result, let endpoint = response.endpointArn {
+                if currentUid() != nil {
+                    AuthModel.shared.publishEndpoint(endpoint)
+                } else {
+                    UserDefaults.standard.set(endpoint, forKey: "endpoint")
+                }
+            }
+            return nil
+        })
+    }
+    
+    func pushRegistry(_ registry: PKPushRegistry, didReceiveIncomingPushWith payload: PKPushPayload, for type: PKPushType, completion: @escaping () -> Void) {
+        LocationManager.shared.getCurrentLocation({ location in
+            if location != nil {
+                if currentUid() != nil {
+                    let update = ["latitude" : location!.coordinate.latitude,
+                                  "longitude" : location!.coordinate.longitude,
+                                  "date" : Date().timeIntervalSince1970]
+                    let ref = Database.database().reference()
+                    ref.child("locations").child(currentUid()!).setValue(update, withCompletionBlock: { _, _ in
+                        completion()
+                    })
+                } else {
+                    completion()
+                }
+            } else {
+                completion()
+            }
+        })
     }
 }

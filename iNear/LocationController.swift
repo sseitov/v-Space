@@ -17,7 +17,6 @@ class LocationController: UIViewController {
     var friendUid:String?
     var friendName:String?
     var friendImage:UIImage?
-    var friendToken:String?
 
     @IBOutlet weak var map: GMSMapView!
     
@@ -36,6 +35,7 @@ class LocationController: UIViewController {
     }
 
     @objc func update(_ notify:Notification) {
+        showMessage("Location Updated.", messageType: .information)
         if let uid = notify.object as? String, uid == friendUid!, notify.userInfo != nil {
             if let lat = notify.userInfo!["latitude"] as? Double,
                 let lon = notify.userInfo!["longitude"] as? Double,
@@ -64,11 +64,9 @@ class LocationController: UIViewController {
     
     @IBAction func refresh() {
         SVProgressHUD.show()
-        PushManager.shared.askLocation(friendToken!, success: { result in
+        PushManager.shared.askLocation(friendUid!, success: { result in
             SVProgressHUD.dismiss()
-            if result {
-                self.showMessage(LOCALIZE("requestSent"), messageType: .information)
-            } else {
+            if !result {
                 self.showMessage(LOCALIZE("requestError"), messageType: .error)
             }
         })

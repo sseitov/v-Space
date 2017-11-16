@@ -41,8 +41,8 @@ extension String {
     }
     
     func partInRange(_ start:Int, end:Int) -> String {
-        let startIndex = self.characters.index(self.startIndex, offsetBy: start)
-        let endIndex = self.characters.index(self.startIndex, offsetBy: end)
+        let startIndex = self.index(self.startIndex, offsetBy: start)
+        let endIndex = self.index(self.startIndex, offsetBy: end)
         return String(self[startIndex..<endIndex])
     }
 
@@ -52,7 +52,7 @@ extension String {
     
     func digitsFromString() -> String {
         let digitSet = CharacterSet.decimalDigits
-        let filteredCharacters = self.characters.filter {
+        let filteredCharacters = self.filter {
             return  String($0).rangeOfCharacter(from: digitSet) != nil
         }
         return String(filteredCharacters)

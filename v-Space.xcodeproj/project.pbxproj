@@ -53,6 +53,7 @@
 		2C91E06B1EAC88370067286B /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2C91E06D1EAC88370067286B /* Localizable.strings */; };
 		2C91E0741EACBB680067286B /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C91E0731EACBB680067286B /* CloudKit.framework */; };
 		2C9423B31DFC6708003C4075 /* UIImageExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C9423B21DFC6708003C4075 /* UIImageExtensions.swift */; };
+		2CB634FE1FBD94AE005ABE27 /* PushKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2CB634FD1FBD94AE005ABE27 /* PushKit.framework */; };
 		2CB65ED31DFD5CA7002A9D29 /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2CB65ED11DFD5CA7002A9D29 /* Interface.storyboard */; };
 		2CB65ED51DFD5CA7002A9D29 /* Watch-Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2CB65ED41DFD5CA7002A9D29 /* Watch-Assets.xcassets */; };
 		2CB65EDC1DFD5CA8002A9D29 /* Watch Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 2CB65EDB1DFD5CA8002A9D29 /* Watch Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -90,6 +91,7 @@
 		2CE268C21E672F7C00FE8219 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CE268C11E672F7C00FE8219 /* Model.swift */; };
 		2CE268C31E672F9C00FE8219 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CE268C11E672F7C00FE8219 /* Model.swift */; };
 		2CE268C41E6758C200FE8219 /* UIColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C87D31B1DDEF3C200F05528 /* UIColorExtensions.swift */; };
+		2CE6FC681FBD72DF00F5795D /* DataExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CE6FC671FBD72DE00F5795D /* DataExtension.swift */; };
 		2CF6723A1F29E54300BDE68C /* UIColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C87D31B1DDEF3C200F05528 /* UIColorExtensions.swift */; };
 		2CF6723B1F29EF2400BDE68C /* UIFontExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C85AA101E01FE350050D9D8 /* UIFontExtensions.swift */; };
 		46811E5591FD9B65000FCF47 /* Pods_v_Space.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 551BE7C10D556D1602CBA6E7 /* Pods_v_Space.framework */; };
@@ -214,6 +216,7 @@
 		2C91E0731EACBB680067286B /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		2C91E0751EACCA0D0067286B /* LocationModel 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "LocationModel 3.xcdatamodel"; sourceTree = "<group>"; };
 		2C9423B21DFC6708003C4075 /* UIImageExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIImageExtensions.swift; path = Extensions/UIImageExtensions.swift; sourceTree = "<group>"; };
+		2CB634FD1FBD94AE005ABE27 /* PushKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PushKit.framework; path = System/Library/Frameworks/PushKit.framework; sourceTree = SDKROOT; };
 		2CB65ECF1DFD5CA7002A9D29 /* Watch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Watch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2CB65ED21DFD5CA7002A9D29 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Interface.storyboard; sourceTree = "<group>"; };
 		2CB65ED41DFD5CA7002A9D29 /* Watch-Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Watch-Assets.xcassets"; sourceTree = "<group>"; };
@@ -250,6 +253,7 @@
 		2CE268BB1E6716BE00FE8219 /* Location+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Location+CoreDataProperties.swift"; path = "Model/Location+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		2CE268C01E672D2B00FE8219 /* Today.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Today.entitlements; sourceTree = "<group>"; };
 		2CE268C11E672F7C00FE8219 /* Model.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Model.swift; path = Model/Model.swift; sourceTree = "<group>"; };
+		2CE6FC671FBD72DE00F5795D /* DataExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DataExtension.swift; path = Extensions/DataExtension.swift; sourceTree = "<group>"; };
 		551BE7C10D556D1602CBA6E7 /* Pods_v_Space.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_v_Space.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7E63B13F1CC7ED11C64BF95C /* Pods-v-Space.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-v-Space.debug.xcconfig"; path = "Pods/Target Support Files/Pods-v-Space/Pods-v-Space.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -259,6 +263,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2CB634FE1FBD94AE005ABE27 /* PushKit.framework in Frameworks */,
 				2CE15FC21EB470AE0085915E /* CoreTelephony.framework in Frameworks */,
 				2C91E0741EACBB680067286B /* CloudKit.framework in Frameworks */,
 				2CBE20211E8D8ACA002EF13C /* CoreLocation.framework in Frameworks */,
@@ -294,6 +299,7 @@
 		12915D74E6089C1BDDF892C9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				2CB634FD1FBD94AE005ABE27 /* PushKit.framework */,
 				2CE15FC11EB470AE0085915E /* CoreTelephony.framework */,
 				2C91E0731EACBB680067286B /* CloudKit.framework */,
 				2CBE20201E8D8ACA002EF13C /* CoreLocation.framework */,
@@ -389,6 +395,7 @@
 		2C87D3151DDEE4A800F05528 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				2CE6FC671FBD72DE00F5795D /* DataExtension.swift */,
 				2C87D31F1DDF026300F05528 /* UIViewControllerExtensions.swift */,
 				2C00AA981F8A494F003524DC /* StringExtension.swift */,
 				2C87D31D1DDEF3F000F05528 /* UIViewExtensions.swift */,
@@ -653,6 +660,9 @@
 							com.apple.ApplicationGroups.iOS = {
 								enabled = 0;
 							};
+							com.apple.Push = {
+								enabled = 0;
+							};
 						};
 					};
 					2CE2689C1E66E15600FE8219 = {
@@ -665,6 +675,9 @@
 								enabled = 1;
 							};
 							com.apple.Maps.iOS = {
+								enabled = 0;
+							};
+							com.apple.Push = {
 								enabled = 0;
 							};
 						};
@@ -750,6 +763,9 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-v-Space/Pods-v-Space-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/AFNetworking/AFNetworking.framework",
+				"${BUILT_PRODUCTS_DIR}/AWSCognito/AWSCognito.framework",
+				"${BUILT_PRODUCTS_DIR}/AWSCore/AWSCore.framework",
+				"${BUILT_PRODUCTS_DIR}/AWSSNS/AWSSNS.framework",
 				"${BUILT_PRODUCTS_DIR}/Bolts/Bolts.framework",
 				"${BUILT_PRODUCTS_DIR}/FBSDKCoreKit/FBSDKCoreKit.framework",
 				"${BUILT_PRODUCTS_DIR}/FBSDKLoginKit/FBSDKLoginKit.framework",
@@ -768,6 +784,9 @@
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AFNetworking.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AWSCognito.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AWSCore.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AWSSNS.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Bolts.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKCoreKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKLoginKit.framework",
@@ -861,6 +880,7 @@
 				2CE268B71E67156400FE8219 /* LocationModel.xcdatamodeld in Sources */,
 				2C3684431F307C6C00A5AD4E /* LocationManager.swift in Sources */,
 				2C79D4A01E92C5CA00EF4954 /* Photo+CoreDataProperties.swift in Sources */,
+				2CE6FC681FBD72DF00F5795D /* DataExtension.swift in Sources */,
 				2CBE202F1E8DA170002EF13C /* TextInput.swift in Sources */,
 				2CE268C21E672F7C00FE8219 /* Model.swift in Sources */,
 				2C87D3331DDF1A5C00F05528 /* LGProgressView.m in Sources */,
@@ -1110,12 +1130,12 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = iNear/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.vchannel.iNearby;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "24eaba94-0c30-4b55-8bc3-2bce58c410e9";
-				PROVISIONING_PROFILE_SPECIFIER = "v-Space Development";
+				PROVISIONING_PROFILE = "495b28b2-dca4-40eb-a0d9-da8d20243c5c";
+				PROVISIONING_PROFILE_SPECIFIER = "vSpace Development";
 				SWIFT_OBJC_BRIDGING_HEADER = "vSpace-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
@@ -1140,12 +1160,12 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = iNear/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.vchannel.iNearby;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "6c3fbdfe-bdd2-45d1-8577-8779d1ffda0f";
-				PROVISIONING_PROFILE_SPECIFIER = "v-Space Production";
+				PROVISIONING_PROFILE = "81cbb086-728a-4960-a13b-d1419c935784";
+				PROVISIONING_PROFILE_SPECIFIER = "vSpace AppStore";
 				SWIFT_OBJC_BRIDGING_HEADER = "vSpace-Bridging-Header.h";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;

@@ -117,7 +117,7 @@ class PlaceInfoController: UITableViewController {
         let mobileNetworkCode = CTTelephonyNetworkInfo().subscriberCellularProvider?.mobileNetworkCode
         
         let isInvalidNetworkCode = mobileNetworkCode == nil
-            || mobileNetworkCode?.characters.count == 0
+            || mobileNetworkCode!.count == 0
             || mobileNetworkCode == "65535"
         
         return UIApplication.shared.canOpenURL(url) && !isInvalidNetworkCode

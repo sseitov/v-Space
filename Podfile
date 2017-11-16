@@ -15,6 +15,11 @@ target 'v-Space' do
     pod 'Firebase/Database'
     pod 'Firebase/Messaging'
     pod 'Firebase/Invites'
+    
+    pod 'AWSCognito'
+    pod 'AWSSNS'
+    
+    pod 'AFNetworking'
 
     pod 'GoogleMaps'
     pod 'GooglePlaces'
@@ -24,8 +29,6 @@ target 'v-Space' do
     pod 'FBSDKCoreKit'
     pod 'FBSDKLoginKit'
     pod 'FBSDKShareKit'
-
-    pod 'AFNetworking'
 
     pod 'SDWebImage'
     pod 'SVProgressHUD'
