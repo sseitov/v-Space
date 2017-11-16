@@ -63,7 +63,7 @@ class LocationController: UIViewController {
     
     @IBAction func refresh() {
         SVProgressHUD.show()
-        PushManager.shared.askLocation(friendUid!, success: { result in
+        PushManager.shared.pushCommand(friendUid!, command:"askLocaton", success: { result in
             SVProgressHUD.dismiss()
             if !result {
                 self.showMessage(LOCALIZE("requestError"), messageType: .error)

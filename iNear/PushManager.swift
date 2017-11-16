@@ -47,7 +47,7 @@ class PushManager: NSObject {
         }
     }
     
-    func askLocation(_ uid:String, success: @escaping(Bool) -> ()) {
+    func pushCommand(_ uid:String, command:String, success: @escaping(Bool) -> ()) {
         AuthModel.shared.userEndpoint(uid, endpoint: { point in
             if point != nil {
                 let message = AWSSNSPublishInput()
@@ -66,12 +66,13 @@ class PushManager: NSObject {
         })
     }
     
-    func callRequest(_ callID:String, from:String, toID:String, success: @escaping(Bool) -> ()) {
+    func callRequest(_ callID:String, toID:String, success: @escaping(Bool) -> ()) {
         AuthModel.shared.userEndpoint(toID, endpoint: { point in
             if point != nil {
                 let message = AWSSNSPublishInput()
                 message?.targetArn = point!
-                let request = ["callID" : callID, "user" : from]
+                let name = Auth.auth().currentUser!.displayName != nil ? Auth.auth().currentUser!.displayName! : "anonymous"
+                let request = ["callID" : callID, "userID" : Auth.auth().currentUser!.uid, "userName" : name]
                 if let data = try? JSONSerialization.data(withJSONObject: request, options: []) {
                     message?.message = String(data: data, encoding:.utf8)
                     AWSSNS.default().publish(message!).continueOnSuccessWith(executor: AWSExecutor.mainThread(), block: { task in

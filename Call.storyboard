@@ -36,8 +36,20 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xMc-aW-uz4" customClass="RTCEAGLVideoView">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tQk-pi-jHK" customClass="RTCCameraPreviewView">
+                                <rect key="frame" x="186" y="370" width="120" height="120"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="120" id="mm4-mh-eVX"/>
+                                    <constraint firstAttribute="height" constant="120" id="qTj-UA-3Ff"/>
+                                </constraints>
+                            </view>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="G3A-OJ-e2Q">
-                                <rect key="frame" x="97.5" y="214.5" width="125" height="75"/>
+                                <rect key="frame" x="97" y="214" width="125" height="75"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="75" id="YFp-RF-Q67"/>
                                     <constraint firstAttribute="width" constant="125" id="ykB-nT-nGF"/>
@@ -46,8 +58,14 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="xMc-aW-uz4" firstAttribute="bottom" secondItem="rIC-oT-tAj" secondAttribute="bottom" id="7G5-vl-Dfz"/>
+                            <constraint firstItem="xMc-aW-uz4" firstAttribute="trailing" secondItem="rIC-oT-tAj" secondAttribute="trailing" id="Fv4-mt-Vz0"/>
+                            <constraint firstItem="xMc-aW-uz4" firstAttribute="leading" secondItem="rIC-oT-tAj" secondAttribute="leading" id="Gy9-kK-IqC"/>
                             <constraint firstItem="G3A-OJ-e2Q" firstAttribute="centerX" secondItem="8xe-1G-WDD" secondAttribute="centerX" id="RQ5-Lu-JQn"/>
+                            <constraint firstItem="rIC-oT-tAj" firstAttribute="bottom" secondItem="tQk-pi-jHK" secondAttribute="bottom" constant="14" id="VWx-k5-PUx"/>
                             <constraint firstItem="G3A-OJ-e2Q" firstAttribute="centerY" secondItem="8xe-1G-WDD" secondAttribute="centerY" id="b9y-hB-kxs"/>
+                            <constraint firstItem="xMc-aW-uz4" firstAttribute="top" secondItem="rIC-oT-tAj" secondAttribute="top" id="f9X-ao-zwq"/>
+                            <constraint firstItem="rIC-oT-tAj" firstAttribute="trailing" secondItem="tQk-pi-jHK" secondAttribute="trailing" constant="14" id="s66-MQ-MdU"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="rIC-oT-tAj"/>
                     </view>
@@ -58,24 +76,34 @@
                         <rightBarButtonItems>
                             <barButtonItem image="videoOn" id="UEg-kI-Mzl">
                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <connections>
+                                    <action selector="switchSpeaker:" destination="aOw-Kd-uXQ" id="a0Y-dx-3t8"/>
+                                </connections>
                             </barButtonItem>
-                            <barButtonItem image="loudOff" id="UjZ-YP-9vH">
+                            <barButtonItem image="loudOn" id="UjZ-YP-9vH">
                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <connections>
+                                    <action selector="muteVideo:" destination="aOw-Kd-uXQ" id="eXs-oc-fG7"/>
+                                </connections>
                             </barButtonItem>
                         </rightBarButtonItems>
                     </navigationItem>
                     <connections>
+                        <outlet property="localView" destination="tQk-pi-jHK" id="6jD-9G-aMp"/>
+                        <outlet property="loudButton" destination="UEg-kI-Mzl" id="GyS-S5-U2Y"/>
+                        <outlet property="remoteView" destination="xMc-aW-uz4" id="tph-Ne-zjN"/>
                         <outlet property="ringView" destination="G3A-OJ-e2Q" id="AtX-EX-ItD"/>
+                        <outlet property="videoButton" destination="UjZ-YP-9vH" id="gad-G3-0Vz"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="MlI-sP-SJi" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="227" y="83"/>
+            <point key="canvasLocation" x="226.875" y="82.394366197183103"/>
         </scene>
     </scenes>
     <resources>
         <image name="hangUp" width="24" height="24"/>
-        <image name="loudOff" width="28" height="28"/>
+        <image name="loudOn" width="28" height="28"/>
         <image name="videoOn" width="24" height="24"/>
     </resources>
 </document>

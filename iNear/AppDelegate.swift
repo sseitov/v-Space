@@ -386,14 +386,25 @@ extension AppDelegate : PKPushRegistryDelegate {
                         completion()
                     }
                 })
+            } else if message == "hangup" {
+                if UIApplication.shared.applicationState == .active {
+                    NotificationCenter.default.post(name: hangUpCallNotification, object: nil)
+                }
+            } else if message == "accept" {
+                if UIApplication.shared.applicationState == .active {
+                    NotificationCenter.default.post(name: acceptCallNotification, object: nil)
+                }
             } else {
                 if let data = message.data(using: .utf8), let request = try? JSONSerialization.jsonObject(with: data, options: []), let requestData = request as? [String:Any]
                 {
-                    if let user = requestData["user"] as? String, let callID = requestData["callID"] as? String {
+                    if let userName = requestData["userName"] as? String,
+                        let userID = requestData["userID"] as? String,
+                        let callID = requestData["callID"] as? String
+                    {
                         if UIApplication.shared.applicationState == .active {
-                            MainApp().window?.topMostWindowController?.yesNoQuestion("\(user) call you.", acceptLabel: "Accept", cancelLabel: "Reject", acceptHandler:
+                            MainApp().window?.topMostWindowController?.yesNoQuestion("\(userName) call you.", acceptLabel: "Accept", cancelLabel: "Reject", acceptHandler:
                                 {
-                                    ShowCall(userName: user, userID: nil, callID: callID)
+                                    ShowCall(userName: userName, userID: userID, callID: callID)
                             }, cancelHandler: {
                             })
                             
