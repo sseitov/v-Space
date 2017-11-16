@@ -406,6 +406,7 @@ extension AppDelegate : PKPushRegistryDelegate {
                                 {
                                     ShowCall(userName: userName, userID: userID, callID: callID)
                             }, cancelHandler: {
+                                PushManager.shared.pushCommand(userID, command: "hangup", success: { _ in })
                             })
                             
                         } else {
