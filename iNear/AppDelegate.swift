@@ -313,48 +313,68 @@ extension AppDelegate : WCSessionDelegate {
 extension AppDelegate : PKPushRegistryDelegate {
     
     func pushRegistry(_ registry: PKPushRegistry, didInvalidatePushTokenFor type: PKPushType) {
-        print("token invalidated")
+        print("Token invalidated")
     }
     
     func pushRegistry(_ registry: PKPushRegistry, didUpdate pushCredentials: PKPushCredentials, for type: PKPushType) {
-        let sns = AWSSNS.default()
-        let endpointRequest = AWSSNSCreatePlatformEndpointInput()
-        #if DEBUG
-            endpointRequest?.platformApplicationArn = endpointDev
-        #else
-            endpointRequest?.platformApplicationArn = endpointProd
-        #endif
-        
-        endpointRequest?.token = pushCredentials.token.hexadecimalString
-        sns.createPlatformEndpoint(endpointRequest!).continueWith(executor: AWSExecutor.mainThread(), block: { task in
-            if let response = task.result, let endpoint = response.endpointArn {
-                if currentUid() != nil {
-                    AuthModel.shared.publishEndpoint(endpoint)
-                } else {
-                    UserDefaults.standard.set(endpoint, forKey: "endpoint")
+        if let deviceToken = UserDefaults.standard.object(forKey: "deviceToken") as? Data,
+            deviceToken.isEqualInConsistentTime(pushCredentials.token) {
+            print("Endpoint already created")
+        } else {
+            let sns = AWSSNS.default()
+            let endpointRequest = AWSSNSCreatePlatformEndpointInput()
+            #if DEBUG
+                endpointRequest?.platformApplicationArn = endpointDev
+            #else
+                endpointRequest?.platformApplicationArn = endpointProd
+            #endif
+            
+            endpointRequest?.token = pushCredentials.token.hexadecimalString
+            sns.createPlatformEndpoint(endpointRequest!).continueWith(executor: AWSExecutor.mainThread(), block: { task in
+                if let response = task.result, let endpoint = response.endpointArn {
+                    UserDefaults.standard.set(pushCredentials.token, forKey: "deviceToken")
+                    if currentUid() != nil {
+                        AuthModel.shared.publishEndpoint(endpoint)
+                    } else {
+                        UserDefaults.standard.set(endpoint, forKey: "endpoint")
+                    }
                 }
-            }
-            return nil
-        })
+                return nil
+            })
+        }
     }
     
-    func pushRegistry(_ registry: PKPushRegistry, didReceiveIncomingPushWith payload: PKPushPayload, for type: PKPushType, completion: @escaping () -> Void) {
-        LocationManager.shared.getCurrentLocation({ location in
-            if location != nil {
-                if currentUid() != nil {
-                    let update = ["latitude" : location!.coordinate.latitude,
-                                  "longitude" : location!.coordinate.longitude,
-                                  "date" : Date().timeIntervalSince1970]
-                    let ref = Database.database().reference()
-                    ref.child("locations").child(currentUid()!).setValue(update, withCompletionBlock: { _, _ in
+    func pushRegistry(_ registry: PKPushRegistry, didReceiveIncomingPushWith payload: PKPushPayload, for type: PKPushType, completion: @escaping () -> Void)
+    {
+        if let payloadDict = payload.dictionaryPayload["aps"] as? Dictionary<String, String>,
+            let message = payloadDict["alert"]
+        {
+            if message == "askLocaton" {
+                LocationManager.shared.getCurrentLocation({ location in
+                    if location != nil {
+                        if currentUid() != nil {
+                            let update = ["latitude" : location!.coordinate.latitude,
+                                          "longitude" : location!.coordinate.longitude,
+                                          "date" : Date().timeIntervalSince1970]
+                            let ref = Database.database().reference()
+                            ref.child("locations").child(currentUid()!).setValue(update, withCompletionBlock: { _, _ in
+                                completion()
+                            })
+                        } else {
+                            completion()
+                        }
+                    } else {
                         completion()
-                    })
-                } else {
-                    completion()
-                }
+                    }
+                })
             } else {
-                completion()
+                if let data = message.data(using: .utf8), let request = try? JSONSerialization.jsonObject(with: data, options: []), let requestData = request as? [String:Any]
+                {
+                    print(requestData)
+                }
             }
-        })
+        } else {
+            completion()
+        }
     }
 }

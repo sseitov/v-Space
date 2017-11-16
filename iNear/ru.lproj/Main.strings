@@ -9,7 +9,7 @@
 "CIY-Y5-zz7.text" = "СКОРОСТЬ, km/h";
 
 /* Class = "UILabel"; text = "You can look location of users from this list and they can see your."; ObjectID = "FTe-nP-TCL"; */
-"FTe-nP-TCL.text" = "Вы можете посмотреть местоположение пользователей из этого списка, а они могут видеть Ваше.";
+"FTe-nP-TCL.text" = "Вы можете связаться с друзьями из этого списка, а также посмотреть их местоположение.";
 
 /* Class = "UIBarButtonItem"; title = "Item"; ObjectID = "GwR-US-3RB"; */
 "GwR-US-3RB.title" = "Item";

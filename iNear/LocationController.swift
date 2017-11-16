@@ -35,7 +35,6 @@ class LocationController: UIViewController {
     }
 
     @objc func update(_ notify:Notification) {
-        showMessage("Location Updated.", messageType: .information)
         if let uid = notify.object as? String, uid == friendUid!, notify.userInfo != nil {
             if let lat = notify.userInfo!["latitude"] as? Double,
                 let lon = notify.userInfo!["longitude"] as? Double,

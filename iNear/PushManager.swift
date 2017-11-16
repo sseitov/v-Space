@@ -52,7 +52,7 @@ class PushManager: NSObject {
             if point != nil {
                 let message = AWSSNSPublishInput()
                 message?.targetArn = point!
-                message?.message = "askLocatom"
+                message?.message = "askLocaton"
                 AWSSNS.default().publish(message!).continueOnSuccessWith(executor: AWSExecutor.mainThread(), block: { task in
                     if task.error != nil {
                         print(task.error!.localizedDescription)
@@ -60,6 +60,32 @@ class PushManager: NSObject {
                     success(true)
                     return nil
                 })
+            } else {
+                success(false)
+            }
+        })
+    }
+    
+    func callRequest(_ callID:String, from:String, userData:[String:Any], success: @escaping(Bool) -> ()) {
+        AuthModel.shared.userEndpoint(from, endpoint: { point in
+            if point != nil {
+                let message = AWSSNSPublishInput()
+                message?.targetArn = point!
+                var request = userData
+                request["callID"] = callID
+                request.removeValue(forKey: "token")
+                if let data = try? JSONSerialization.data(withJSONObject: request, options: []) {
+                    message?.message = String(data: data, encoding:.utf8)
+                    AWSSNS.default().publish(message!).continueOnSuccessWith(executor: AWSExecutor.mainThread(), block: { task in
+                        if task.error != nil {
+                            print(task.error!.localizedDescription)
+                        }
+                        success(true)
+                        return nil
+                    })
+                } else {
+                    success(false)
+                }
             } else {
                 success(false)
             }
