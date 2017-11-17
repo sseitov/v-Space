@@ -71,7 +71,9 @@ class CallController: UIViewController {
 
         if callID == nil {
             callID = UUID().uuidString
+            SVProgressHUD.show()
             PushManager.shared.callRequest(callID!, toID: userID!, success: { isSuccess in
+                SVProgressHUD.dismiss()
                 if !isSuccess {
                     self.showMessage(LOCALIZE("requestError"), messageType: .error, messageHandler: {
                         self.dismiss(animated: true, completion: nil)

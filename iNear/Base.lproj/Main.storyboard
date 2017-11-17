@@ -294,7 +294,7 @@
                             </constraints>
                         </view>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="user" id="Eev-II-1OF" customClass="UserCell" customModule="v_Space" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="user" id="Eev-II-1OF" customClass="UserCell" customModule="v_Space" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="135.5" width="320" height="80"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Eev-II-1OF" id="3Qj-kt-Yr5">
