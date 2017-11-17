@@ -15,7 +15,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>5.1</string>
+	<string>5.2</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
@@ -66,8 +66,6 @@
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>v-Space needs your camera for take photos and put their on your tracks.</string>
-    <key>NSMicrophoneUsageDescription</key>
-    <string>v-Space needs use your microphone for VOIP audio call with friends from Trust Ring.</string>
 	<key>NSContactsUsageDescription</key>
 	<string>v-Space needs access to your contacts to send invitations.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
@@ -76,6 +74,8 @@
 	<string>v-Space will be collect your geolocation points into track and show places nearby.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>v-Space will be collect your geolocation points into track and show places nearby.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>v-Space needs use your microphone for VOIP audio call with friends from Trust Ring.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>v-Space needs your photo library for sync photos with your tracks.</string>
 	<key>UIBackgroundModes</key>

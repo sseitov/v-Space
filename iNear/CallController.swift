@@ -30,11 +30,8 @@ class CallController: UIViewController {
     var videoTrack:RTCVideoTrack?
     var videoSize:CGSize = CGSize()
     var cameraController:ARDCaptureController?
-    
-    private var ringPlayer:AVAudioPlayer?
-    private var busyPlayer:AVAudioPlayer?
 
-    var isLoud = false {
+    var isLoud = true {
         didSet {
             if isLoud {
                 loudButton.image = UIImage(named: "loudOn")
@@ -53,20 +50,26 @@ class CallController: UIViewController {
         }
     }
 
+    deinit {
+        print("&&&&&&&&&&&&&&&&&&& DEINIT")
+        NotificationCenter.default.removeObserver(self)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         setupBackButton()
-        
-        remoteView.delegate = self
-        ARDAppClient.enableLoudspeaker(false)
+        setupTitle(userName!)
 
-        if userName != nil {
-            setupTitle(userName!)
-        }
-        
+        remoteView.delegate = self
+
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(self.hangUpCall),
                                                name: hangUpCallNotification,
+                                               object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(self.acceptCall),
+                                               name: acceptCallNotification,
                                                object: nil)
 
         if callID == nil {
@@ -76,19 +79,10 @@ class CallController: UIViewController {
                 SVProgressHUD.dismiss()
                 if !isSuccess {
                     self.showMessage(LOCALIZE("requestError"), messageType: .error, messageHandler: {
-                        self.dismiss(animated: true, completion: nil)
+                        self.callID = nil
+                        self.goBack()
                     })
                 } else {
-                    NotificationCenter.default.addObserver(self,
-                                                           selector: #selector(self.acceptCall),
-                                                           name: acceptCallNotification,
-                                                           object: nil)
-                    
-                    self.ringPlayer = try? AVAudioPlayer(contentsOf: Bundle.main.url(forResource: "calling", withExtension: "wav")!)
-                    self.ringPlayer?.numberOfLoops = -1
-                    self.ringPlayer!.prepareToPlay()
-                    self.ringPlayer?.play()
-                    
                     self.callView.isHidden = false
                     var gifs:[UIImage] = []
                     for i in 0..<24 {
@@ -98,6 +92,8 @@ class CallController: UIViewController {
                     self.ringView.animationDuration = 2
                     self.ringView.animationRepeatCount = 0
                     self.ringView.startAnimating()
+                    
+                    Ringtone.shared.playCall()
                 }
             })
         } else {
@@ -106,6 +102,11 @@ class CallController: UIViewController {
         }
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        MainApp().closeCall()
+    }
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         if videoTrack != nil {
@@ -113,7 +114,7 @@ class CallController: UIViewController {
         }
         resizePreview()
     }
-    
+
     // MARK: - Video views resizing
 
     func updateVideoSize() {
@@ -194,65 +195,46 @@ class CallController: UIViewController {
     // MARK: - Notifications
     
     @objc func acceptCall() {
-        ringPlayer?.stop()
-        ringPlayer = nil
         ringView.stopAnimating()
         callView.isHidden = true
         connect()
     }
     
     @objc func hangUpCall() {
-        if self.ringPlayer != nil {
-            self.ringPlayer?.stop()
-            self.ringPlayer = nil
-            self.ringView.stopAnimating()
-            
-            self.busyPlayer = try? AVAudioPlayer(contentsOf: Bundle.main.url(forResource: "busy", withExtension: "wav")!)
-            self.busyPlayer?.numberOfLoops = -1
-            self.busyPlayer!.prepareToPlay()
-            self.busyPlayer?.play()
-            callID = nil
-        } else {
-            callID = nil
+        self.ringView.stopAnimating()
+        self.ringView.image = UIImage(named: "ring_frame_0.gif")
+        if rtcClient != nil {
+            disconnect()
             goBack()
+        } else {
+            Ringtone.shared.playBusy()
         }
     }
 
     // MARK: - Commands
 
     override func goBack() {
-        if callID != nil {
+        if rtcClient != nil {
             yesNoQuestion("Want you hang up?", acceptLabel: "Yes", cancelLabel: "Cancel", acceptHandler: {
                 SVProgressHUD.show()
-                PushManager.shared.pushCommand(self.userID!, command:"hangup", success: { result in
+                PushManager.shared.pushCommand(self.userID!, command:"hangup", success: { _ in
                     SVProgressHUD.dismiss()
-                    if !result {
-                        self.showMessage(LOCALIZE("requestError"), messageType: .error)
-                    } else {
-                        if self.rtcClient != nil {
-                            self.disconnect()
-                        }
-                        if self.ringPlayer != nil {
-                            self.ringPlayer?.stop()
-                            self.ringPlayer = nil
-                        }
-                        self.dismiss(animated: true, completion: nil)
-                    }
+                    self.disconnect()
+                    self.dismiss(animated: true, completion: nil)
                 })
             })
         } else {
-            if self.busyPlayer != nil {
-                self.busyPlayer?.stop()
-                self.busyPlayer = nil
-                dismiss(animated: true, completion: nil)
-            } else if self.rtcClient != nil {
-                self.disconnect()
-                dismiss(animated: true, completion: nil)
-            }
+            Ringtone.shared.stop()
+            SVProgressHUD.show()
+            PushManager.shared.pushCommand(self.userID!, command:"hangup", success: { _ in
+                SVProgressHUD.dismiss()
+                self.dismiss(animated: true, completion: nil)
+            })
         }
     }
     
     func connect() {
+        Ringtone.shared.stop()
         rtcClient = ARDAppClient(delegate: self)
         let settings = ARDSettingsModel()
         rtcClient?.connectToRoom(withId: callID!,
@@ -359,6 +341,7 @@ extension CallController : ARDAppClientDelegate {
     }
     
     func appClient(_ client: ARDAppClient!, didReceiveRemoteAudioTracks remoteAudioTrack: RTCAudioTrack!) {
+        ARDAppClient.enableLoudspeaker(true)
         isLoud = ARDAppClient.isLoudSpeaker()
     }
     

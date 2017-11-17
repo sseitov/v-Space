@@ -110,6 +110,10 @@
 		2CB65EE31DFD5CA8002A9D29 /* ExtensionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB65EE21DFD5CA8002A9D29 /* ExtensionDelegate.swift */; };
 		2CB65EE51DFD5CA8002A9D29 /* Extensions-Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2CB65EE41DFD5CA8002A9D29 /* Extensions-Assets.xcassets */; };
 		2CB65EE91DFD5CA8002A9D29 /* Watch.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 2CB65ECF1DFD5CA7002A9D29 /* Watch.app */; };
+		2CBAE3651FBF467100620A48 /* CallManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CBAE3631FBF467100620A48 /* CallManager.swift */; };
+		2CBAE3661FBF467100620A48 /* Call.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CBAE3641FBF467100620A48 /* Call.swift */; };
+		2CBAE3681FBF471400620A48 /* ProviderDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CBAE3671FBF471400620A48 /* ProviderDelegate.swift */; };
+		2CBAE36E1FBF7C7F00620A48 /* Ringtone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CBAE36D1FBF7C7F00620A48 /* Ringtone.swift */; };
 		2CBC8DF31F9C8FFF00C918FD /* PushManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CBC8DF21F9C8FFF00C918FD /* PushManager.swift */; };
 		2CBC8DF51F9D040500C918FD /* UserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CBC8DF41F9D040500C918FD /* UserCell.swift */; };
 		2CBE20151E8D5EEB002EF13C /* NotificationCenter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2CBE20131E8D5EBB002EF13C /* NotificationCenter.framework */; };
@@ -352,6 +356,10 @@
 		2CB65EE61DFD5CA8002A9D29 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2CB65EF21DFD714E002A9D29 /* Watch.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Watch.entitlements; sourceTree = "<group>"; };
 		2CB65EF31DFD715C002A9D29 /* Watch Extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Watch Extension.entitlements"; sourceTree = "<group>"; };
+		2CBAE3631FBF467100620A48 /* CallManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CallManager.swift; path = iNear/Vendor/CallManager/CallManager.swift; sourceTree = "<group>"; };
+		2CBAE3641FBF467100620A48 /* Call.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Call.swift; path = iNear/Vendor/CallManager/Call.swift; sourceTree = "<group>"; };
+		2CBAE3671FBF471400620A48 /* ProviderDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderDelegate.swift; sourceTree = "<group>"; };
+		2CBAE36D1FBF7C7F00620A48 /* Ringtone.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Ringtone.swift; sourceTree = "<group>"; };
 		2CBC8DF21F9C8FFF00C918FD /* PushManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushManager.swift; sourceTree = "<group>"; };
 		2CBC8DF41F9D040500C918FD /* UserCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCell.swift; sourceTree = "<group>"; };
 		2CBE20131E8D5EBB002EF13C /* NotificationCenter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NotificationCenter.framework; path = System/Library/Frameworks/NotificationCenter.framework; sourceTree = SDKROOT; };
@@ -445,6 +453,7 @@
 				2CBC8DF41F9D040500C918FD /* UserCell.swift */,
 				2C6E7D7B1F9DDE2D004B4D68 /* LocationController.swift */,
 				2CB635011FBE0172005ABE27 /* CallController.swift */,
+				2CBAE36D1FBF7C7F00620A48 /* Ringtone.swift */,
 			);
 			name = "Trust List";
 			sourceTree = "<group>";
@@ -452,7 +461,6 @@
 		2C17474F1DDB872A0018AEAB = {
 			isa = PBXGroup;
 			children = (
-				2C87D3231DDF1A5B00F05528 /* vSpace-Bridging-Header.h */,
 				2C87D3211DDF1A2100F05528 /* Vendor */,
 				2C17475A1DDB872A0018AEAB /* v-Space */,
 				2CB65ED01DFD5CA7002A9D29 /* Watch */,
@@ -477,6 +485,7 @@
 		2C17475A1DDB872A0018AEAB /* v-Space */ = {
 			isa = PBXGroup;
 			children = (
+				2C87D3231DDF1A5B00F05528 /* vSpace-Bridging-Header.h */,
 				2C00AA9C1F8A53C2003524DC /* Trust List */,
 				2C8B18A61DFB1E8A00769A12 /* Model */,
 				2C87D3151DDEE4A800F05528 /* Extensions */,
@@ -489,6 +498,7 @@
 				2C51F7321F8CD693008A0678 /* AuthModel.swift */,
 				2CBC8DF21F9C8FFF00C918FD /* PushManager.swift */,
 				2C17475B1DDB872A0018AEAB /* AppDelegate.swift */,
+				2CBAE3671FBF471400620A48 /* ProviderDelegate.swift */,
 				2C3F368C1E6C132900021B10 /* Credentials.swift */,
 				2C17476F1DDB93660018AEAB /* Resources */,
 			);
@@ -554,6 +564,7 @@
 		2C87D3211DDF1A2100F05528 /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
+				2CBAE3621FBF464200620A48 /* CallManager */,
 				2CB635351FBE1F14005ABE27 /* SocketRocket */,
 				2CB635341FBE1F01005ABE27 /* WebRTC */,
 				2C87D3221DDF1A3300F05528 /* LGAlertSheet */,
@@ -717,6 +728,15 @@
 			);
 			path = "Watch Extension";
 			sourceTree = SOURCE_ROOT;
+		};
+		2CBAE3621FBF464200620A48 /* CallManager */ = {
+			isa = PBXGroup;
+			children = (
+				2CBAE3641FBF467100620A48 /* Call.swift */,
+				2CBAE3631FBF467100620A48 /* CallManager.swift */,
+			);
+			name = CallManager;
+			sourceTree = "<group>";
 		};
 		2CE15FBE1EB466A60085915E /* Track */ = {
 			isa = PBXGroup;
@@ -1123,17 +1143,20 @@
 				2CB635641FBE1F5B005ABE27 /* RTCMediaConstraints+JSON.m in Sources */,
 				2CB6356D1FBE1F5B005ABE27 /* ARDSettingsModel.m in Sources */,
 				2C33C70D1F310C790031241F /* PhotoCollectionController.swift in Sources */,
+				2CBAE3681FBF471400620A48 /* ProviderDelegate.swift in Sources */,
 				2C79D4A41E92DE9F00EF4954 /* PhotoController.swift in Sources */,
 				2CB635651FBE1F5B005ABE27 /* ARDWebSocketChannel.m in Sources */,
 				2CB635721FBE1F5B005ABE27 /* ARDSDPUtils.m in Sources */,
 				2C87D31C1DDEF3C200F05528 /* UIColorExtensions.swift in Sources */,
 				2C3ED2131EB2046200463199 /* RouteController.swift in Sources */,
 				2CB6356A1FBE1F5B005ABE27 /* RTCIceCandidate+JSON.m in Sources */,
+				2CBAE36E1FBF7C7F00620A48 /* Ringtone.swift in Sources */,
 				2C87D31E1DDEF3F000F05528 /* UIViewExtensions.swift in Sources */,
 				2C79D49F1E92C5CA00EF4954 /* Photo+CoreDataClass.swift in Sources */,
 				2CB635731FBE1F5B005ABE27 /* ARDAppEngineClient.m in Sources */,
 				2CB635701FBE1F5B005ABE27 /* ARDMessageResponse.m in Sources */,
 				2CDFA7FE1E6ACC13007D9FF0 /* MKMapRectExtension.swift in Sources */,
+				2CBAE3651FBF467100620A48 /* CallManager.swift in Sources */,
 				2CBC8DF31F9C8FFF00C918FD /* PushManager.swift in Sources */,
 				2CB635681FBE1F5B005ABE27 /* ARDTURNClient.m in Sources */,
 				2CB635691FBE1F5B005ABE27 /* RTCIceServer+JSON.m in Sources */,
@@ -1163,6 +1186,7 @@
 				2CB6356B1FBE1F5B005ABE27 /* ARDBitrateTracker.m in Sources */,
 				2CB6356C1FBE1F5B005ABE27 /* ARDStatsBuilder.m in Sources */,
 				2C87D32F1DDF1A5C00F05528 /* LGAlertView.m in Sources */,
+				2CBAE3661FBF467100620A48 /* Call.swift in Sources */,
 				2C33C7091F30C4F30031241F /* Reachability.m in Sources */,
 				2CB635711FBE1F5B005ABE27 /* ARDJoinResponse.m in Sources */,
 				2CBE20291E8D9799002EF13C /* Track+CoreDataClass.swift in Sources */,
@@ -1443,7 +1467,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "495b28b2-dca4-40eb-a0d9-da8d20243c5c";
 				PROVISIONING_PROFILE_SPECIFIER = "vSpace Development";
-				SWIFT_OBJC_BRIDGING_HEADER = "vSpace-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "iNear/vSpace-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
@@ -1500,7 +1524,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "81cbb086-728a-4960-a13b-d1419c935784";
 				PROVISIONING_PROFILE_SPECIFIER = "vSpace AppStore";
-				SWIFT_OBJC_BRIDGING_HEADER = "vSpace-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "iNear/vSpace-Bridging-Header.h";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
 				VALID_ARCHS = "arm64 armv7";

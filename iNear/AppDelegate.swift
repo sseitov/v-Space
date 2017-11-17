@@ -39,6 +39,7 @@ func ShowCall(userName:String?, userID:String?, callID:String?) {
                 callController.userID = userID
             }
             top.present(nav, animated: true, completion: nil)
+
         }
     }
 }
@@ -49,6 +50,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
     var window: UIWindow?
     var watchSession:WCSession?
     var voipRegistry:PKPushRegistry?
+    var providerDelegate: ProviderDelegate!
+    let callManager = CallManager()
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
 
@@ -126,10 +129,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
                                                                 identityPoolId:identityPoolID)
         let configuration = AWSServiceConfiguration(region:.USEast1, credentialsProvider:credentialsProvider)
         AWSServiceManager.default().defaultServiceConfiguration = configuration
+        
+        providerDelegate = ProviderDelegate(callManager: callManager)
 
         return true
     }
     
+    func closeCall() {
+        providerDelegate.closeIncomingCall()
+    }
+
     // MARK: - Application delegate
     
     func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
@@ -389,6 +398,8 @@ extension AppDelegate : PKPushRegistryDelegate {
             } else if message == "hangup" {
                 if UIApplication.shared.applicationState == .active {
                     NotificationCenter.default.post(name: hangUpCallNotification, object: nil)
+                } else {
+                    providerDelegate.closeIncomingCall()
                 }
             } else if message == "accept" {
                 if UIApplication.shared.applicationState == .active {
@@ -419,7 +430,14 @@ extension AppDelegate : PKPushRegistryDelegate {
                             })
                             
                         } else {
-                            print(requestData)
+                            providerDelegate.reportIncomingCall(callID: callID,
+                                                                userName: userName,
+                                                                userID: userID, completion:
+                                { error in
+                                    if error != nil {
+                                        print(error!.localizedDescription)
+                                    }
+                            })
                         }
                     }
                 }

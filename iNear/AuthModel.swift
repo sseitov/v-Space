@@ -129,7 +129,7 @@ class AuthModel: NSObject {
     
     func userEndpoint(_ uid:String, endpoint:@escaping(String?) -> ()) {
         let ref = Database.database().reference()
-        ref.child("endponts").child(uid).observe(.value, with: { snapshot in
+        ref.child("endponts").child(uid).observeSingleEvent(of: .value, with: { snapshot in
             endpoint(snapshot.value as? String)
         })
     }

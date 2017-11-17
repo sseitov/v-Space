@@ -14,7 +14,7 @@ import AWSSNS
 class PushManager: NSObject {
     static let shared = PushManager()
 
-    override init() {
+    private override init() {
         super.init()
     }
     
@@ -75,11 +75,15 @@ class PushManager: NSObject {
                 let request = ["callID" : callID, "userID" : Auth.auth().currentUser!.uid, "userName" : name]
                 if let data = try? JSONSerialization.data(withJSONObject: request, options: []) {
                     message?.message = String(data: data, encoding:.utf8)
-                    AWSSNS.default().publish(message!).continueOnSuccessWith(executor: AWSExecutor.mainThread(), block: { task in
-                        if task.error != nil {
-                            print(task.error!.localizedDescription)
+                    AWSSNS.default().publish(message!).continueWith(block: { task in
+                        DispatchQueue.main.async {
+                            if task.error != nil {
+                                print(task.error!.localizedDescription)
+                                success(false)
+                            } else {
+                                success(true)
+                            }
                         }
-                        success(true)
                         return nil
                     })
                 } else {
