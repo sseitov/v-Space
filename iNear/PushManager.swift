@@ -52,7 +52,7 @@ class PushManager: NSObject {
             if point != nil {
                 let message = AWSSNSPublishInput()
                 message?.targetArn = point!
-                message?.message = "askLocaton"
+                message?.message = command
                 AWSSNS.default().publish(message!).continueOnSuccessWith(executor: AWSExecutor.mainThread(), block: { task in
                     if task.error != nil {
                         print(task.error!.localizedDescription)

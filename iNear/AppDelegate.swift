@@ -404,7 +404,16 @@ extension AppDelegate : PKPushRegistryDelegate {
                         if UIApplication.shared.applicationState == .active {
                             MainApp().window?.topMostWindowController?.yesNoQuestion("\(userName) call you.", acceptLabel: "Accept", cancelLabel: "Reject", acceptHandler:
                                 {
-                                    ShowCall(userName: userName, userID: userID, callID: callID)
+                                    SVProgressHUD.show()
+                                    PushManager.shared.pushCommand(userID, command:"accept", success: { result in
+                                        SVProgressHUD.dismiss()
+                                        if !result {
+                                            MainApp().window?.topMostWindowController?.showMessage(LOCALIZE("requestError"), messageType: .error)
+                                        } else {
+                                            ShowCall(userName: userName, userID: userID, callID: callID)
+                                        }
+                                    })
+
                             }, cancelHandler: {
                                 PushManager.shared.pushCommand(userID, command: "hangup", success: { _ in })
                             })

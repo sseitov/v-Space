@@ -66,6 +66,8 @@
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>v-Space needs your camera for take photos and put their on your tracks.</string>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>v-Space needs use your microphone for VOIP audio call with friends from Trust Ring.</string>
 	<key>NSContactsUsageDescription</key>
 	<string>v-Space needs access to your contacts to send invitations.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
