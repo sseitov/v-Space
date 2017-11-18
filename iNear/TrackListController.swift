@@ -50,7 +50,9 @@ class TrackListController: UITableViewController, LastTrackCellDelegate, PHPhoto
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupTitle("v-Space")
+        
+        let versionNumber: String = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String
+        setupTitle("v-Space ( \(versionNumber) )")
         
         GIDSignIn.sharedInstance().clientID = FirebaseApp.app()?.options.clientID
         GIDSignIn.sharedInstance().delegate = self

@@ -31,7 +31,10 @@ class ProviderDelegate: NSObject {
         providerConfiguration.maximumCallsPerCallGroup = 1
         providerConfiguration.maximumCallGroups = 1
         providerConfiguration.supportedHandleTypes = [.generic]
-        
+        if let iconMaskImage = UIImage(named: "provider") {
+            providerConfiguration.iconTemplateImageData = UIImagePNGRepresentation(iconMaskImage)
+        }
+
         return providerConfiguration
     }
     
@@ -123,33 +126,7 @@ extension ProviderDelegate: CXProviderDelegate {
         call.state = action.isOnHold ? .held : .active
         action.fulfill()
     }
-/*
-    func provider(_ provider: CXProvider, perform action: CXStartCallAction) {
-
-        let call = Call(uuid: action.callUUID, outgoing: true, handle: action.handle.value)
-        
-        call.connectedStateChanged = { [weak self] in
-            guard let strongSelf = self else { return }
-            
-            if case .pending = call.connectedState {
-                strongSelf.provider.reportOutgoingCall(with: call.uuid, startedConnectingAt: nil)
-            } else if case .complete = call.connectedState {
-                strongSelf.provider.reportOutgoingCall(with: call.uuid, connectedAt: nil)
-            }
-        }
-        
-        call.start { [weak self] success in
-            guard let strongSelf = self else { return }
-            
-            if success {
-                action.fulfill()
-                strongSelf.callManager.add(call: call)
-            } else {
-                action.fail()
-            }
-        }
-    }
-*/
+    
     func provider(_ provider: CXProvider, didActivate audioSession: AVAudioSession) {
     }
 }
