@@ -400,10 +400,12 @@ extension AppDelegate : PKPushRegistryDelegate {
                 } else {
                     self.providerDelegate.closeIncomingCall()
                 }
+                complete()
             } else if message == "accept" {
                 if UIApplication.shared.applicationState == .active {
                     NotificationCenter.default.post(name: acceptCallNotification, object: nil)
                 }
+                complete()
             } else {
                 if let data = message.data(using: .utf8), let request = try? JSONSerialization.jsonObject(with: data, options: []), let requestData = request as? [String:Any]
                 {
@@ -427,7 +429,7 @@ extension AppDelegate : PKPushRegistryDelegate {
                             }, cancelHandler: {
                                 PushManager.shared.pushCommand(userID, command: "hangup", success: { _ in })
                             })
-                            
+                            complete()
                         } else {
                             self.providerDelegate.reportIncomingCall(callID: callID,
                                                                      userName: userName,
@@ -436,9 +438,14 @@ extension AppDelegate : PKPushRegistryDelegate {
                                     if error != nil {
                                         print(error!.localizedDescription)
                                     }
+                                    complete()
                             })
                         }
+                    } else {
+                        complete()
                     }
+                } else {
+                    complete()
                 }
             }
         } else {
