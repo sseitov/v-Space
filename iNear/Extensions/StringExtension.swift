@@ -7,11 +7,11 @@
 
 import UIKit
 
-func LOCALIZE(_ text:String) -> String {
-    return NSLocalizedString(text, comment: "")
-}
-
 extension String {
+    
+    var localized : String {
+        return NSLocalizedString(self, comment: "")
+    }
     
     static func generateUDID() -> String {
         return UUID().uuidString

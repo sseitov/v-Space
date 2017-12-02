@@ -25,6 +25,7 @@ class LocationController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupBackButton()
+        self.setupTitle("search".localized)
         map.isMyLocationEnabled = true
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(LocationController.update(_:)),
@@ -66,7 +67,7 @@ class LocationController: UIViewController {
         PushManager.shared.pushCommand(friendUid!, command:"askLocaton", success: { result in
             SVProgressHUD.dismiss()
             if !result {
-                self.showMessage(LOCALIZE("requestError"), messageType: .error, messageHandler: {
+                self.showMessage("requestError".localized, messageType: .error, messageHandler: {
                     self.goBack()
                 })
             }

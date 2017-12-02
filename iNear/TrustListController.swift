@@ -37,7 +37,7 @@ class TrustListController: UITableViewController, GIDSignInDelegate, UserCellDel
 
     override func viewDidLoad() {
         super.viewDidLoad()        
-        setupTitle(LOCALIZE("trustListTitle"))
+        setupTitle("trustListTitle".localized)
         
         GIDSignIn.sharedInstance().clientID = "1027279802021-j65vtq40vuqvhknel6j72iqqiethlqau.apps.googleusercontent.com"
         GIDSignIn.sharedInstance().delegate = self
@@ -101,7 +101,7 @@ class TrustListController: UITableViewController, GIDSignInDelegate, UserCellDel
     }
 
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return LOCALIZE("myList")
+        return "myList".localized
     }
 
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -153,7 +153,7 @@ class TrustListController: UITableViewController, GIDSignInDelegate, UserCellDel
     }
     
     @IBAction func signOut(_ sender: Any) {
-        let ask = createQuestion(LOCALIZE("SignOut"), acceptTitle: "Ok", cancelTitle: "Cancel", acceptHandler: {
+        let ask = createQuestion("SignOut".localized, acceptTitle: "Ok", cancelTitle: "Cancel", acceptHandler: {
             SVProgressHUD.show(withStatus: "SignOut")
             let ref = Database.database().reference()
             for friend in self.friendPairs {
@@ -187,21 +187,21 @@ class TrustListController: UITableViewController, GIDSignInDelegate, UserCellDel
                                 if !result {
                                     self.showMessage("Can not send invite.", messageType: .error)
                                 } else {
-                                    self.showMessage(LOCALIZE("inviteSent"), messageType: .information)
+                                    self.showMessage("inviteSent".localized, messageType: .information)
                                 }
                             })
                         } else {
                             if error == .alreadyInList {
-                                self.showMessage(LOCALIZE("alreadyInList"), messageType: .information)
+                                self.showMessage("alreadyInList".localized, messageType: .information)
                             } else {
                                 if self.inviteEnabled {
-                                    let ask = self.createQuestion(LOCALIZE("askNotRegistered"), acceptTitle: "Send", cancelTitle: "Cancel", acceptHandler:
+                                    let ask = self.createQuestion("askNotRegistered".localized, acceptTitle: "Send", cancelTitle: "Cancel", acceptHandler:
                                     {
                                         self.sendInvite()
                                     })
                                     ask?.show()
                                 } else {
-                                    self.showMessage(LOCALIZE("notRegistered"), messageType: .error)
+                                    self.showMessage("notRegistered".localized, messageType: .error)
                                 }
                             }
                         }

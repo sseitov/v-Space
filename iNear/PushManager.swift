@@ -32,7 +32,7 @@ class PushManager: NSObject {
             let notification:[String:Any] = [
                 "title" : "v-Space",
                 "sound" : "default",
-                "body" : "\(name) \(LOCALIZE("invite"))",
+                "body" : "\(name) \("invite".localized)",
                 "content_available": true]
             let data:[String:Any] = ["requester" : Auth.auth().currentUser!.uid]
             let message:[String:Any] = ["to" : token, "priority" : "high", "notification" : notification, "data" : data]

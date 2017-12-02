@@ -37,3 +37,4 @@
 "inviteSent" = "An invitation to the Ring of Trust was sent.";
 "requestSent" = "Request was sent.";
 "requestError" = "Can not send request.";
+"search" = "Searching ...";

@@ -420,7 +420,7 @@ extension AppDelegate : PKPushRegistryDelegate {
                                     PushManager.shared.pushCommand(userID, command:"accept", success: { result in
                                         SVProgressHUD.dismiss()
                                         if !result {
-                                            MainApp().window?.topMostWindowController?.showMessage(LOCALIZE("requestError"), messageType: .error)
+                                            MainApp().window?.topMostWindowController?.showMessage("requestError".localized, messageType: .error)
                                         } else {
                                             ShowCall(userName: userName, userID: userID, callID: callID)
                                         }

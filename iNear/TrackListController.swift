@@ -353,7 +353,7 @@ class TrackListController: UITableViewController, LastTrackCellDelegate, PHPhoto
         if Auth.auth().currentUser != nil {
             self.performSegue(withIdentifier: "trustList", sender: nil)
         } else {
-            let ask = createQuestion(LOCALIZE("trustList"), acceptTitle: "Ok", cancelTitle: "Cancel", acceptHandler: {
+            let ask = createQuestion("trustList".localized, acceptTitle: "Ok", cancelTitle: "Cancel", acceptHandler: {
                 let askProvider = ActionSheet.create(title: "Choose provider",
                                                      actions: ["Google+", "Facebook"],
                                                      handler1:
