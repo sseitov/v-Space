@@ -372,8 +372,7 @@ extension AppDelegate : PKPushRegistryDelegate {
         }
     }
     
-    func pushRegistry(_ registry: PKPushRegistry, didReceiveIncomingPushWith payload: PKPushPayload, for type: PKPushType, completion: @escaping () -> Void)
-    {
+    private func processPayload(_ payload: PKPushPayload, complete: @escaping () -> Void) {
         if let payloadDict = payload.dictionaryPayload["aps"] as? Dictionary<String, String>,
             let message = payloadDict["alert"]
         {
@@ -386,20 +385,20 @@ extension AppDelegate : PKPushRegistryDelegate {
                                           "date" : Date().timeIntervalSince1970]
                             let ref = Database.database().reference()
                             ref.child("locations").child(currentUid()!).setValue(update, withCompletionBlock: { _, _ in
-                                completion()
+                                complete()
                             })
                         } else {
-                            completion()
+                            complete()
                         }
                     } else {
-                        completion()
+                        complete()
                     }
                 })
             } else if message == "hangup" {
                 if UIApplication.shared.applicationState == .active {
                     NotificationCenter.default.post(name: hangUpCallNotification, object: nil)
                 } else {
-                    providerDelegate.closeIncomingCall()
+                    self.providerDelegate.closeIncomingCall()
                 }
             } else if message == "accept" {
                 if UIApplication.shared.applicationState == .active {
@@ -424,15 +423,15 @@ extension AppDelegate : PKPushRegistryDelegate {
                                             ShowCall(userName: userName, userID: userID, callID: callID)
                                         }
                                     })
-
+                                    
                             }, cancelHandler: {
                                 PushManager.shared.pushCommand(userID, command: "hangup", success: { _ in })
                             })
                             
                         } else {
-                            providerDelegate.reportIncomingCall(callID: callID,
-                                                                userName: userName,
-                                                                userID: userID, completion:
+                            self.providerDelegate.reportIncomingCall(callID: callID,
+                                                                     userName: userName,
+                                                                     userID: userID, completion:
                                 { error in
                                     if error != nil {
                                         print(error!.localizedDescription)
@@ -443,7 +442,19 @@ extension AppDelegate : PKPushRegistryDelegate {
                 }
             }
         } else {
-            completion()
+            complete()
         }
+    }
+    
+    func pushRegistry(_ registry: PKPushRegistry, didReceiveIncomingPushWith payload: PKPushPayload, for type: PKPushType) {
+        processPayload(payload, complete: {
+        })
+    }
+    
+    func pushRegistry(_ registry: PKPushRegistry, didReceiveIncomingPushWith payload: PKPushPayload, for type: PKPushType, completion: @escaping () -> Void)
+    {
+        processPayload(payload, complete: {
+            completion()
+        })
     }
 }
