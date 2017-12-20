@@ -133,8 +133,9 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
             if CLLocationManager.authorizationStatus() == .notDetermined {
                 manager.requestAlwaysAuthorization()
             } else if CLLocationManager.authorizationStatus() == .restricted || CLLocationManager.authorizationStatus() == .denied {
-            } else if CLLocationManager.authorizationStatus() == .authorizedAlways {
+            } else if CLLocationManager.authorizationStatus() == .authorizedAlways || CLLocationManager.authorizationStatus() == .authorizedWhenInUse {
                 manager.startUpdatingLocation()
+                manager.allowsBackgroundLocationUpdates = true
             }
         }
     }
@@ -144,8 +145,8 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         if status == .authorizedAlways || status == .authorizedWhenInUse {
             manager.startUpdatingLocation()
+            manager.allowsBackgroundLocationUpdates = true
             if locationClosure == nil {
-                manager.allowsBackgroundLocationUpdates = true
                 isPaused = false
             }
         }
@@ -155,12 +156,13 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
         if let location = locations.last {
             if self.locationClosure != nil {
                 self.locationClosure!(location)
+                self.locationClosure = nil
+                self.manager.stopUpdatingLocation()
             } else {
                 if !isPaused {
                     Model.shared.addCoordinate(location.coordinate, at:NSDate().timeIntervalSince1970)
                 }
             }
-            self.locationClosure = nil
         }
     }
 }

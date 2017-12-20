@@ -356,11 +356,9 @@ extension AppDelegate : PKPushRegistryDelegate {
             endpointRequest?.token = pushCredentials.token.hexadecimalString
             sns.createPlatformEndpoint(endpointRequest!).continueWith(executor: AWSExecutor.mainThread(), block: { task in
                 if let response = task.result, let endpoint = response.endpointArn {
-                    UserDefaults.standard.set(pushCredentials.token, forKey: "deviceToken")
+                    UserDefaults.standard.set(endpoint, forKey: "endpoint")
                     if currentUid() != nil {
                         AuthModel.shared.publishEndpoint(endpoint)
-                    } else {
-                        UserDefaults.standard.set(endpoint, forKey: "endpoint")
                     }
                 }
                 return nil
