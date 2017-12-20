@@ -171,7 +171,8 @@ class Model: NSObject {
     func clearLastTrack() {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Location")
         let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
-        _ = try? persistentStoreCoordinator.execute(deleteRequest, with: managedObjectContext)
+        _ = try? managedObjectContext.execute(deleteRequest)
+        saveContext()
     }
     
     func lastTrackSize(_ uid:String? = nil) -> Int {

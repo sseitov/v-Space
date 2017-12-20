@@ -8,7 +8,7 @@
 
 import Foundation
 import CoreLocation
-/*
+
 fileprivate func checkAccurancy(_ location:CLLocation) -> Bool {
     if IS_PAD() {
         return true
@@ -17,78 +17,6 @@ fileprivate func checkAccurancy(_ location:CLLocation) -> Bool {
     }
 }
 
-class Tracker : NSObject, CLLocationManagerDelegate {
-    
-    static let shared = Tracker()
-    
-    var isPaused:Bool = true
-    
-    private let trackManager = CLLocationManager()
-//    private var authCondition:NSCondition?
-
-    private override init() {
-        super.init()
-        trackManager.delegate = self
-        trackManager.desiredAccuracy = kCLLocationAccuracyBest
-        trackManager.distanceFilter = 10.0
-        trackManager.headingFilter = 5.0
-        trackManager.pausesLocationUpdatesAutomatically = false
-    }
-/*
-    func registeredAlways(_  isRegistered: @escaping(Bool) -> ()) {
-        if CLLocationManager.locationServicesEnabled() {
-            switch CLLocationManager.authorizationStatus() {
-            case .authorizedAlways:
-                isRegistered(true)
-            case .notDetermined:
-                authCondition = NSCondition()
-                self.trackManager.requestAlwaysAuthorization()
-                DispatchQueue.global().async {
-                    self.authCondition?.lock()
-                    self.authCondition?.wait()
-                    self.authCondition?.unlock()
-                    DispatchQueue.main.async {
-                        self.authCondition = nil
-                        isRegistered(CLLocationManager.authorizationStatus() == .authorizedAlways)
-                    }
-                }
-            default:
-                isRegistered(false)
-            }
-        } else {
-            isRegistered(false)
-        }
-    }
-    */
-    func startInBackground() {
-        trackManager.startUpdatingLocation()
-        trackManager.allowsBackgroundLocationUpdates = true
-        isPaused = false
-    }
-    
-    func stop() {
-        trackManager.stopUpdatingLocation()
-        isPaused = true
-    }
-    
-    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-        if status != .notDetermined {
-            self.authCondition?.lock()
-            self.authCondition?.signal()
-            self.authCondition?.unlock()
-        }
-    }
-    
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        if let location = locations.last, checkAccurancy(location) {
-            if !isPaused {
-                Model.shared.addCoordinate(location.coordinate, at:NSDate().timeIntervalSince1970)
-            }
-        }
-    }
-
-}
-*/
 class LocationManager: NSObject, CLLocationManagerDelegate {
     
     static let shared = LocationManager()
@@ -159,7 +87,7 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
                 self.locationClosure = nil
                 self.manager.stopUpdatingLocation()
             } else {
-                if !isPaused {
+                if !isPaused && checkAccurancy(location) {
                     Model.shared.addCoordinate(location.coordinate, at:NSDate().timeIntervalSince1970)
                 }
             }
