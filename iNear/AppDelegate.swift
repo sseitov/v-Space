@@ -341,29 +341,24 @@ extension AppDelegate : PKPushRegistryDelegate {
     }
     
     func pushRegistry(_ registry: PKPushRegistry, didUpdate pushCredentials: PKPushCredentials, for type: PKPushType) {
-        if let deviceToken = UserDefaults.standard.object(forKey: "deviceToken") as? Data,
-            deviceToken.isEqualInConsistentTime(pushCredentials.token) {
-            print("Endpoint already created")
-        } else {
-            let sns = AWSSNS.default()
-            let endpointRequest = AWSSNSCreatePlatformEndpointInput()
-            #if DEBUG
-                endpointRequest?.platformApplicationArn = endpointDev
-            #else
-                endpointRequest?.platformApplicationArn = endpointProd
-            #endif
-            
-            endpointRequest?.token = pushCredentials.token.hexadecimalString
-            sns.createPlatformEndpoint(endpointRequest!).continueWith(executor: AWSExecutor.mainThread(), block: { task in
-                if let response = task.result, let endpoint = response.endpointArn {
-                    UserDefaults.standard.set(endpoint, forKey: "endpoint")
-                    if currentUid() != nil {
-                        AuthModel.shared.publishEndpoint(endpoint)
-                    }
+        let sns = AWSSNS.default()
+        let endpointRequest = AWSSNSCreatePlatformEndpointInput()
+        #if DEBUG
+            endpointRequest?.platformApplicationArn = endpointDev
+        #else
+            endpointRequest?.platformApplicationArn = endpointProd
+        #endif
+        
+        endpointRequest?.token = pushCredentials.token.hexadecimalString
+        sns.createPlatformEndpoint(endpointRequest!).continueWith(executor: AWSExecutor.mainThread(), block: { task in
+            if let response = task.result, let endpoint = response.endpointArn {
+                UserDefaults.standard.set(endpoint, forKey: "endpoint")
+                if currentUid() != nil {
+                    AuthModel.shared.publishEndpoint(endpoint)
                 }
-                return nil
-            })
-        }
+            }
+            return nil
+        })
     }
     
     private func processPayload(_ payload: PKPushPayload, complete: @escaping () -> Void) {
