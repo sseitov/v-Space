@@ -8,7 +8,7 @@
 
 import Foundation
 import CoreLocation
-
+/*
 fileprivate func checkAccurancy(_ location:CLLocation) -> Bool {
     if IS_PAD() {
         return true
@@ -24,7 +24,7 @@ class Tracker : NSObject, CLLocationManagerDelegate {
     var isPaused:Bool = true
     
     private let trackManager = CLLocationManager()
-    private var authCondition:NSCondition?
+//    private var authCondition:NSCondition?
 
     private override init() {
         super.init()
@@ -34,7 +34,7 @@ class Tracker : NSObject, CLLocationManagerDelegate {
         trackManager.headingFilter = 5.0
         trackManager.pausesLocationUpdatesAutomatically = false
     }
-    
+/*
     func registeredAlways(_  isRegistered: @escaping(Bool) -> ()) {
         if CLLocationManager.locationServicesEnabled() {
             switch CLLocationManager.authorizationStatus() {
@@ -59,7 +59,7 @@ class Tracker : NSObject, CLLocationManagerDelegate {
             isRegistered(false)
         }
     }
-    
+    */
     func startInBackground() {
         trackManager.startUpdatingLocation()
         trackManager.allowsBackgroundLocationUpdates = true
@@ -88,92 +88,80 @@ class Tracker : NSObject, CLLocationManagerDelegate {
     }
 
 }
-
+*/
 class LocationManager: NSObject, CLLocationManagerDelegate {
     
     static let shared = LocationManager()
     
-    private let locationManager = CLLocationManager()
-    private var authCondition:NSCondition?
-    private var locationCondition:NSCondition?
-    private var currentLocation:CLLocation?
-
+    let manager: CLLocationManager
+    var isPaused:Bool = true
+    var locationClosure: ((_ location: CLLocation) -> ())?
+    
     private override init() {
+        self.manager = CLLocationManager()
         super.init()
-        locationManager.delegate = self
-        locationManager.desiredAccuracy = kCLLocationAccuracyBest
-        locationManager.distanceFilter = 10.0
-        locationManager.headingFilter = 5.0
-        locationManager.pausesLocationUpdatesAutomatically = false
+        self.manager.delegate = self
+        self.manager.desiredAccuracy = kCLLocationAccuracyBest
+        self.manager.distanceFilter = 10.0
+        self.manager.headingFilter = 5.0
+        self.manager.pausesLocationUpdatesAutomatically = false
     }
     
-    private func registeredInUse(_  isRegistered: @escaping(Bool) -> ()) {
+    func startInBackground() {
         if CLLocationManager.locationServicesEnabled() {
-            switch CLLocationManager.authorizationStatus() {
-            case .authorizedWhenInUse:
-                isRegistered(true)
-            case .authorizedAlways:
-                isRegistered(true)
-            case .notDetermined:
-                authCondition = NSCondition()
-                self.locationManager.requestAlwaysAuthorization()
-                DispatchQueue.global().async {
-                    self.authCondition?.lock()
-                    self.authCondition?.wait()
-                    self.authCondition?.unlock()
-                    DispatchQueue.main.async {
-                        self.authCondition = nil
-                        isRegistered(CLLocationManager.authorizationStatus() == .authorizedAlways)
-                    }
-                }
-            default:
-                isRegistered(false)
+            if CLLocationManager.authorizationStatus() == .notDetermined {
+                manager.requestAlwaysAuthorization()
+            } else if CLLocationManager.authorizationStatus() == .restricted || CLLocationManager.authorizationStatus() == .denied {
+            } else if CLLocationManager.authorizationStatus() == .authorizedAlways {
+                manager.startUpdatingLocation()
+                manager.allowsBackgroundLocationUpdates = true
+                isPaused = false
             }
-        } else {
-            isRegistered(false)
         }
     }
     
-    func getCurrentLocation(_ location: @escaping(CLLocation?) -> ()) {
-        registeredInUse({ enable in
-            if enable {
-                self.currentLocation = nil
-                self.locationCondition = NSCondition()
-                self.locationManager.startUpdatingLocation()
-                DispatchQueue.global().async {
-                    self.locationCondition?.lock()
-                    self.locationCondition?.wait()
-                    self.locationCondition?.unlock()
-                    self.locationCondition = nil
-                    DispatchQueue.main.async {
-                        location(self.currentLocation)
-                    }
-                }
-            } else {
-                location(nil)
+    func stop() {
+        manager.stopUpdatingLocation()
+        isPaused = true
+    }
+
+    func getCurrentLocation(_ closure: @escaping((_ location: CLLocation) -> ())) {
+        
+        self.locationClosure = closure
+        
+        if CLLocationManager.locationServicesEnabled() {
+            if CLLocationManager.authorizationStatus() == .notDetermined {
+                manager.requestAlwaysAuthorization()
+            } else if CLLocationManager.authorizationStatus() == .restricted || CLLocationManager.authorizationStatus() == .denied {
+            } else if CLLocationManager.authorizationStatus() == .authorizedAlways {
+                manager.startUpdatingLocation()
             }
-        })
+        }
     }
     
+    //MARK: CLLocationManager Delegate methods
+    
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-        if status != .notDetermined {
-            self.authCondition?.lock()
-            self.authCondition?.signal()
-            self.authCondition?.unlock()
+        if status == .authorizedAlways || status == .authorizedWhenInUse {
+            manager.startUpdatingLocation()
+            if locationClosure == nil {
+                manager.allowsBackgroundLocationUpdates = true
+                isPaused = false
+            }
         }
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        if let location = locations.last, checkAccurancy(location) {
-            self.currentLocation = location
-            locationManager.stopUpdatingLocation()
-            if self.locationCondition != nil {
-                self.locationCondition?.lock()
-                self.locationCondition?.signal()
-                self.locationCondition?.unlock()
+        if let location = locations.last {
+            if self.locationClosure != nil {
+                self.locationClosure!(location)
+            } else {
+                if !isPaused {
+                    Model.shared.addCoordinate(location.coordinate, at:NSDate().timeIntervalSince1970)
+                }
             }
+            self.locationClosure = nil
         }
     }
-
 }
 

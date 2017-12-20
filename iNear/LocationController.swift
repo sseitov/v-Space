@@ -63,7 +63,8 @@ class LocationController: UIViewController {
     }
     
     @IBAction func refresh() {
-        SVProgressHUD.show()
+        SVProgressHUD.show(withStatus: "sendRequest".localized)
+        self.setupTitle("search".localized)
         PushManager.shared.pushCommand(friendUid!, command:"askLocaton", success: { result in
             SVProgressHUD.dismiss()
             if !result {

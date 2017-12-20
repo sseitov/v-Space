@@ -149,12 +149,8 @@ class PlaceInfoController: UITableViewController {
                 SVProgressHUD.show(withStatus: "Get location...")
                 LocationManager.shared.getCurrentLocation({ location in
                     SVProgressHUD.dismiss()
-                    if location != nil {
-                        self.myCoordinate = location!.coordinate
-                        self.performSegue(withIdentifier: "route", sender: nil)
-                    } else {
-                        self.showMessage(NSLocalizedString("Can not get current location.", comment: ""), messageType: .error)
-                    }
+                    self.myCoordinate = location.coordinate
+                    self.performSegue(withIdentifier: "route", sender: nil)
                 })
             }
         case 2:

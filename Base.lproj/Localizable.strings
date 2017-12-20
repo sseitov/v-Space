@@ -38,3 +38,4 @@
 "requestSent" = "Request was sent.";
 "requestError" = "Can not send request.";
 "search" = "Searching ...";
+"sendRequest" = "Send request...";

@@ -160,27 +160,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
             let body = alert["body"] as? String
         {
             LocationManager.shared.getCurrentLocation({location in
-                if location != nil {
-                    let ask = self.window?.topMostWindowController?.createQuestion(body,
-                                                                              acceptTitle: "Accept",
-                                                                              cancelTitle: "Reject",
-                                                                              acceptHandler:
-                        {
-                            if currentUid() != nil {
-                                let update = ["latitude" : location!.coordinate.latitude,
-                                              "longitude" : location!.coordinate.longitude,
-                                              "date" : Date().timeIntervalSince1970]
-                                let ref = Database.database().reference()
-                                ref.child("locations").child(currentUid()!).setValue(update)
-                                
-                                let update2 = [currentUid()!, requester]
-                                ref.child("friends").childByAutoId().setValue(update2)
-                            }
-                    })
-                    ask?.show()
-                } else {
-                    self.window?.topMostWindowController?.showMessage("You must enable location access for v-Space in device settings.", messageType: .error)
-                }
+                let ask = self.window?.topMostWindowController?.createQuestion(body,
+                                                                               acceptTitle: "Accept",
+                                                                               cancelTitle: "Reject",
+                                                                               acceptHandler:
+                    {
+                        if currentUid() != nil {
+                            let update = ["latitude" : location.coordinate.latitude,
+                                          "longitude" : location.coordinate.longitude,
+                                          "date" : Date().timeIntervalSince1970]
+                            let ref = Database.database().reference()
+                            ref.child("locations").child(currentUid()!).setValue(update)
+                            
+                            let update2 = [currentUid()!, requester]
+                            ref.child("friends").childByAutoId().setValue(update2)
+                        }
+                })
+                ask?.show()
             })
         }
     }
@@ -320,15 +316,15 @@ extension AppDelegate : WCSessionDelegate {
         if let command = message["command"] as? String {
             if command == "status" {
                 replyHandler(
-                    ["isRunning" : !Tracker.shared.isPaused,
+                    ["isRunning" : !LocationManager.shared.isPaused,
                      "distance" : Model.shared.lastTrackDistance(),
                      "speed" : Model.shared.lastTrackSpeed()])
             } else if command == "start" {
-                Tracker.shared.startInBackground()
-                replyHandler(["result": !Tracker.shared.isPaused])
+                LocationManager.shared.startInBackground()
+                replyHandler(["result": !LocationManager.shared.isPaused])
             } else if command == "stop" {
-                Tracker.shared.stop()
-                replyHandler(["result": !Tracker.shared.isPaused])
+                LocationManager.shared.stop()
+                replyHandler(["result": !LocationManager.shared.isPaused])
             }
         }
     }
@@ -378,18 +374,14 @@ extension AppDelegate : PKPushRegistryDelegate {
         {
             if message == "askLocaton" {
                 LocationManager.shared.getCurrentLocation({ location in
-                    if location != nil {
-                        if currentUid() != nil {
-                            let update = ["latitude" : location!.coordinate.latitude,
-                                          "longitude" : location!.coordinate.longitude,
-                                          "date" : Date().timeIntervalSince1970]
-                            let ref = Database.database().reference()
-                            ref.child("locations").child(currentUid()!).setValue(update, withCompletionBlock: { _, _ in
-                                complete()
-                            })
-                        } else {
+                    if currentUid() != nil {
+                        let update = ["latitude" : location.coordinate.latitude,
+                                      "longitude" : location.coordinate.longitude,
+                                      "date" : Date().timeIntervalSince1970]
+                        let ref = Database.database().reference()
+                        ref.child("locations").child(currentUid()!).setValue(update, withCompletionBlock: { _, _ in
                             complete()
-                        }
+                        })
                     } else {
                         complete()
                     }

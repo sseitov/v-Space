@@ -41,7 +41,7 @@ let syncNotification = Notification.Name("SYNCED")
     // MARK: - Reachability
     
     private func syncAvailable(_ status:NetworkStatus) -> Bool {
-        return status == ReachableViaWiFi
+        return status == ReachableViaWiFi || status == ReachableViaWWAN
     }
     
     @objc func reachabilityChanged(_ notify:Notification) {
@@ -50,7 +50,6 @@ let syncNotification = Notification.Name("SYNCED")
             if !syncAvailable(networkStatus) && syncAvailable(newStatus) {
                 networkStatus = newStatus
                 sync({ error in
-                    print(error!)
                     self.upload()
                 })
             } else {
@@ -171,11 +170,11 @@ let syncNotification = Notification.Name("SYNCED")
 
     func saveTrack(_ track:Track) {
         let photos = track.allPhotos()
-        if photos.count > 0 && syncAvailable(networkStatus) {
-            self.saveTrackPhotos(photos)
-        }
         
         if syncAvailable(networkStatus) {
+            if photos.count > 0 && syncAvailable(networkStatus) {
+                self.saveTrackPhotos(photos)
+            }
             let record = CKRecord(recordType: "Track")
             record.setValue(track.path!, forKey: "track")
             record.setValue(track.place!, forKey: "place")
@@ -192,6 +191,12 @@ let syncNotification = Notification.Name("SYNCED")
                     }
                 }
             })
+        } else {
+            track.synced = false
+            for photo in photos {
+                photo.synced = false
+            }
+            Model.shared.saveContext()
         }
     }
     
@@ -398,6 +403,7 @@ let syncNotification = Notification.Name("SYNCED")
         for track in Model.shared.unsyncedTracks() {
             saveTrack(track)
         }
+        saveTrackPhotos(Model.shared.unsyncedPhotos())
         for place in Model.shared.unsyncedPlaces() {
             savePlace(place, result: { error in
                 if error != nil {

@@ -171,44 +171,40 @@ class TrustListController: UITableViewController, GIDSignInDelegate, UserCellDel
         SVProgressHUD.show(withStatus: "Update location...")
         LocationManager.shared.getCurrentLocation({ location in
             SVProgressHUD.dismiss()
-            if location == nil {
-                self.showMessage("You must enable location access for v-Space in device settings.", messageType: .error)
-            } else {
-                let update = ["latitude" : location!.coordinate.latitude,
-                              "longitude" : location!.coordinate.longitude,
-                              "date" : Date().timeIntervalSince1970]
-                let ref = Database.database().reference()
-                ref.child("locations").child(currentUid()!).setValue(update)
-
-                let ask = TextInput.getEmail(cancelHandler: {}, acceptHandler: { email in
-                    self.findUser(email, result: { uid, token, error in
-                        if token != nil {
-                            PushManager.shared.pushInvite(token!, success: { result in
-                                if !result {
-                                    self.showMessage("Can not send invite.", messageType: .error)
-                                } else {
-                                    self.showMessage("inviteSent".localized, messageType: .information)
-                                }
-                            })
-                        } else {
-                            if error == .alreadyInList {
-                                self.showMessage("alreadyInList".localized, messageType: .information)
+            let update = ["latitude" : location.coordinate.latitude,
+                          "longitude" : location.coordinate.longitude,
+                          "date" : Date().timeIntervalSince1970]
+            let ref = Database.database().reference()
+            ref.child("locations").child(currentUid()!).setValue(update)
+            
+            let ask = TextInput.getEmail(cancelHandler: {}, acceptHandler: { email in
+                self.findUser(email, result: { uid, token, error in
+                    if token != nil {
+                        PushManager.shared.pushInvite(token!, success: { result in
+                            if !result {
+                                self.showMessage("Can not send invite.", messageType: .error)
                             } else {
-                                if self.inviteEnabled {
-                                    let ask = self.createQuestion("askNotRegistered".localized, acceptTitle: "Send", cancelTitle: "Cancel", acceptHandler:
-                                    {
-                                        self.sendInvite()
-                                    })
-                                    ask?.show()
-                                } else {
-                                    self.showMessage("notRegistered".localized, messageType: .error)
-                                }
+                                self.showMessage("inviteSent".localized, messageType: .information)
+                            }
+                        })
+                    } else {
+                        if error == .alreadyInList {
+                            self.showMessage("alreadyInList".localized, messageType: .information)
+                        } else {
+                            if self.inviteEnabled {
+                                let ask = self.createQuestion("askNotRegistered".localized, acceptTitle: "Send", cancelTitle: "Cancel", acceptHandler:
+                                {
+                                    self.sendInvite()
+                                })
+                                ask?.show()
+                            } else {
+                                self.showMessage("notRegistered".localized, messageType: .error)
                             }
                         }
-                    })
+                    }
                 })
-                ask?.show()
-            }
+            })
+            ask?.show()
         })
     }
     

@@ -355,4 +355,15 @@ class Model: NSObject {
             }
         })
     }
+    
+    func unsyncedPhotos() -> [Photo] {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Photo")
+        fetchRequest.predicate = NSPredicate(format: "synced == %@", NSNumber(booleanLiteral: false))
+        if let all = try? managedObjectContext.fetch(fetchRequest) as! [Photo] {
+            return all
+        } else {
+            return []
+        }
+    }
+
 }

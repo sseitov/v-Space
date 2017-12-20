@@ -190,21 +190,17 @@ class TrackListController: UITableViewController, LastTrackCellDelegate, PHPhoto
         SVProgressHUD.show(withStatus: "Get location...")
         LocationManager.shared.getCurrentLocation({ location in
             SVProgressHUD.dismiss()
-            if location != nil {
-                let center = location!.coordinate
-                let northEast = CLLocationCoordinate2D(latitude: center.latitude + 0.1, longitude: center.longitude + 0.1)
-                let southWest = CLLocationCoordinate2D(latitude: center.latitude - 0.1, longitude: center.longitude - 0.1)
-                let viewport = GMSCoordinateBounds(coordinate: northEast, coordinate: southWest)
-                let config = GMSPlacePickerConfig(viewport: viewport)
-                let placePicker = CustomGMSPlacePickerViewController(config: config)
-                placePicker.delegate = self
-                if IS_PAD() {
-                    self.present(placePicker, animated: true, completion: nil)
-                } else {
-                    self.navigationController?.pushViewController(placePicker, animated: true)
-                }
+            let center = location.coordinate
+            let northEast = CLLocationCoordinate2D(latitude: center.latitude + 0.1, longitude: center.longitude + 0.1)
+            let southWest = CLLocationCoordinate2D(latitude: center.latitude - 0.1, longitude: center.longitude - 0.1)
+            let viewport = GMSCoordinateBounds(coordinate: northEast, coordinate: southWest)
+            let config = GMSPlacePickerConfig(viewport: viewport)
+            let placePicker = CustomGMSPlacePickerViewController(config: config)
+            placePicker.delegate = self
+            if IS_PAD() {
+                self.present(placePicker, animated: true, completion: nil)
             } else {
-                self.showMessage(NSLocalizedString("Can not get current location.", comment: ""), messageType: .error)
+                self.navigationController?.pushViewController(placePicker, animated: true)
             }
         })
     }
