@@ -237,12 +237,14 @@ class CallController: UIViewController {
         Ringtone.shared.stop()
         rtcClient = ARDAppClient(delegate: self)
         let settings = ARDSettingsModel()
-        rtcClient?.connectToRoom(withId: callID!,
-                                 settings: settings,
-                                 isLoopback: false,
-                                 isAudioOnly: false,
-                                 shouldMakeAecDump: false,
-                                 shouldUseLevelControl: false)
+        DispatchQueue.main.async {
+            self.rtcClient?.connectToRoom(withId: self.callID!,
+                                          settings: settings,
+                                          isLoopback: false,
+                                          isAudioOnly: false,
+                                          shouldMakeAecDump: false,
+                                          shouldUseLevelControl: false)
+        }
     }
     
     func disconnect() {
@@ -341,6 +343,7 @@ extension CallController : ARDAppClientDelegate {
     }
     
     func appClient(_ client: ARDAppClient!, didReceiveRemoteAudioTracks remoteAudioTrack: RTCAudioTrack!) {
+        print("================== didReceiveRemoteAudioTracks \(Thread.current)")
         ARDAppClient.enableLoudspeaker(true)
         isLoud = ARDAppClient.isLoudSpeaker()
     }

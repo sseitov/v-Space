@@ -32,14 +32,13 @@ func ShowCall(userName:String?, userID:String?, callID:String?) {
     let call = UIStoryboard(name: "Call", bundle: nil)
     if let nav = call.instantiateViewController(withIdentifier: "Call") as? UINavigationController {
         nav.modalTransitionStyle = .flipHorizontal
-        if let top = MainApp().window?.topMostController {
+        if let top = MainApp().window?.rootViewController {
             if let callController = nav.topViewController as? CallController {
                 callController.userName = userName
                 callController.callID = callID
                 callController.userID = userID
             }
             top.present(nav, animated: true, completion: nil)
-
         }
     }
 }
@@ -380,15 +379,19 @@ extension AppDelegate : PKPushRegistryDelegate {
                     }
                 })
             } else if message == "hangup" {
-                if UIApplication.shared.applicationState == .active {
-                    NotificationCenter.default.post(name: hangUpCallNotification, object: nil)
-                } else {
-                    self.providerDelegate.closeIncomingCall()
+                DispatchQueue.main.async {
+                    if UIApplication.shared.applicationState == .active {
+                        NotificationCenter.default.post(name: hangUpCallNotification, object: nil)
+                    } else {
+                        self.providerDelegate.closeIncomingCall()
+                    }
                 }
                 complete()
             } else if message == "accept" {
-                if UIApplication.shared.applicationState == .active {
-                    NotificationCenter.default.post(name: acceptCallNotification, object: nil)
+                DispatchQueue.main.async {
+                    if UIApplication.shared.applicationState == .active {
+                        NotificationCenter.default.post(name: acceptCallNotification, object: nil)
+                    }
                 }
                 complete()
             } else {
@@ -398,33 +401,35 @@ extension AppDelegate : PKPushRegistryDelegate {
                         let userID = requestData["userID"] as? String,
                         let callID = requestData["callID"] as? String
                     {
-                        if UIApplication.shared.applicationState == .active {
-                            MainApp().window?.topMostController?.yesNoQuestion("\(userName) call you.", acceptLabel: "Accept", cancelLabel: "Reject", acceptHandler:
-                                {
-                                    SVProgressHUD.show()
-                                    PushManager.shared.pushCommand(userID, command:"accept", success: { result in
-                                        SVProgressHUD.dismiss()
-                                        if !result {
-                                            MainApp().window?.topMostController?.showMessage("requestError".localized, messageType: .error)
-                                        } else {
-                                            ShowCall(userName: userName, userID: userID, callID: callID)
+                        DispatchQueue.main.async {
+                            if UIApplication.shared.applicationState == .active {
+                                MainApp().window?.topMostController?.yesNoQuestion("\(userName) call you.", acceptLabel: "Accept", cancelLabel: "Reject", acceptHandler:
+                                    {
+                                        SVProgressHUD.show()
+                                        PushManager.shared.pushCommand(userID, command:"accept", success: { result in
+                                            SVProgressHUD.dismiss()
+                                            if !result {
+                                                MainApp().window?.topMostController?.showMessage("requestError".localized, messageType: .error)
+                                            } else {
+                                                ShowCall(userName: userName, userID: userID, callID: callID)
+                                            }
+                                        })
+                                        
+                                }, cancelHandler: {
+                                    PushManager.shared.pushCommand(userID, command: "hangup", success: { _ in })
+                                })
+                                complete()
+                            } else {
+                                self.providerDelegate.reportIncomingCall(callID: callID,
+                                                                         userName: userName,
+                                                                         userID: userID, completion:
+                                    { error in
+                                        if error != nil {
+                                            print(error!.localizedDescription)
                                         }
-                                    })
-                                    
-                            }, cancelHandler: {
-                                PushManager.shared.pushCommand(userID, command: "hangup", success: { _ in })
-                            })
-                            complete()
-                        } else {
-                            self.providerDelegate.reportIncomingCall(callID: callID,
-                                                                     userName: userName,
-                                                                     userID: userID, completion:
-                                { error in
-                                    if error != nil {
-                                        print(error!.localizedDescription)
-                                    }
-                                    complete()
-                            })
+                                        complete()
+                                })
+                            }
                         }
                     } else {
                         complete()
