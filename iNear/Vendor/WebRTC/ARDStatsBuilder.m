@@ -171,16 +171,16 @@
   [statsReport.values enumerateKeysAndObjectsUsingBlock:^(
       NSString *key, NSString *value, BOOL *stop) {
     if ([key isEqualToString:@"googAvailableSendBandwidth"]) {
-      _availableSendBw =
+        self->_availableSendBw =
           [ARDBitrateTracker bitrateStringForBitrate:value.doubleValue];
     } else if ([key isEqualToString:@"googAvailableReceiveBandwidth"]) {
-      _availableRecvBw =
+        self->_availableRecvBw =
           [ARDBitrateTracker bitrateStringForBitrate:value.doubleValue];
     } else if ([key isEqualToString:@"googActualEncBitrate"]) {
-      _actualEncBitrate =
+        self->_actualEncBitrate =
           [ARDBitrateTracker bitrateStringForBitrate:value.doubleValue];
     } else if ([key isEqualToString:@"googTargetEncBitrate"]) {
-      _targetEncBitrate =
+        self->_targetEncBitrate =
           [ARDBitrateTracker bitrateStringForBitrate:value.doubleValue];
     }
   }];
@@ -194,21 +194,21 @@
   [statsReport.values enumerateKeysAndObjectsUsingBlock:^(
       NSString *key, NSString *value, BOOL *stop) {
     if ([key isEqualToString:@"googRtt"]) {
-      _connRtt = value;
+        self->_connRtt = value;
     } else if ([key isEqualToString:@"googLocalCandidateType"]) {
-      _localCandType = value;
+        self->_localCandType = value;
     } else if ([key isEqualToString:@"googRemoteCandidateType"]) {
-      _remoteCandType = value;
+        self->_remoteCandType = value;
     } else if ([key isEqualToString:@"googTransportType"]) {
-      _transportType = value;
+        self->_transportType = value;
     } else if ([key isEqualToString:@"bytesReceived"]) {
       NSInteger byteCount = value.integerValue;
-      [_connRecvBitrateTracker updateBitrateWithCurrentByteCount:byteCount];
-      _connRecvBitrate = _connRecvBitrateTracker.bitrateString;
+        [self->_connRecvBitrateTracker updateBitrateWithCurrentByteCount:byteCount];
+        self->_connRecvBitrate = self->_connRecvBitrateTracker.bitrateString;
     } else if ([key isEqualToString:@"bytesSent"]) {
       NSInteger byteCount = value.integerValue;
-      [_connSendBitrateTracker updateBitrateWithCurrentByteCount:byteCount];
-      _connSendBitrate = _connSendBitrateTracker.bitrateString;
+        [self->_connSendBitrateTracker updateBitrateWithCurrentByteCount:byteCount];
+        self->_connSendBitrate = self->_connSendBitrateTracker.bitrateString;
     }
   }];
 }
@@ -228,11 +228,11 @@
   [statsReport.values enumerateKeysAndObjectsUsingBlock:^(
       NSString *key, NSString *value, BOOL *stop) {
     if ([key isEqualToString:@"googCodecName"]) {
-      _audioSendCodec = value;
+        self->_audioSendCodec = value;
     } else if ([key isEqualToString:@"bytesSent"]) {
       NSInteger byteCount = value.integerValue;
-      [_audioSendBitrateTracker updateBitrateWithCurrentByteCount:byteCount];
-      _audioSendBitrate = _audioSendBitrateTracker.bitrateString;
+        [self->_audioSendBitrateTracker updateBitrateWithCurrentByteCount:byteCount];
+        self->_audioSendBitrate = self->_audioSendBitrateTracker.bitrateString;
     }
   }];
 }
@@ -241,31 +241,31 @@
   [statsReport.values enumerateKeysAndObjectsUsingBlock:^(
       NSString *key, NSString *value, BOOL *stop) {
     if ([key isEqualToString:@"googCodecName"]) {
-      _videoSendCodec = value;
+        self->_videoSendCodec = value;
     } else if ([key isEqualToString:@"googFrameHeightInput"]) {
-      _videoInputHeight = value;
+        self->_videoInputHeight = value;
     } else if ([key isEqualToString:@"googFrameWidthInput"]) {
-      _videoInputWidth = value;
+        self->_videoInputWidth = value;
     } else if ([key isEqualToString:@"googFrameRateInput"]) {
-      _videoInputFps = value;
+        self->_videoInputFps = value;
     } else if ([key isEqualToString:@"googFrameHeightSent"]) {
-      _videoSendHeight = value;
+        self->_videoSendHeight = value;
     } else if ([key isEqualToString:@"googFrameWidthSent"]) {
-      _videoSendWidth = value;
+        self->_videoSendWidth = value;
     } else if ([key isEqualToString:@"googFrameRateSent"]) {
-      _videoSendFps = value;
+        self->_videoSendFps = value;
     } else if ([key isEqualToString:@"googAvgEncodeMs"]) {
-      _videoEncodeMs = value;
+        self->_videoEncodeMs = value;
     } else if ([key isEqualToString:@"bytesSent"]) {
       NSInteger byteCount = value.integerValue;
-      [_videoSendBitrateTracker updateBitrateWithCurrentByteCount:byteCount];
-      _videoSendBitrate = _videoSendBitrateTracker.bitrateString;
+        [self->_videoSendBitrateTracker updateBitrateWithCurrentByteCount:byteCount];
+        self->_videoSendBitrate = self->_videoSendBitrateTracker.bitrateString;
     } else if ([key isEqualToString:@"qpSum"]) {
-      _oldVideoQPSum = _videoQPSum;
-      _videoQPSum = value.intValue;
+        self->_oldVideoQPSum = self->_videoQPSum;
+        self->_videoQPSum = value.intValue;
     } else if ([key isEqualToString:@"framesEncoded"]) {
-      _oldFramesEncoded = _framesEncoded;
-      _framesEncoded = value.intValue;
+        self->_oldFramesEncoded = self->_framesEncoded;
+        self->_framesEncoded = value.intValue;
     }
   }];
 }
@@ -285,15 +285,15 @@
   [statsReport.values enumerateKeysAndObjectsUsingBlock:^(
       NSString *key, NSString *value, BOOL *stop) {
     if ([key isEqualToString:@"googCodecName"]) {
-      _audioRecvCodec = value;
+        self->_audioRecvCodec = value;
     } else if ([key isEqualToString:@"bytesReceived"]) {
       NSInteger byteCount = value.integerValue;
-      [_audioRecvBitrateTracker updateBitrateWithCurrentByteCount:byteCount];
-      _audioRecvBitrate = _audioRecvBitrateTracker.bitrateString;
+        [self->_audioRecvBitrateTracker updateBitrateWithCurrentByteCount:byteCount];
+        self->_audioRecvBitrate = self->_audioRecvBitrateTracker.bitrateString;
     } else if ([key isEqualToString:@"googSpeechExpandRate"]) {
-      _audioExpandRate = value;
+        self->_audioExpandRate = value;
     } else if ([key isEqualToString:@"googCurrentDelayMs"]) {
-      _audioCurrentDelay = value;
+        self->_audioCurrentDelay = value;
     }
   }];
 }
@@ -302,21 +302,21 @@
   [statsReport.values enumerateKeysAndObjectsUsingBlock:^(
       NSString *key, NSString *value, BOOL *stop) {
     if ([key isEqualToString:@"googFrameHeightReceived"]) {
-      _videoRecvHeight = value;
+        self->_videoRecvHeight = value;
     } else if ([key isEqualToString:@"googFrameWidthReceived"]) {
-      _videoRecvWidth = value;
+        self->_videoRecvWidth = value;
     } else if ([key isEqualToString:@"googFrameRateReceived"]) {
-      _videoRecvFps = value;
+        self->_videoRecvFps = value;
     } else if ([key isEqualToString:@"googFrameRateDecoded"]) {
-      _videoDecodedFps = value;
+        self->_videoDecodedFps = value;
     } else if ([key isEqualToString:@"googFrameRateOutput"]) {
-      _videoOutputFps = value;
+        self->_videoOutputFps = value;
     } else if ([key isEqualToString:@"googDecodeMs"]) {
-      _videoDecodeMs = value;
+        self->_videoDecodeMs = value;
     } else if ([key isEqualToString:@"bytesReceived"]) {
       NSInteger byteCount = value.integerValue;
-      [_videoRecvBitrateTracker updateBitrateWithCurrentByteCount:byteCount];
-      _videoRecvBitrate = _videoRecvBitrateTracker.bitrateString;
+        [self->_videoRecvBitrateTracker updateBitrateWithCurrentByteCount:byteCount];
+        self->_videoRecvBitrate = self->_videoRecvBitrateTracker.bitrateString;
     }
   }];
 }

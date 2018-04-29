@@ -549,17 +549,17 @@ static dispatch_semaphore_t show_animation_semaphore;
             // 1. Expand progress view, hide progress related views
             [UIView animateWithDuration:transitionDuration1
                              animations:^{
-                                 _progressContainerViewHeight.priority = UILayoutPriorityDefaultHigh + 1;
-                                 _progressContainerViewHeight.constant = _containerView.bounds.size.height;
-                                 _progressContainerViewWidth.constant = _containerView.bounds.size.width;
-                                 _progressContainerViewCenterY.priority = UILayoutPriorityDefaultLow - 1;
+                                 self->_progressContainerViewHeight.priority = UILayoutPriorityDefaultHigh + 1;
+                                 self->_progressContainerViewHeight.constant = self->_containerView.bounds.size.height;
+                                 self->_progressContainerViewWidth.constant = self->_containerView.bounds.size.width;
+                                 self->_progressContainerViewCenterY.priority = UILayoutPriorityDefaultLow - 1;
                                  
-                                 _progressView.alpha = _progressLabel.alpha = 0;
+                                 self->_progressView.alpha = self->_progressLabel.alpha = 0;
                                  
                                  [self layoutIfNeeded];
                              } completion:^(BOOL finished) {
-                                 [_progressView removeFromSuperview];
-                                 [_progressLabel removeFromSuperview];
+                                 [self->_progressView removeFromSuperview];
+                                 [self->_progressLabel removeFromSuperview];
                              }];
             
             // 2. Show completion view
@@ -567,15 +567,15 @@ static dispatch_semaphore_t show_animation_semaphore;
                                            delay:transitionDelay2
                                          options:0
                                       animations:^{
-                                          _completionContainerView.alpha = 1;
+                                          self->_completionContainerView.alpha = 1;
                                       } completion:nil];
             
             // 3. Transition to completion image
-            [UIView transitionWithView:_circularProgressBGImageView
+            [UIView transitionWithView:self->_circularProgressBGImageView
                               duration:transitionDuration2 + transitionDelay2
                                options:UIViewAnimationOptionTransitionCrossDissolve
                             animations:^{
-                                _circularProgressBGImageView.image = _completionImage;
+                                self->_circularProgressBGImageView.image = self->_completionImage;
                             }
                             completion:^(BOOL finished) {
                                 dispatch_semaphore_signal(show_animation_semaphore);
