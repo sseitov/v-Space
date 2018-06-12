@@ -1,5 +1,5 @@
 //
-//  LocationManager.swift
+//  TrackManager.swift
 //  v-Space
 //
 //  Created by Sergey Seitov on 01.08.17.
@@ -17,13 +17,12 @@ fileprivate func checkAccurancy(_ location:CLLocation) -> Bool {
     }
 }
 
-class LocationManager: NSObject, CLLocationManagerDelegate {
+class TrackManager: NSObject, CLLocationManagerDelegate {
     
-    static let shared = LocationManager()
+    static let shared = TrackManager()
     
     let manager: CLLocationManager
-    var isPaused:Bool = true
-    var locationClosure: ((_ location: CLLocation) -> ())?
+    var isRunning:Bool = false
     
     private override init() {
         self.manager = CLLocationManager()
@@ -43,21 +42,57 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
             } else if CLLocationManager.authorizationStatus() == .authorizedAlways {
                 manager.startUpdatingLocation()
                 manager.allowsBackgroundLocationUpdates = true
-                isPaused = false
+                isRunning = true
             }
         }
     }
     
     func stop() {
+        isRunning = false
         manager.stopUpdatingLocation()
-        isPaused = true
     }
+    
+    //MARK: CLLocationManager Delegate methods
+    
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        if status == .authorizedAlways {
+            manager.startUpdatingLocation()
+            manager.allowsBackgroundLocationUpdates = true
+            isRunning = true
+        }
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        if let location = locations.last {
+            if isRunning && checkAccurancy(location) {
+                Model.shared.addCoordinate(location.coordinate, at:NSDate().timeIntervalSince1970)
+            }
+        }
+    }
+}
 
+class LocationManager: NSObject, CLLocationManagerDelegate {
+    
+    static let shared = LocationManager()
+    
+    let manager: CLLocationManager
+    var locationClosure: ((_ location: CLLocation) -> ())?
+
+    private override init() {
+        self.manager = CLLocationManager()
+        super.init()
+        self.manager.delegate = self
+        self.manager.desiredAccuracy = kCLLocationAccuracyBest
+        self.manager.distanceFilter = 10.0
+        self.manager.headingFilter = 5.0
+        self.manager.pausesLocationUpdatesAutomatically = false
+    }
+    
     func getCurrentLocation(_ closure: @escaping((_ location: CLLocation) -> ())) {
         
         self.locationClosure = closure
-        
         if CLLocationManager.locationServicesEnabled() {
+            
             if CLLocationManager.authorizationStatus() == .notDetermined {
                 manager.requestAlwaysAuthorization()
             } else if CLLocationManager.authorizationStatus() == .restricted || CLLocationManager.authorizationStatus() == .denied {
@@ -71,27 +106,18 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
     //MARK: CLLocationManager Delegate methods
     
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-        if status == .authorizedAlways || status == .authorizedWhenInUse {
+        if status == .authorizedAlways {
             manager.startUpdatingLocation()
             manager.allowsBackgroundLocationUpdates = true
-            if locationClosure == nil {
-                isPaused = false
-            }
         }
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        if let location = locations.last {
-            if self.locationClosure != nil {
-                self.locationClosure!(location)
-                self.locationClosure = nil
-                self.manager.stopUpdatingLocation()
-            } else {
-                if !isPaused && checkAccurancy(location) {
-                    Model.shared.addCoordinate(location.coordinate, at:NSDate().timeIntervalSince1970)
-                }
-            }
+        if let location = locations.last, let closure = self.locationClosure {
+            closure(location)
+            self.locationClosure = nil
+            self.manager.stopUpdatingLocation()
         }
     }
-}
 
+}

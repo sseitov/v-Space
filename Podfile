@@ -16,9 +16,6 @@ target 'v-Space' do
     pod 'Firebase/Messaging'
     pod 'Firebase/Invites'
     
-    pod 'AWSCognito'
-    pod 'AWSSNS'
-    
     pod 'AFNetworking'
 
     pod 'GoogleMaps'

@@ -9,7 +9,6 @@
 import UIKit
 import AFNetworking
 import Firebase
-import AWSSNS
 
 class PushManager: NSObject {
     static let shared = PushManager()
@@ -48,50 +47,6 @@ class PushManager: NSObject {
     }
     
     func pushCommand(_ uid:String, command:String, success: @escaping(Bool) -> ()) {
-        AuthModel.shared.userEndpoint(uid, endpoint: { point in
-            if point != nil {
-                let message = AWSSNSPublishInput()
-                message?.targetArn = point!
-                message?.message = command
-                AWSSNS.default().publish(message!).continueOnSuccessWith(executor: AWSExecutor.mainThread(), block: { task in
-                    if task.error != nil {
-                        print(task.error!.localizedDescription)
-                    }
-                    success(true)
-                    return nil
-                })
-            } else {
-                success(false)
-            }
-        })
-    }
-    
-    func callRequest(_ callID:String, toID:String, success: @escaping(Bool) -> ()) {
-        AuthModel.shared.userEndpoint(toID, endpoint: { point in
-            if point != nil {
-                let message = AWSSNSPublishInput()
-                message?.targetArn = point!
-                let name = Auth.auth().currentUser!.displayName != nil ? Auth.auth().currentUser!.displayName! : "anonymous"
-                let request = ["callID" : callID, "userID" : Auth.auth().currentUser!.uid, "userName" : name]
-                if let data = try? JSONSerialization.data(withJSONObject: request, options: []) {
-                    message?.message = String(data: data, encoding:.utf8)
-                    AWSSNS.default().publish(message!).continueWith(block: { task in
-                        DispatchQueue.main.async {
-                            if task.error != nil {
-                                print(task.error!.localizedDescription)
-                                success(false)
-                            } else {
-                                success(true)
-                            }
-                        }
-                        return nil
-                    })
-                } else {
-                    success(false)
-                }
-            } else {
-                success(false)
-            }
-        })
+        print("PUSH COMMAND")
     }
 }

@@ -30,7 +30,7 @@ struct FriendPair {
     }
 }
 
-class TrustListController: UITableViewController, GIDSignInDelegate, UserCellDelegate {
+class TrustListController: UITableViewController, GIDSignInDelegate {
     
     private var friendPairs:[FriendPair] = []
     private var inviteEnabled = false
@@ -120,7 +120,6 @@ class TrustListController: UITableViewController, GIDSignInDelegate, UserCellDel
         let cell = tableView.dequeueReusableCell(withIdentifier: "user", for: indexPath) as! UserCell
         let friend = friendPairs[indexPath.row]
         cell.uid = friend.friend()
-        cell.delegate = self
         return cell
     }
 
@@ -274,21 +273,6 @@ class TrustListController: UITableViewController, GIDSignInDelegate, UserCellDel
                 next.friendImage = cell.userImage.image
             }
         }
-    }
-    
-    func userDidCall(_ uid:String, data:[String:Any]) {
-        if let name = data["displayName"] as? String {
-            dismiss(animated: false, completion: {
-                ShowCall(userName: name, userID: uid, callID: nil)
-            })
-        }
-/*
-        PushManager.shared.callRequest("TEST CALL", from: uid, userData: data, success: { isSuccess in
-            if !isSuccess {
-                self.showMessage(LOCALIZE("requestError"), messageType: .error)
-            }
-        })
- */
     }
 
 }

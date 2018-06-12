@@ -21,7 +21,7 @@
 		2C362BDB1EB495C500749C46 /* Place+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C362BD91EB495C500749C46 /* Place+CoreDataProperties.swift */; };
 		2C362BE01EB4999300749C46 /* Place+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C362BD81EB495C500749C46 /* Place+CoreDataClass.swift */; };
 		2C362BE11EB4999300749C46 /* Place+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C362BD91EB495C500749C46 /* Place+CoreDataProperties.swift */; };
-		2C3684431F307C6C00A5AD4E /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C3684421F307C6C00A5AD4E /* LocationManager.swift */; };
+		2C3684431F307C6C00A5AD4E /* TrackManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C3684421F307C6C00A5AD4E /* TrackManager.swift */; };
 		2C3ED20F1EB1F0E300463199 /* PlaceInfoController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C3ED20E1EB1F0E300463199 /* PlaceInfoController.swift */; };
 		2C3ED2111EB1FB2900463199 /* WebController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C3ED2101EB1FB2900463199 /* WebController.swift */; };
 		2C3ED2131EB2046200463199 /* RouteController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C3ED2121EB2046200463199 /* RouteController.swift */; };
@@ -54,55 +54,8 @@
 		2C91E0741EACBB680067286B /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C91E0731EACBB680067286B /* CloudKit.framework */; };
 		2C9423B31DFC6708003C4075 /* UIImageExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C9423B21DFC6708003C4075 /* UIImageExtensions.swift */; };
 		2CB634FE1FBD94AE005ABE27 /* PushKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2CB634FD1FBD94AE005ABE27 /* PushKit.framework */; };
-		2CB635001FBE0108005ABE27 /* Call.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2CB634FF1FBE0108005ABE27 /* Call.storyboard */; };
-		2CB635021FBE0172005ABE27 /* CallController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB635011FBE0172005ABE27 /* CallController.swift */; };
-		2CB6351C1FBE146D005ABE27 /* ring_frame_5.gif in Resources */ = {isa = PBXBuildFile; fileRef = 2CB635041FBE146B005ABE27 /* ring_frame_5.gif */; };
-		2CB6351D1FBE146D005ABE27 /* ring_frame_7.gif in Resources */ = {isa = PBXBuildFile; fileRef = 2CB635051FBE146B005ABE27 /* ring_frame_7.gif */; };
-		2CB6351E1FBE146D005ABE27 /* ring_frame_3.gif in Resources */ = {isa = PBXBuildFile; fileRef = 2CB635061FBE146B005ABE27 /* ring_frame_3.gif */; };
-		2CB6351F1FBE146D005ABE27 /* ring_frame_6.gif in Resources */ = {isa = PBXBuildFile; fileRef = 2CB635071FBE146B005ABE27 /* ring_frame_6.gif */; };
-		2CB635201FBE146D005ABE27 /* ring_frame_0.gif in Resources */ = {isa = PBXBuildFile; fileRef = 2CB635081FBE146B005ABE27 /* ring_frame_0.gif */; };
-		2CB635211FBE146D005ABE27 /* ring_frame_9.gif in Resources */ = {isa = PBXBuildFile; fileRef = 2CB635091FBE146B005ABE27 /* ring_frame_9.gif */; };
-		2CB635221FBE146D005ABE27 /* ring_frame_1.gif in Resources */ = {isa = PBXBuildFile; fileRef = 2CB6350A1FBE146B005ABE27 /* ring_frame_1.gif */; };
-		2CB635231FBE146D005ABE27 /* ring_frame_15.gif in Resources */ = {isa = PBXBuildFile; fileRef = 2CB6350B1FBE146B005ABE27 /* ring_frame_15.gif */; };
-		2CB635241FBE146D005ABE27 /* ring_frame_19.gif in Resources */ = {isa = PBXBuildFile; fileRef = 2CB6350C1FBE146B005ABE27 /* ring_frame_19.gif */; };
-		2CB635251FBE146D005ABE27 /* ring_frame_18.gif in Resources */ = {isa = PBXBuildFile; fileRef = 2CB6350D1FBE146B005ABE27 /* ring_frame_18.gif */; };
-		2CB635261FBE146D005ABE27 /* ring_frame_8.gif in Resources */ = {isa = PBXBuildFile; fileRef = 2CB6350E1FBE146C005ABE27 /* ring_frame_8.gif */; };
-		2CB635271FBE146D005ABE27 /* ring_frame_22.gif in Resources */ = {isa = PBXBuildFile; fileRef = 2CB6350F1FBE146C005ABE27 /* ring_frame_22.gif */; };
-		2CB635281FBE146D005ABE27 /* ring_frame_16.gif in Resources */ = {isa = PBXBuildFile; fileRef = 2CB635101FBE146C005ABE27 /* ring_frame_16.gif */; };
-		2CB635291FBE146D005ABE27 /* ring_frame_20.gif in Resources */ = {isa = PBXBuildFile; fileRef = 2CB635111FBE146C005ABE27 /* ring_frame_20.gif */; };
-		2CB6352A1FBE146D005ABE27 /* ring_frame_23.gif in Resources */ = {isa = PBXBuildFile; fileRef = 2CB635121FBE146C005ABE27 /* ring_frame_23.gif */; };
-		2CB6352B1FBE146D005ABE27 /* ring_frame_17.gif in Resources */ = {isa = PBXBuildFile; fileRef = 2CB635131FBE146C005ABE27 /* ring_frame_17.gif */; };
-		2CB6352C1FBE146D005ABE27 /* ring_frame_14.gif in Resources */ = {isa = PBXBuildFile; fileRef = 2CB635141FBE146C005ABE27 /* ring_frame_14.gif */; };
-		2CB6352D1FBE146D005ABE27 /* ring_frame_11.gif in Resources */ = {isa = PBXBuildFile; fileRef = 2CB635151FBE146C005ABE27 /* ring_frame_11.gif */; };
-		2CB6352E1FBE146D005ABE27 /* ring_frame_12.gif in Resources */ = {isa = PBXBuildFile; fileRef = 2CB635161FBE146C005ABE27 /* ring_frame_12.gif */; };
-		2CB6352F1FBE146D005ABE27 /* ring_frame_21.gif in Resources */ = {isa = PBXBuildFile; fileRef = 2CB635171FBE146C005ABE27 /* ring_frame_21.gif */; };
-		2CB635301FBE146D005ABE27 /* ring_frame_2.gif in Resources */ = {isa = PBXBuildFile; fileRef = 2CB635181FBE146C005ABE27 /* ring_frame_2.gif */; };
-		2CB635311FBE146D005ABE27 /* ring_frame_4.gif in Resources */ = {isa = PBXBuildFile; fileRef = 2CB635191FBE146C005ABE27 /* ring_frame_4.gif */; };
-		2CB635321FBE146D005ABE27 /* ring_frame_10.gif in Resources */ = {isa = PBXBuildFile; fileRef = 2CB6351A1FBE146C005ABE27 /* ring_frame_10.gif */; };
-		2CB635331FBE146D005ABE27 /* ring_frame_13.gif in Resources */ = {isa = PBXBuildFile; fileRef = 2CB6351B1FBE146D005ABE27 /* ring_frame_13.gif */; };
-		2CB635381FBE1F39005ABE27 /* SRWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CB635371FBE1F39005ABE27 /* SRWebSocket.m */; };
-		2CB635641FBE1F5B005ABE27 /* RTCMediaConstraints+JSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CB6353D1FBE1F57005ABE27 /* RTCMediaConstraints+JSON.m */; };
-		2CB635651FBE1F5B005ABE27 /* ARDWebSocketChannel.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CB635401FBE1F57005ABE27 /* ARDWebSocketChannel.m */; };
-		2CB635661FBE1F5B005ABE27 /* ARDAppClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CB635421FBE1F58005ABE27 /* ARDAppClient.m */; };
-		2CB635671FBE1F5B005ABE27 /* ARDUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CB635461FBE1F58005ABE27 /* ARDUtilities.m */; };
-		2CB635681FBE1F5B005ABE27 /* ARDTURNClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CB635471FBE1F58005ABE27 /* ARDTURNClient.m */; };
-		2CB635691FBE1F5B005ABE27 /* RTCIceServer+JSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CB635481FBE1F58005ABE27 /* RTCIceServer+JSON.m */; };
-		2CB6356A1FBE1F5B005ABE27 /* RTCIceCandidate+JSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CB635491FBE1F58005ABE27 /* RTCIceCandidate+JSON.m */; };
-		2CB6356B1FBE1F5B005ABE27 /* ARDBitrateTracker.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CB6354A1FBE1F58005ABE27 /* ARDBitrateTracker.m */; };
-		2CB6356C1FBE1F5B005ABE27 /* ARDStatsBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CB635531FBE1F59005ABE27 /* ARDStatsBuilder.m */; };
-		2CB6356D1FBE1F5B005ABE27 /* ARDSettingsModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CB635541FBE1F59005ABE27 /* ARDSettingsModel.m */; };
-		2CB6356E1FBE1F5B005ABE27 /* ARDSignalingMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CB635571FBE1F5A005ABE27 /* ARDSignalingMessage.m */; };
-		2CB6356F1FBE1F5B005ABE27 /* ARDCaptureController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CB6355A1FBE1F5A005ABE27 /* ARDCaptureController.m */; };
-		2CB635701FBE1F5B005ABE27 /* ARDMessageResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CB6355B1FBE1F5A005ABE27 /* ARDMessageResponse.m */; };
-		2CB635711FBE1F5B005ABE27 /* ARDJoinResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CB6355C1FBE1F5A005ABE27 /* ARDJoinResponse.m */; };
-		2CB635721FBE1F5B005ABE27 /* ARDSDPUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CB6355D1FBE1F5A005ABE27 /* ARDSDPUtils.m */; };
-		2CB635731FBE1F5B005ABE27 /* ARDAppEngineClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CB6355E1FBE1F5A005ABE27 /* ARDAppEngineClient.m */; };
-		2CB635741FBE1F5B005ABE27 /* RTCSessionDescription+JSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CB6355F1FBE1F5B005ABE27 /* RTCSessionDescription+JSON.m */; };
-		2CB635751FBE1F5B005ABE27 /* ARDSettingsStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CB635621FBE1F5B005ABE27 /* ARDSettingsStore.m */; };
 		2CB635771FBE20E9005ABE27 /* librtc_sdk_objc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2CB635761FBE20E9005ABE27 /* librtc_sdk_objc.a */; };
 		2CB635791FBE20F3005ABE27 /* VideoToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2CB635781FBE20F2005ABE27 /* VideoToolbox.framework */; };
-		2CB6357D1FBE26F5005ABE27 /* calling.wav in Resources */ = {isa = PBXBuildFile; fileRef = 2CB6357B1FBE26F5005ABE27 /* calling.wav */; };
-		2CB6357E1FBE26F5005ABE27 /* busy.wav in Resources */ = {isa = PBXBuildFile; fileRef = 2CB6357C1FBE26F5005ABE27 /* busy.wav */; };
 		2CB65ED31DFD5CA7002A9D29 /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2CB65ED11DFD5CA7002A9D29 /* Interface.storyboard */; };
 		2CB65ED51DFD5CA7002A9D29 /* Watch-Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2CB65ED41DFD5CA7002A9D29 /* Watch-Assets.xcassets */; };
 		2CB65EDC1DFD5CA8002A9D29 /* Watch Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 2CB65EDB1DFD5CA8002A9D29 /* Watch Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -110,10 +63,6 @@
 		2CB65EE31DFD5CA8002A9D29 /* ExtensionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB65EE21DFD5CA8002A9D29 /* ExtensionDelegate.swift */; };
 		2CB65EE51DFD5CA8002A9D29 /* Extensions-Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2CB65EE41DFD5CA8002A9D29 /* Extensions-Assets.xcassets */; };
 		2CB65EE91DFD5CA8002A9D29 /* Watch.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 2CB65ECF1DFD5CA7002A9D29 /* Watch.app */; };
-		2CBAE3651FBF467100620A48 /* CallManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CBAE3631FBF467100620A48 /* CallManager.swift */; };
-		2CBAE3661FBF467100620A48 /* Call.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CBAE3641FBF467100620A48 /* Call.swift */; };
-		2CBAE3681FBF471400620A48 /* ProviderDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CBAE3671FBF471400620A48 /* ProviderDelegate.swift */; };
-		2CBAE36E1FBF7C7F00620A48 /* Ringtone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CBAE36D1FBF7C7F00620A48 /* Ringtone.swift */; };
 		2CBC8DF31F9C8FFF00C918FD /* PushManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CBC8DF21F9C8FFF00C918FD /* PushManager.swift */; };
 		2CBC8DF51F9D040500C918FD /* UserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CBC8DF41F9D040500C918FD /* UserCell.swift */; };
 		2CBE20151E8D5EEB002EF13C /* NotificationCenter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2CBE20131E8D5EBB002EF13C /* NotificationCenter.framework */; };
@@ -229,7 +178,7 @@
 		2C362BD71EB4947000749C46 /* LocationModel 5.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "LocationModel 5.xcdatamodel"; sourceTree = "<group>"; };
 		2C362BD81EB495C500749C46 /* Place+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Place+CoreDataClass.swift"; path = "Model/Place+CoreDataClass.swift"; sourceTree = "<group>"; };
 		2C362BD91EB495C500749C46 /* Place+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Place+CoreDataProperties.swift"; path = "Model/Place+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		2C3684421F307C6C00A5AD4E /* LocationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
+		2C3684421F307C6C00A5AD4E /* TrackManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackManager.swift; sourceTree = "<group>"; };
 		2C3ED20E1EB1F0E300463199 /* PlaceInfoController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaceInfoController.swift; sourceTree = "<group>"; };
 		2C3ED2101EB1FB2900463199 /* WebController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebController.swift; sourceTree = "<group>"; };
 		2C3ED2121EB2046200463199 /* RouteController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RouteController.swift; sourceTree = "<group>"; };
@@ -270,81 +219,8 @@
 		2C91E0751EACCA0D0067286B /* LocationModel 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "LocationModel 3.xcdatamodel"; sourceTree = "<group>"; };
 		2C9423B21DFC6708003C4075 /* UIImageExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIImageExtensions.swift; path = Extensions/UIImageExtensions.swift; sourceTree = "<group>"; };
 		2CB634FD1FBD94AE005ABE27 /* PushKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PushKit.framework; path = System/Library/Frameworks/PushKit.framework; sourceTree = SDKROOT; };
-		2CB634FF1FBE0108005ABE27 /* Call.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Call.storyboard; sourceTree = "<group>"; };
-		2CB635011FBE0172005ABE27 /* CallController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallController.swift; sourceTree = "<group>"; };
-		2CB635041FBE146B005ABE27 /* ring_frame_5.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = ring_frame_5.gif; path = iNear/ring/ring_frame_5.gif; sourceTree = "<group>"; };
-		2CB635051FBE146B005ABE27 /* ring_frame_7.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = ring_frame_7.gif; path = iNear/ring/ring_frame_7.gif; sourceTree = "<group>"; };
-		2CB635061FBE146B005ABE27 /* ring_frame_3.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = ring_frame_3.gif; path = iNear/ring/ring_frame_3.gif; sourceTree = "<group>"; };
-		2CB635071FBE146B005ABE27 /* ring_frame_6.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = ring_frame_6.gif; path = iNear/ring/ring_frame_6.gif; sourceTree = "<group>"; };
-		2CB635081FBE146B005ABE27 /* ring_frame_0.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = ring_frame_0.gif; path = iNear/ring/ring_frame_0.gif; sourceTree = "<group>"; };
-		2CB635091FBE146B005ABE27 /* ring_frame_9.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = ring_frame_9.gif; path = iNear/ring/ring_frame_9.gif; sourceTree = "<group>"; };
-		2CB6350A1FBE146B005ABE27 /* ring_frame_1.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = ring_frame_1.gif; path = iNear/ring/ring_frame_1.gif; sourceTree = "<group>"; };
-		2CB6350B1FBE146B005ABE27 /* ring_frame_15.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = ring_frame_15.gif; path = iNear/ring/ring_frame_15.gif; sourceTree = "<group>"; };
-		2CB6350C1FBE146B005ABE27 /* ring_frame_19.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = ring_frame_19.gif; path = iNear/ring/ring_frame_19.gif; sourceTree = "<group>"; };
-		2CB6350D1FBE146B005ABE27 /* ring_frame_18.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = ring_frame_18.gif; path = iNear/ring/ring_frame_18.gif; sourceTree = "<group>"; };
-		2CB6350E1FBE146C005ABE27 /* ring_frame_8.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = ring_frame_8.gif; path = iNear/ring/ring_frame_8.gif; sourceTree = "<group>"; };
-		2CB6350F1FBE146C005ABE27 /* ring_frame_22.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = ring_frame_22.gif; path = iNear/ring/ring_frame_22.gif; sourceTree = "<group>"; };
-		2CB635101FBE146C005ABE27 /* ring_frame_16.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = ring_frame_16.gif; path = iNear/ring/ring_frame_16.gif; sourceTree = "<group>"; };
-		2CB635111FBE146C005ABE27 /* ring_frame_20.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = ring_frame_20.gif; path = iNear/ring/ring_frame_20.gif; sourceTree = "<group>"; };
-		2CB635121FBE146C005ABE27 /* ring_frame_23.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = ring_frame_23.gif; path = iNear/ring/ring_frame_23.gif; sourceTree = "<group>"; };
-		2CB635131FBE146C005ABE27 /* ring_frame_17.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = ring_frame_17.gif; path = iNear/ring/ring_frame_17.gif; sourceTree = "<group>"; };
-		2CB635141FBE146C005ABE27 /* ring_frame_14.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = ring_frame_14.gif; path = iNear/ring/ring_frame_14.gif; sourceTree = "<group>"; };
-		2CB635151FBE146C005ABE27 /* ring_frame_11.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = ring_frame_11.gif; path = iNear/ring/ring_frame_11.gif; sourceTree = "<group>"; };
-		2CB635161FBE146C005ABE27 /* ring_frame_12.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = ring_frame_12.gif; path = iNear/ring/ring_frame_12.gif; sourceTree = "<group>"; };
-		2CB635171FBE146C005ABE27 /* ring_frame_21.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = ring_frame_21.gif; path = iNear/ring/ring_frame_21.gif; sourceTree = "<group>"; };
-		2CB635181FBE146C005ABE27 /* ring_frame_2.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = ring_frame_2.gif; path = iNear/ring/ring_frame_2.gif; sourceTree = "<group>"; };
-		2CB635191FBE146C005ABE27 /* ring_frame_4.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = ring_frame_4.gif; path = iNear/ring/ring_frame_4.gif; sourceTree = "<group>"; };
-		2CB6351A1FBE146C005ABE27 /* ring_frame_10.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = ring_frame_10.gif; path = iNear/ring/ring_frame_10.gif; sourceTree = "<group>"; };
-		2CB6351B1FBE146D005ABE27 /* ring_frame_13.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = ring_frame_13.gif; path = iNear/ring/ring_frame_13.gif; sourceTree = "<group>"; };
-		2CB635361FBE1F39005ABE27 /* SRWebSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SRWebSocket.h; path = iNear/Vendor/SocketRocket/SRWebSocket.h; sourceTree = "<group>"; };
-		2CB635371FBE1F39005ABE27 /* SRWebSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SRWebSocket.m; path = iNear/Vendor/SocketRocket/SRWebSocket.m; sourceTree = "<group>"; };
-		2CB635391FBE1F57005ABE27 /* ARDAppEngineClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ARDAppEngineClient.h; path = iNear/Vendor/WebRTC/ARDAppEngineClient.h; sourceTree = "<group>"; };
-		2CB6353A1FBE1F57005ABE27 /* ARDAppClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ARDAppClient.h; path = iNear/Vendor/WebRTC/ARDAppClient.h; sourceTree = "<group>"; };
-		2CB6353B1FBE1F57005ABE27 /* ARDAppClient+Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "ARDAppClient+Internal.h"; path = "iNear/Vendor/WebRTC/ARDAppClient+Internal.h"; sourceTree = "<group>"; };
-		2CB6353C1FBE1F57005ABE27 /* RTCMediaConstraints+JSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RTCMediaConstraints+JSON.h"; path = "iNear/Vendor/WebRTC/RTCMediaConstraints+JSON.h"; sourceTree = "<group>"; };
-		2CB6353D1FBE1F57005ABE27 /* RTCMediaConstraints+JSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RTCMediaConstraints+JSON.m"; path = "iNear/Vendor/WebRTC/RTCMediaConstraints+JSON.m"; sourceTree = "<group>"; };
-		2CB6353E1FBE1F57005ABE27 /* ARDJoinResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ARDJoinResponse.h; path = iNear/Vendor/WebRTC/ARDJoinResponse.h; sourceTree = "<group>"; };
-		2CB6353F1FBE1F57005ABE27 /* RTCSessionDescription+JSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RTCSessionDescription+JSON.h"; path = "iNear/Vendor/WebRTC/RTCSessionDescription+JSON.h"; sourceTree = "<group>"; };
-		2CB635401FBE1F57005ABE27 /* ARDWebSocketChannel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ARDWebSocketChannel.m; path = iNear/Vendor/WebRTC/ARDWebSocketChannel.m; sourceTree = "<group>"; };
-		2CB635411FBE1F58005ABE27 /* ARDCaptureController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ARDCaptureController.h; path = iNear/Vendor/WebRTC/ARDCaptureController.h; sourceTree = "<group>"; };
-		2CB635421FBE1F58005ABE27 /* ARDAppClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ARDAppClient.m; path = iNear/Vendor/WebRTC/ARDAppClient.m; sourceTree = "<group>"; };
-		2CB635431FBE1F58005ABE27 /* ARDRoomServerClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ARDRoomServerClient.h; path = iNear/Vendor/WebRTC/ARDRoomServerClient.h; sourceTree = "<group>"; };
-		2CB635441FBE1F58005ABE27 /* ARDStatsBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ARDStatsBuilder.h; path = iNear/Vendor/WebRTC/ARDStatsBuilder.h; sourceTree = "<group>"; };
-		2CB635451FBE1F58005ABE27 /* ARDUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ARDUtilities.h; path = iNear/Vendor/WebRTC/ARDUtilities.h; sourceTree = "<group>"; };
-		2CB635461FBE1F58005ABE27 /* ARDUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ARDUtilities.m; path = iNear/Vendor/WebRTC/ARDUtilities.m; sourceTree = "<group>"; };
-		2CB635471FBE1F58005ABE27 /* ARDTURNClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ARDTURNClient.m; path = iNear/Vendor/WebRTC/ARDTURNClient.m; sourceTree = "<group>"; };
-		2CB635481FBE1F58005ABE27 /* RTCIceServer+JSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RTCIceServer+JSON.m"; path = "iNear/Vendor/WebRTC/RTCIceServer+JSON.m"; sourceTree = "<group>"; };
-		2CB635491FBE1F58005ABE27 /* RTCIceCandidate+JSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RTCIceCandidate+JSON.m"; path = "iNear/Vendor/WebRTC/RTCIceCandidate+JSON.m"; sourceTree = "<group>"; };
-		2CB6354A1FBE1F58005ABE27 /* ARDBitrateTracker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ARDBitrateTracker.m; path = iNear/Vendor/WebRTC/ARDBitrateTracker.m; sourceTree = "<group>"; };
-		2CB6354B1FBE1F58005ABE27 /* ARDSignalingMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ARDSignalingMessage.h; path = iNear/Vendor/WebRTC/ARDSignalingMessage.h; sourceTree = "<group>"; };
-		2CB6354C1FBE1F58005ABE27 /* ARDWebSocketChannel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ARDWebSocketChannel.h; path = iNear/Vendor/WebRTC/ARDWebSocketChannel.h; sourceTree = "<group>"; };
-		2CB6354D1FBE1F59005ABE27 /* ARDSettingsModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ARDSettingsModel.h; path = iNear/Vendor/WebRTC/ARDSettingsModel.h; sourceTree = "<group>"; };
-		2CB6354E1FBE1F59005ABE27 /* ARDSettingsModel+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "ARDSettingsModel+Private.h"; path = "iNear/Vendor/WebRTC/ARDSettingsModel+Private.h"; sourceTree = "<group>"; };
-		2CB6354F1FBE1F59005ABE27 /* ARDTURNClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ARDTURNClient.h; path = iNear/Vendor/WebRTC/ARDTURNClient.h; sourceTree = "<group>"; };
-		2CB635501FBE1F59005ABE27 /* RTCIceServer+JSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RTCIceServer+JSON.h"; path = "iNear/Vendor/WebRTC/RTCIceServer+JSON.h"; sourceTree = "<group>"; };
-		2CB635511FBE1F59005ABE27 /* ARDTURNClient+Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "ARDTURNClient+Internal.h"; path = "iNear/Vendor/WebRTC/ARDTURNClient+Internal.h"; sourceTree = "<group>"; };
-		2CB635521FBE1F59005ABE27 /* ARDMessageResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ARDMessageResponse.h; path = iNear/Vendor/WebRTC/ARDMessageResponse.h; sourceTree = "<group>"; };
-		2CB635531FBE1F59005ABE27 /* ARDStatsBuilder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ARDStatsBuilder.m; path = iNear/Vendor/WebRTC/ARDStatsBuilder.m; sourceTree = "<group>"; };
-		2CB635541FBE1F59005ABE27 /* ARDSettingsModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ARDSettingsModel.m; path = iNear/Vendor/WebRTC/ARDSettingsModel.m; sourceTree = "<group>"; };
-		2CB635551FBE1F59005ABE27 /* ARDBitrateTracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ARDBitrateTracker.h; path = iNear/Vendor/WebRTC/ARDBitrateTracker.h; sourceTree = "<group>"; };
-		2CB635561FBE1F5A005ABE27 /* ARDSettingsStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ARDSettingsStore.h; path = iNear/Vendor/WebRTC/ARDSettingsStore.h; sourceTree = "<group>"; };
-		2CB635571FBE1F5A005ABE27 /* ARDSignalingMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ARDSignalingMessage.m; path = iNear/Vendor/WebRTC/ARDSignalingMessage.m; sourceTree = "<group>"; };
-		2CB635581FBE1F5A005ABE27 /* ARDMessageResponse+Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "ARDMessageResponse+Internal.h"; path = "iNear/Vendor/WebRTC/ARDMessageResponse+Internal.h"; sourceTree = "<group>"; };
-		2CB635591FBE1F5A005ABE27 /* RTCIceCandidate+JSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RTCIceCandidate+JSON.h"; path = "iNear/Vendor/WebRTC/RTCIceCandidate+JSON.h"; sourceTree = "<group>"; };
-		2CB6355A1FBE1F5A005ABE27 /* ARDCaptureController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ARDCaptureController.m; path = iNear/Vendor/WebRTC/ARDCaptureController.m; sourceTree = "<group>"; };
-		2CB6355B1FBE1F5A005ABE27 /* ARDMessageResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ARDMessageResponse.m; path = iNear/Vendor/WebRTC/ARDMessageResponse.m; sourceTree = "<group>"; };
-		2CB6355C1FBE1F5A005ABE27 /* ARDJoinResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ARDJoinResponse.m; path = iNear/Vendor/WebRTC/ARDJoinResponse.m; sourceTree = "<group>"; };
-		2CB6355D1FBE1F5A005ABE27 /* ARDSDPUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ARDSDPUtils.m; path = iNear/Vendor/WebRTC/ARDSDPUtils.m; sourceTree = "<group>"; };
-		2CB6355E1FBE1F5A005ABE27 /* ARDAppEngineClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ARDAppEngineClient.m; path = iNear/Vendor/WebRTC/ARDAppEngineClient.m; sourceTree = "<group>"; };
-		2CB6355F1FBE1F5B005ABE27 /* RTCSessionDescription+JSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RTCSessionDescription+JSON.m"; path = "iNear/Vendor/WebRTC/RTCSessionDescription+JSON.m"; sourceTree = "<group>"; };
-		2CB635601FBE1F5B005ABE27 /* ARDJoinResponse+Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "ARDJoinResponse+Internal.h"; path = "iNear/Vendor/WebRTC/ARDJoinResponse+Internal.h"; sourceTree = "<group>"; };
-		2CB635611FBE1F5B005ABE27 /* ARDSDPUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ARDSDPUtils.h; path = iNear/Vendor/WebRTC/ARDSDPUtils.h; sourceTree = "<group>"; };
-		2CB635621FBE1F5B005ABE27 /* ARDSettingsStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ARDSettingsStore.m; path = iNear/Vendor/WebRTC/ARDSettingsStore.m; sourceTree = "<group>"; };
-		2CB635631FBE1F5B005ABE27 /* ARDSignalingChannel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ARDSignalingChannel.h; path = iNear/Vendor/WebRTC/ARDSignalingChannel.h; sourceTree = "<group>"; };
 		2CB635761FBE20E9005ABE27 /* librtc_sdk_objc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = librtc_sdk_objc.a; sourceTree = "<group>"; };
 		2CB635781FBE20F2005ABE27 /* VideoToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VideoToolbox.framework; path = System/Library/Frameworks/VideoToolbox.framework; sourceTree = SDKROOT; };
-		2CB6357B1FBE26F5005ABE27 /* calling.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = calling.wav; path = iNear/sounds/calling.wav; sourceTree = "<group>"; };
-		2CB6357C1FBE26F5005ABE27 /* busy.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = busy.wav; path = iNear/sounds/busy.wav; sourceTree = "<group>"; };
 		2CB65ECF1DFD5CA7002A9D29 /* Watch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Watch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2CB65ED21DFD5CA7002A9D29 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Interface.storyboard; sourceTree = "<group>"; };
 		2CB65ED41DFD5CA7002A9D29 /* Watch-Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Watch-Assets.xcassets"; sourceTree = "<group>"; };
@@ -356,10 +232,6 @@
 		2CB65EE61DFD5CA8002A9D29 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2CB65EF21DFD714E002A9D29 /* Watch.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Watch.entitlements; sourceTree = "<group>"; };
 		2CB65EF31DFD715C002A9D29 /* Watch Extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Watch Extension.entitlements"; sourceTree = "<group>"; };
-		2CBAE3631FBF467100620A48 /* CallManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CallManager.swift; path = iNear/Vendor/CallManager/CallManager.swift; sourceTree = "<group>"; };
-		2CBAE3641FBF467100620A48 /* Call.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Call.swift; path = iNear/Vendor/CallManager/Call.swift; sourceTree = "<group>"; };
-		2CBAE3671FBF471400620A48 /* ProviderDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderDelegate.swift; sourceTree = "<group>"; };
-		2CBAE36D1FBF7C7F00620A48 /* Ringtone.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Ringtone.swift; sourceTree = "<group>"; };
 		2CBC8DF21F9C8FFF00C918FD /* PushManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushManager.swift; sourceTree = "<group>"; };
 		2CBC8DF41F9D040500C918FD /* UserCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCell.swift; sourceTree = "<group>"; };
 		2CBE20131E8D5EBB002EF13C /* NotificationCenter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NotificationCenter.framework; path = System/Library/Frameworks/NotificationCenter.framework; sourceTree = SDKROOT; };
@@ -452,8 +324,6 @@
 				2C00AA9D1F8A53ED003524DC /* TrustListController.swift */,
 				2CBC8DF41F9D040500C918FD /* UserCell.swift */,
 				2C6E7D7B1F9DDE2D004B4D68 /* LocationController.swift */,
-				2CB635011FBE0172005ABE27 /* CallController.swift */,
-				2CBAE36D1FBF7C7F00620A48 /* Ringtone.swift */,
 			);
 			name = "Trust List";
 			sourceTree = "<group>";
@@ -493,12 +363,11 @@
 				2CE15FBE1EB466A60085915E /* Track */,
 				2CE15FC01EB46CAA0085915E /* Place */,
 				2C33C7061F30C4650031241F /* Sync */,
-				2C3684421F307C6C00A5AD4E /* LocationManager.swift */,
+				2C3684421F307C6C00A5AD4E /* TrackManager.swift */,
 				2CE268C11E672F7C00FE8219 /* Model.swift */,
 				2C51F7321F8CD693008A0678 /* AuthModel.swift */,
 				2CBC8DF21F9C8FFF00C918FD /* PushManager.swift */,
 				2C17475B1DDB872A0018AEAB /* AppDelegate.swift */,
-				2CBAE3671FBF471400620A48 /* ProviderDelegate.swift */,
 				2C3F368C1E6C132900021B10 /* Credentials.swift */,
 				2C17476F1DDB93660018AEAB /* Resources */,
 			);
@@ -509,13 +378,10 @@
 		2C17476F1DDB93660018AEAB /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				2CB634FF1FBE0108005ABE27 /* Call.storyboard */,
 				2C1747611DDB872A0018AEAB /* Main.storyboard */,
 				2C1747641DDB872A0018AEAB /* Assets.xcassets */,
 				2C1747661DDB872A0018AEAB /* LaunchScreen.storyboard */,
 				2C1747691DDB872A0018AEAB /* Info.plist */,
-				2CB6357A1FBE26D1005ABE27 /* sounds */,
-				2CB635031FBE1447005ABE27 /* ring */,
 				2C00AA9A1F8A5140003524DC /* GoogleService-Info.plist */,
 				2C91E06D1EAC88370067286B /* Localizable.strings */,
 				2C87D3131DDEE1E500F05528 /* iNear.entitlements */,
@@ -564,9 +430,6 @@
 		2C87D3211DDF1A2100F05528 /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
-				2CBAE3621FBF464200620A48 /* CallManager */,
-				2CB635351FBE1F14005ABE27 /* SocketRocket */,
-				2CB635341FBE1F01005ABE27 /* WebRTC */,
 				2C87D3221DDF1A3300F05528 /* LGAlertSheet */,
 			);
 			name = Vendor;
@@ -606,105 +469,6 @@
 			name = Model;
 			sourceTree = "<group>";
 		};
-		2CB635031FBE1447005ABE27 /* ring */ = {
-			isa = PBXGroup;
-			children = (
-				2CB635081FBE146B005ABE27 /* ring_frame_0.gif */,
-				2CB6350A1FBE146B005ABE27 /* ring_frame_1.gif */,
-				2CB635181FBE146C005ABE27 /* ring_frame_2.gif */,
-				2CB635061FBE146B005ABE27 /* ring_frame_3.gif */,
-				2CB635191FBE146C005ABE27 /* ring_frame_4.gif */,
-				2CB635041FBE146B005ABE27 /* ring_frame_5.gif */,
-				2CB635071FBE146B005ABE27 /* ring_frame_6.gif */,
-				2CB635051FBE146B005ABE27 /* ring_frame_7.gif */,
-				2CB6350E1FBE146C005ABE27 /* ring_frame_8.gif */,
-				2CB635091FBE146B005ABE27 /* ring_frame_9.gif */,
-				2CB6351A1FBE146C005ABE27 /* ring_frame_10.gif */,
-				2CB635151FBE146C005ABE27 /* ring_frame_11.gif */,
-				2CB635161FBE146C005ABE27 /* ring_frame_12.gif */,
-				2CB6351B1FBE146D005ABE27 /* ring_frame_13.gif */,
-				2CB635141FBE146C005ABE27 /* ring_frame_14.gif */,
-				2CB6350B1FBE146B005ABE27 /* ring_frame_15.gif */,
-				2CB635101FBE146C005ABE27 /* ring_frame_16.gif */,
-				2CB635131FBE146C005ABE27 /* ring_frame_17.gif */,
-				2CB6350D1FBE146B005ABE27 /* ring_frame_18.gif */,
-				2CB6350C1FBE146B005ABE27 /* ring_frame_19.gif */,
-				2CB635111FBE146C005ABE27 /* ring_frame_20.gif */,
-				2CB635171FBE146C005ABE27 /* ring_frame_21.gif */,
-				2CB6350F1FBE146C005ABE27 /* ring_frame_22.gif */,
-				2CB635121FBE146C005ABE27 /* ring_frame_23.gif */,
-			);
-			name = ring;
-			sourceTree = "<group>";
-		};
-		2CB635341FBE1F01005ABE27 /* WebRTC */ = {
-			isa = PBXGroup;
-			children = (
-				2CB6353A1FBE1F57005ABE27 /* ARDAppClient.h */,
-				2CB635421FBE1F58005ABE27 /* ARDAppClient.m */,
-				2CB6353B1FBE1F57005ABE27 /* ARDAppClient+Internal.h */,
-				2CB635391FBE1F57005ABE27 /* ARDAppEngineClient.h */,
-				2CB6355E1FBE1F5A005ABE27 /* ARDAppEngineClient.m */,
-				2CB635551FBE1F59005ABE27 /* ARDBitrateTracker.h */,
-				2CB6354A1FBE1F58005ABE27 /* ARDBitrateTracker.m */,
-				2CB635411FBE1F58005ABE27 /* ARDCaptureController.h */,
-				2CB6355A1FBE1F5A005ABE27 /* ARDCaptureController.m */,
-				2CB6353E1FBE1F57005ABE27 /* ARDJoinResponse.h */,
-				2CB6355C1FBE1F5A005ABE27 /* ARDJoinResponse.m */,
-				2CB635601FBE1F5B005ABE27 /* ARDJoinResponse+Internal.h */,
-				2CB635521FBE1F59005ABE27 /* ARDMessageResponse.h */,
-				2CB6355B1FBE1F5A005ABE27 /* ARDMessageResponse.m */,
-				2CB635581FBE1F5A005ABE27 /* ARDMessageResponse+Internal.h */,
-				2CB635431FBE1F58005ABE27 /* ARDRoomServerClient.h */,
-				2CB635611FBE1F5B005ABE27 /* ARDSDPUtils.h */,
-				2CB6355D1FBE1F5A005ABE27 /* ARDSDPUtils.m */,
-				2CB6354D1FBE1F59005ABE27 /* ARDSettingsModel.h */,
-				2CB635541FBE1F59005ABE27 /* ARDSettingsModel.m */,
-				2CB6354E1FBE1F59005ABE27 /* ARDSettingsModel+Private.h */,
-				2CB635561FBE1F5A005ABE27 /* ARDSettingsStore.h */,
-				2CB635621FBE1F5B005ABE27 /* ARDSettingsStore.m */,
-				2CB635631FBE1F5B005ABE27 /* ARDSignalingChannel.h */,
-				2CB6354B1FBE1F58005ABE27 /* ARDSignalingMessage.h */,
-				2CB635571FBE1F5A005ABE27 /* ARDSignalingMessage.m */,
-				2CB635441FBE1F58005ABE27 /* ARDStatsBuilder.h */,
-				2CB635531FBE1F59005ABE27 /* ARDStatsBuilder.m */,
-				2CB6354F1FBE1F59005ABE27 /* ARDTURNClient.h */,
-				2CB635471FBE1F58005ABE27 /* ARDTURNClient.m */,
-				2CB635511FBE1F59005ABE27 /* ARDTURNClient+Internal.h */,
-				2CB635451FBE1F58005ABE27 /* ARDUtilities.h */,
-				2CB635461FBE1F58005ABE27 /* ARDUtilities.m */,
-				2CB6354C1FBE1F58005ABE27 /* ARDWebSocketChannel.h */,
-				2CB635401FBE1F57005ABE27 /* ARDWebSocketChannel.m */,
-				2CB635591FBE1F5A005ABE27 /* RTCIceCandidate+JSON.h */,
-				2CB635491FBE1F58005ABE27 /* RTCIceCandidate+JSON.m */,
-				2CB635501FBE1F59005ABE27 /* RTCIceServer+JSON.h */,
-				2CB635481FBE1F58005ABE27 /* RTCIceServer+JSON.m */,
-				2CB6353C1FBE1F57005ABE27 /* RTCMediaConstraints+JSON.h */,
-				2CB6353D1FBE1F57005ABE27 /* RTCMediaConstraints+JSON.m */,
-				2CB6353F1FBE1F57005ABE27 /* RTCSessionDescription+JSON.h */,
-				2CB6355F1FBE1F5B005ABE27 /* RTCSessionDescription+JSON.m */,
-			);
-			name = WebRTC;
-			sourceTree = "<group>";
-		};
-		2CB635351FBE1F14005ABE27 /* SocketRocket */ = {
-			isa = PBXGroup;
-			children = (
-				2CB635361FBE1F39005ABE27 /* SRWebSocket.h */,
-				2CB635371FBE1F39005ABE27 /* SRWebSocket.m */,
-			);
-			name = SocketRocket;
-			sourceTree = "<group>";
-		};
-		2CB6357A1FBE26D1005ABE27 /* sounds */ = {
-			isa = PBXGroup;
-			children = (
-				2CB6357C1FBE26F5005ABE27 /* busy.wav */,
-				2CB6357B1FBE26F5005ABE27 /* calling.wav */,
-			);
-			name = sounds;
-			sourceTree = "<group>";
-		};
 		2CB65ED01DFD5CA7002A9D29 /* Watch */ = {
 			isa = PBXGroup;
 			children = (
@@ -728,15 +492,6 @@
 			);
 			path = "Watch Extension";
 			sourceTree = SOURCE_ROOT;
-		};
-		2CBAE3621FBF464200620A48 /* CallManager */ = {
-			isa = PBXGroup;
-			children = (
-				2CBAE3641FBF467100620A48 /* Call.swift */,
-				2CBAE3631FBF467100620A48 /* CallManager.swift */,
-			);
-			name = CallManager;
-			sourceTree = "<group>";
 		};
 		2CE15FBE1EB466A60085915E /* Track */ = {
 			isa = PBXGroup;
@@ -964,43 +719,16 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2CB6351E1FBE146D005ABE27 /* ring_frame_3.gif in Resources */,
-				2CB635231FBE146D005ABE27 /* ring_frame_15.gif in Resources */,
-				2CB635251FBE146D005ABE27 /* ring_frame_18.gif in Resources */,
-				2CB635281FBE146D005ABE27 /* ring_frame_16.gif in Resources */,
-				2CB6351F1FBE146D005ABE27 /* ring_frame_6.gif in Resources */,
-				2CB6357D1FBE26F5005ABE27 /* calling.wav in Resources */,
 				2C87D3311DDF1A5C00F05528 /* LGDecoratedAlertView.xib in Resources */,
-				2CB635001FBE0108005ABE27 /* Call.storyboard in Resources */,
-				2CB6352C1FBE146D005ABE27 /* ring_frame_14.gif in Resources */,
 				2C1747681DDB872A0018AEAB /* LaunchScreen.storyboard in Resources */,
 				2C91E06B1EAC88370067286B /* Localizable.strings in Resources */,
-				2CB635221FBE146D005ABE27 /* ring_frame_1.gif in Resources */,
 				2CE268AF1E67096A00FE8219 /* Assets.xcassets in Resources */,
-				2CB635211FBE146D005ABE27 /* ring_frame_9.gif in Resources */,
 				2CBE20301E8DA170002EF13C /* TextInput.xib in Resources */,
-				2CB6352D1FBE146D005ABE27 /* ring_frame_11.gif in Resources */,
-				2CB635291FBE146D005ABE27 /* ring_frame_20.gif in Resources */,
-				2CB635331FBE146D005ABE27 /* ring_frame_13.gif in Resources */,
-				2CB6351D1FBE146D005ABE27 /* ring_frame_7.gif in Resources */,
-				2CB635301FBE146D005ABE27 /* ring_frame_2.gif in Resources */,
-				2CB6352E1FBE146D005ABE27 /* ring_frame_12.gif in Resources */,
-				2CB6357E1FBE26F5005ABE27 /* busy.wav in Resources */,
-				2CB6352A1FBE146D005ABE27 /* ring_frame_23.gif in Resources */,
-				2CB6352B1FBE146D005ABE27 /* ring_frame_17.gif in Resources */,
-				2CB635201FBE146D005ABE27 /* ring_frame_0.gif in Resources */,
-				2CB6351C1FBE146D005ABE27 /* ring_frame_5.gif in Resources */,
 				2C00AA9B1F8A5140003524DC /* GoogleService-Info.plist in Resources */,
 				2CC50C361DECC8D900D27456 /* ActionSheet.xib in Resources */,
 				2C87D3321DDF1A5C00F05528 /* LGProgressAlertView.xib in Resources */,
-				2CB635311FBE146D005ABE27 /* ring_frame_4.gif in Resources */,
-				2CB6352F1FBE146D005ABE27 /* ring_frame_21.gif in Resources */,
 				2C87D3301DDF1A5C00F05528 /* LGAlertView.xib in Resources */,
-				2CB635241FBE146D005ABE27 /* ring_frame_19.gif in Resources */,
 				2C87D3351DDF1A5C00F05528 /* LGVAlertView.xib in Resources */,
-				2CB635321FBE146D005ABE27 /* ring_frame_10.gif in Resources */,
-				2CB635271FBE146D005ABE27 /* ring_frame_22.gif in Resources */,
-				2CB635261FBE146D005ABE27 /* ring_frame_8.gif in Resources */,
 				2C87D3341DDF1A5C00F05528 /* LGTextFieldAlertView.xib in Resources */,
 				2C1747631DDB872A0018AEAB /* Main.storyboard in Resources */,
 			);
@@ -1043,9 +771,6 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-v-Space/Pods-v-Space-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/AFNetworking/AFNetworking.framework",
-				"${BUILT_PRODUCTS_DIR}/AWSCognito/AWSCognito.framework",
-				"${BUILT_PRODUCTS_DIR}/AWSCore/AWSCore.framework",
-				"${BUILT_PRODUCTS_DIR}/AWSSNS/AWSSNS.framework",
 				"${BUILT_PRODUCTS_DIR}/Bolts/Bolts.framework",
 				"${BUILT_PRODUCTS_DIR}/FBSDKCoreKit/FBSDKCoreKit.framework",
 				"${BUILT_PRODUCTS_DIR}/FBSDKLoginKit/FBSDKLoginKit.framework",
@@ -1064,9 +789,6 @@
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AFNetworking.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AWSCognito.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AWSCore.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AWSSNS.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Bolts.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKCoreKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKLoginKit.framework",
@@ -1142,61 +864,37 @@
 			files = (
 				2C85AA111E01FE350050D9D8 /* UIFontExtensions.swift in Sources */,
 				2CBE20171E8D6151002EF13C /* LastTrackCell.swift in Sources */,
-				2CB635671FBE1F5B005ABE27 /* ARDUtilities.m in Sources */,
 				2C3ED2111EB1FB2900463199 /* WebController.swift in Sources */,
 				2C9423B31DFC6708003C4075 /* UIImageExtensions.swift in Sources */,
-				2CB635641FBE1F5B005ABE27 /* RTCMediaConstraints+JSON.m in Sources */,
-				2CB6356D1FBE1F5B005ABE27 /* ARDSettingsModel.m in Sources */,
 				2C33C70D1F310C790031241F /* PhotoCollectionController.swift in Sources */,
-				2CBAE3681FBF471400620A48 /* ProviderDelegate.swift in Sources */,
 				2C79D4A41E92DE9F00EF4954 /* PhotoController.swift in Sources */,
-				2CB635651FBE1F5B005ABE27 /* ARDWebSocketChannel.m in Sources */,
-				2CB635721FBE1F5B005ABE27 /* ARDSDPUtils.m in Sources */,
 				2C87D31C1DDEF3C200F05528 /* UIColorExtensions.swift in Sources */,
 				2C3ED2131EB2046200463199 /* RouteController.swift in Sources */,
-				2CB6356A1FBE1F5B005ABE27 /* RTCIceCandidate+JSON.m in Sources */,
-				2CBAE36E1FBF7C7F00620A48 /* Ringtone.swift in Sources */,
 				2C87D31E1DDEF3F000F05528 /* UIViewExtensions.swift in Sources */,
 				2C79D49F1E92C5CA00EF4954 /* Photo+CoreDataClass.swift in Sources */,
-				2CB635731FBE1F5B005ABE27 /* ARDAppEngineClient.m in Sources */,
-				2CB635701FBE1F5B005ABE27 /* ARDMessageResponse.m in Sources */,
 				2CDFA7FE1E6ACC13007D9FF0 /* MKMapRectExtension.swift in Sources */,
-				2CBAE3651FBF467100620A48 /* CallManager.swift in Sources */,
 				2CBC8DF31F9C8FFF00C918FD /* PushManager.swift in Sources */,
-				2CB635681FBE1F5B005ABE27 /* ARDTURNClient.m in Sources */,
-				2CB635691FBE1F5B005ABE27 /* RTCIceServer+JSON.m in Sources */,
 				2C87D3361DDF1A5C00F05528 /* NSPointerArray+AbstractionHelpers.m in Sources */,
 				2CE268BC1E6716BE00FE8219 /* Location+CoreDataClass.swift in Sources */,
-				2CB635661FBE1F5B005ABE27 /* ARDAppClient.m in Sources */,
-				2CB6356E1FBE1F5B005ABE27 /* ARDSignalingMessage.m in Sources */,
 				2C2B3FBC1E3BB6AD003FE095 /* TrackController.swift in Sources */,
 				2C87D31A1DDEF37900F05528 /* TextFieldContainer.swift in Sources */,
 				2CE268BE1E6716BE00FE8219 /* Location+CoreDataProperties.swift in Sources */,
 				2C00AA991F8A494F003524DC /* StringExtension.swift in Sources */,
 				2C87D3201DDF026300F05528 /* UIViewControllerExtensions.swift in Sources */,
 				2C6E7D7C1F9DDE2D004B4D68 /* LocationController.swift in Sources */,
-				2CB635381FBE1F39005ABE27 /* SRWebSocket.m in Sources */,
 				2C362BDB1EB495C500749C46 /* Place+CoreDataProperties.swift in Sources */,
-				2CB635751FBE1F5B005ABE27 /* ARDSettingsStore.m in Sources */,
-				2CB635021FBE0172005ABE27 /* CallController.swift in Sources */,
-				2CB6356F1FBE1F5B005ABE27 /* ARDCaptureController.m in Sources */,
 				2CBC8DF51F9D040500C918FD /* UserCell.swift in Sources */,
 				2CE268B71E67156400FE8219 /* LocationModel.xcdatamodeld in Sources */,
-				2C3684431F307C6C00A5AD4E /* LocationManager.swift in Sources */,
+				2C3684431F307C6C00A5AD4E /* TrackManager.swift in Sources */,
 				2C79D4A01E92C5CA00EF4954 /* Photo+CoreDataProperties.swift in Sources */,
 				2CE6FC681FBD72DF00F5795D /* DataExtension.swift in Sources */,
 				2CBE202F1E8DA170002EF13C /* TextInput.swift in Sources */,
 				2CE268C21E672F7C00FE8219 /* Model.swift in Sources */,
 				2C87D3331DDF1A5C00F05528 /* LGProgressView.m in Sources */,
-				2CB6356B1FBE1F5B005ABE27 /* ARDBitrateTracker.m in Sources */,
-				2CB6356C1FBE1F5B005ABE27 /* ARDStatsBuilder.m in Sources */,
 				2C87D32F1DDF1A5C00F05528 /* LGAlertView.m in Sources */,
-				2CBAE3661FBF467100620A48 /* Call.swift in Sources */,
 				2C33C7091F30C4F30031241F /* Reachability.m in Sources */,
-				2CB635711FBE1F5B005ABE27 /* ARDJoinResponse.m in Sources */,
 				2CBE20291E8D9799002EF13C /* Track+CoreDataClass.swift in Sources */,
 				2CBE202A1E8D9799002EF13C /* Track+CoreDataProperties.swift in Sources */,
-				2CB635741FBE1F5B005ABE27 /* RTCSessionDescription+JSON.m in Sources */,
 				2C51F7331F8CD693008A0678 /* AuthModel.swift in Sources */,
 				2C3ED20F1EB1F0E300463199 /* PlaceInfoController.swift in Sources */,
 				2C54EB7A1E8ADC49009C4A27 /* TrackListController.swift in Sources */,

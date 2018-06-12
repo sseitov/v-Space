@@ -391,6 +391,24 @@ class TrackListController: UITableViewController, LastTrackCellDelegate, PHPhoto
         let credential = GoogleAuthProvider.credential(withIDToken: (authentication?.idToken)!,
                                                        accessToken: (authentication?.accessToken)!)
         SVProgressHUD.show(withStatus: "Login...")
+        Auth.auth().signInAndRetrieveData(with: credential, completion: { result, error in
+            if error != nil {
+                SVProgressHUD.dismiss()
+                self.showMessage((error as NSError?)!.localizedDescription, messageType: .error)
+            } else {
+                if AuthModel.shared.updatePerson(Auth.auth().currentUser) {
+                    SVProgressHUD.dismiss()
+                    AuthModel.shared.startObservers()
+                    self.performSegue(withIdentifier: "trustList", sender: nil)
+                } else {
+                    AuthModel.shared.signOut {
+                        SVProgressHUD.dismiss()
+                        self.showMessage("Can not upload profile data.", messageType: .error)
+                    }
+                }
+            }
+        })
+/*
         Auth.auth().signIn(with: credential, completion: { firUser, error in
             if error != nil {
                 SVProgressHUD.dismiss()
@@ -408,6 +426,7 @@ class TrackListController: UITableViewController, LastTrackCellDelegate, PHPhoto
                 }
             }
         })
+ */
     }
     
     func sign(_ signIn: GIDSignIn!, didDisconnectWith user: GIDGoogleUser!, withError error: Error!) {
@@ -431,6 +450,24 @@ class TrackListController: UITableViewController, LastTrackCellDelegate, PHPhoto
                     self.showMessage(fbError!.localizedDescription, messageType: .error)
                 } else {
                     let credential = FacebookAuthProvider.credential(withAccessToken: FBSDKAccessToken.current().tokenString)
+                    Auth.auth().signInAndRetrieveData(with: credential, completion: { result, error in
+                        if error != nil {
+                            SVProgressHUD.dismiss()
+                            self.showMessage((error as NSError?)!.localizedDescription, messageType: .error)
+                        } else {
+                            if AuthModel.shared.updatePerson(Auth.auth().currentUser) {
+                                SVProgressHUD.dismiss()
+                                AuthModel.shared.startObservers()
+                                self.performSegue(withIdentifier: "trustList", sender: nil)
+                            } else {
+                                AuthModel.shared.signOut {
+                                    SVProgressHUD.dismiss()
+                                    self.showMessage("Can not upload profile data.", messageType: .error)
+                                }
+                            }
+                        }
+                    })
+/*
                     Auth.auth().signIn(with: credential, completion: { firUser, error in
                         if error != nil {
                             SVProgressHUD.dismiss()
@@ -448,6 +485,7 @@ class TrackListController: UITableViewController, LastTrackCellDelegate, PHPhoto
                             }
                         }
                     })
+ */
                 }
             })
         })

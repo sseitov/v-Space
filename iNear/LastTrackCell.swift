@@ -44,10 +44,10 @@ class LastTrackCell: UITableViewCell {
     @IBAction func switchStatus(_ sender: UISwitch) {
         if sender.isOn {
             Model.shared.clearLastTrack()
-            LocationManager.shared.startInBackground()
+            TrackManager.shared.startInBackground()
             self.statusLabel.text = NSLocalizedString("Tracker starting", comment: "").uppercased()
         } else {
-            LocationManager.shared.stop()
+            TrackManager.shared.stop()
             stateView.isHidden = true
             statusLabel.text = NSLocalizedString("Tracker not running", comment: "").uppercased()
             delegate?.saveLastTrack()
