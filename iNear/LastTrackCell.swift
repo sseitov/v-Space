@@ -44,8 +44,11 @@ class LastTrackCell: UITableViewCell {
     @IBAction func switchStatus(_ sender: UISwitch) {
         if sender.isOn {
             Model.shared.clearLastTrack()
-            TrackManager.shared.startInBackground()
-            self.statusLabel.text = NSLocalizedString("Tracker starting", comment: "").uppercased()
+            if TrackManager.shared.startInBackground() {
+                self.statusLabel.text = NSLocalizedString("Tracker starting", comment: "").uppercased()
+            } else {
+                MainApp().window?.rootViewController?.showMessage("Location manager must be enabled always. Check your device settings.", messageType: .information)
+            }
         } else {
             TrackManager.shared.stop()
             stateView.isHidden = true

@@ -168,7 +168,7 @@ class TrustListController: UITableViewController, GIDSignInDelegate {
     
     @IBAction func addFriend(_ sender: Any) {
         SVProgressHUD.show(withStatus: "Update location...")
-        LocationManager.shared.getCurrentLocation({ location in
+        if !LocationManager.shared.getCurrentLocation({ location in
             SVProgressHUD.dismiss()
             let update = ["latitude" : location.coordinate.latitude,
                           "longitude" : location.coordinate.longitude,
@@ -204,7 +204,10 @@ class TrustListController: UITableViewController, GIDSignInDelegate {
                 })
             })
             ask?.show()
-        })
+        }) {
+            SVProgressHUD.dismiss()
+            showMessage("Location service disabled.", messageType: .information)
+        }
     }
     
     private func sendInvite() {

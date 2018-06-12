@@ -188,7 +188,7 @@ class TrackListController: UITableViewController, LastTrackCellDelegate, PHPhoto
 
     @IBAction func nearByMe(_ sender: Any) {
         SVProgressHUD.show(withStatus: "Get location...")
-        LocationManager.shared.getCurrentLocation({ location in
+        if !LocationManager.shared.getCurrentLocation({ location in
             SVProgressHUD.dismiss()
             let center = location.coordinate
             let northEast = CLLocationCoordinate2D(latitude: center.latitude + 0.1, longitude: center.longitude + 0.1)
@@ -202,7 +202,10 @@ class TrackListController: UITableViewController, LastTrackCellDelegate, PHPhoto
             } else {
                 self.navigationController?.pushViewController(placePicker, animated: true)
             }
-        })
+        }) {
+            SVProgressHUD.dismiss()
+            showMessage("Location service disabled.", messageType: .information)
+        }
     }
     
     func placePicker(_ viewController: GMSPlacePickerViewController, didPick place: GMSPlace) {
@@ -408,25 +411,6 @@ class TrackListController: UITableViewController, LastTrackCellDelegate, PHPhoto
                 }
             }
         })
-/*
-        Auth.auth().signIn(with: credential, completion: { firUser, error in
-            if error != nil {
-                SVProgressHUD.dismiss()
-                self.showMessage((error as NSError?)!.localizedDescription, messageType: .error)
-            } else {
-                if AuthModel.shared.updatePerson(Auth.auth().currentUser) {
-                    SVProgressHUD.dismiss()
-                    AuthModel.shared.startObservers()
-                    self.performSegue(withIdentifier: "trustList", sender: nil)
-                } else {
-                    AuthModel.shared.signOut {
-                        SVProgressHUD.dismiss()
-                        self.showMessage("Can not upload profile data.", messageType: .error)
-                    }
-                }
-            }
-        })
- */
     }
     
     func sign(_ signIn: GIDSignIn!, didDisconnectWith user: GIDGoogleUser!, withError error: Error!) {
@@ -467,25 +451,6 @@ class TrackListController: UITableViewController, LastTrackCellDelegate, PHPhoto
                             }
                         }
                     })
-/*
-                    Auth.auth().signIn(with: credential, completion: { firUser, error in
-                        if error != nil {
-                            SVProgressHUD.dismiss()
-                            self.showMessage((error as NSError?)!.localizedDescription, messageType: .error)
-                        } else {
-                            if AuthModel.shared.updatePerson(Auth.auth().currentUser) {
-                                SVProgressHUD.dismiss()
-                                AuthModel.shared.startObservers()
-                                self.performSegue(withIdentifier: "trustList", sender: nil)
-                            } else {
-                                AuthModel.shared.signOut {
-                                    SVProgressHUD.dismiss()
-                                    self.showMessage("Can not upload profile data.", messageType: .error)
-                                }
-                            }
-                        }
-                    })
- */
                 }
             })
         })

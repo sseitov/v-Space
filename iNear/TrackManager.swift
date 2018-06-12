@@ -21,11 +21,10 @@ class TrackManager: NSObject, CLLocationManagerDelegate {
     
     static let shared = TrackManager()
     
-    let manager: CLLocationManager
+    let manager: CLLocationManager = CLLocationManager()
     var isRunning:Bool = false
     
     private override init() {
-        self.manager = CLLocationManager()
         super.init()
         self.manager.delegate = self
         self.manager.desiredAccuracy = kCLLocationAccuracyBest
@@ -34,16 +33,22 @@ class TrackManager: NSObject, CLLocationManagerDelegate {
         self.manager.pausesLocationUpdatesAutomatically = false
     }
     
-    func startInBackground() {
+    func startInBackground() -> Bool {
         if CLLocationManager.locationServicesEnabled() {
-            if CLLocationManager.authorizationStatus() == .notDetermined {
+            switch CLLocationManager.authorizationStatus() {
+            case .notDetermined:
                 manager.requestAlwaysAuthorization()
-            } else if CLLocationManager.authorizationStatus() == .restricted || CLLocationManager.authorizationStatus() == .denied {
-            } else if CLLocationManager.authorizationStatus() == .authorizedAlways {
+                return true
+            case .authorizedAlways:
                 manager.startUpdatingLocation()
                 manager.allowsBackgroundLocationUpdates = true
                 isRunning = true
+                return true
+            default:
+                return false
             }
+        } else {
+            return false
         }
     }
     
@@ -75,40 +80,42 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
     
     static let shared = LocationManager()
     
-    let manager: CLLocationManager
+    let manager: CLLocationManager = CLLocationManager()
     var locationClosure: ((_ location: CLLocation) -> ())?
 
     private override init() {
-        self.manager = CLLocationManager()
         super.init()
         self.manager.delegate = self
         self.manager.desiredAccuracy = kCLLocationAccuracyBest
         self.manager.distanceFilter = 10.0
         self.manager.headingFilter = 5.0
-        self.manager.pausesLocationUpdatesAutomatically = false
     }
     
-    func getCurrentLocation(_ closure: @escaping((_ location: CLLocation) -> ())) {
-        
-        self.locationClosure = closure
+    func getCurrentLocation(_ closure: @escaping((_ location: CLLocation) -> ())) -> Bool {
         if CLLocationManager.locationServicesEnabled() {
-            
-            if CLLocationManager.authorizationStatus() == .notDetermined {
+            switch CLLocationManager.authorizationStatus() {
+            case .notDetermined:
                 manager.requestAlwaysAuthorization()
-            } else if CLLocationManager.authorizationStatus() == .restricted || CLLocationManager.authorizationStatus() == .denied {
-            } else if CLLocationManager.authorizationStatus() == .authorizedAlways || CLLocationManager.authorizationStatus() == .authorizedWhenInUse {
+                return true
+            case .restricted:
+                return false
+            case .denied:
+                return false
+            default:
+                self.locationClosure = closure
                 manager.startUpdatingLocation()
-                manager.allowsBackgroundLocationUpdates = true
+                return true
             }
+        } else {
+            return false
         }
     }
     
     //MARK: CLLocationManager Delegate methods
     
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-        if status == .authorizedAlways {
+        if status == .authorizedAlways || status == .authorizedWhenInUse {
             manager.startUpdatingLocation()
-            manager.allowsBackgroundLocationUpdates = true
         }
     }
     

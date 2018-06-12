@@ -147,11 +147,14 @@ class PlaceInfoController: UITableViewController {
                 performSegue(withIdentifier: "route", sender: nil)
             } else {
                 SVProgressHUD.show(withStatus: "Get location...")
-                LocationManager.shared.getCurrentLocation({ location in
+                if !LocationManager.shared.getCurrentLocation({ location in
                     SVProgressHUD.dismiss()
                     self.myCoordinate = location.coordinate
                     self.performSegue(withIdentifier: "route", sender: nil)
-                })
+                }) {
+                    SVProgressHUD.dismiss()
+                    showMessage("Location service disabled.", messageType: .information)
+                }
             }
         case 2:
             performSegue(withIdentifier: "webPage", sender: nil)

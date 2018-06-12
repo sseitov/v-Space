@@ -120,7 +120,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
             let alert = aps["alert"] as? [String:Any],
             let body = alert["body"] as? String
         {
-            LocationManager.shared.getCurrentLocation({location in
+            if !LocationManager.shared.getCurrentLocation({location in
                 let ask = self.window?.topMostController?.createQuestion(body,
                                                                                acceptTitle: "Accept",
                                                                                cancelTitle: "Reject",
@@ -138,7 +138,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
                         }
                 })
                 ask?.show()
-            })
+            }) {
+                window?.rootViewController?.showMessage("Location service disabled", messageType: .information)
+            }
         }
     }
     
@@ -281,8 +283,11 @@ extension AppDelegate : WCSessionDelegate {
                      "distance" : Model.shared.lastTrackDistance(),
                      "speed" : Model.shared.lastTrackSpeed()])
             } else if command == "start" {
-                TrackManager.shared.startInBackground()
-                replyHandler(["result": TrackManager.shared.isRunning])
+                if TrackManager.shared.startInBackground() {
+                    replyHandler(["result": TrackManager.shared.isRunning])
+                } else {
+                    replyHandler(["result": false])
+                }
             } else if command == "stop" {
                 TrackManager.shared.stop()
                 replyHandler(["result": TrackManager.shared.isRunning])

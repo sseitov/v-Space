@@ -53,9 +53,6 @@
 		2C91E06B1EAC88370067286B /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2C91E06D1EAC88370067286B /* Localizable.strings */; };
 		2C91E0741EACBB680067286B /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C91E0731EACBB680067286B /* CloudKit.framework */; };
 		2C9423B31DFC6708003C4075 /* UIImageExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C9423B21DFC6708003C4075 /* UIImageExtensions.swift */; };
-		2CB634FE1FBD94AE005ABE27 /* PushKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2CB634FD1FBD94AE005ABE27 /* PushKit.framework */; };
-		2CB635771FBE20E9005ABE27 /* librtc_sdk_objc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2CB635761FBE20E9005ABE27 /* librtc_sdk_objc.a */; };
-		2CB635791FBE20F3005ABE27 /* VideoToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2CB635781FBE20F2005ABE27 /* VideoToolbox.framework */; };
 		2CB65ED31DFD5CA7002A9D29 /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2CB65ED11DFD5CA7002A9D29 /* Interface.storyboard */; };
 		2CB65ED51DFD5CA7002A9D29 /* Watch-Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2CB65ED41DFD5CA7002A9D29 /* Watch-Assets.xcassets */; };
 		2CB65EDC1DFD5CA8002A9D29 /* Watch Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 2CB65EDB1DFD5CA8002A9D29 /* Watch Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -78,7 +75,6 @@
 		2CC50C361DECC8D900D27456 /* ActionSheet.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2CC50C331DECC8D900D27456 /* ActionSheet.xib */; };
 		2CC50C371DECC8D900D27456 /* ActionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CC50C341DECC8D900D27456 /* ActionSheet.swift */; };
 		2CDFA7FE1E6ACC13007D9FF0 /* MKMapRectExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CDFA7FD1E6ACC13007D9FF0 /* MKMapRectExtension.swift */; };
-		2CE15FC21EB470AE0085915E /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2CE15FC11EB470AE0085915E /* CoreTelephony.framework */; };
 		2CE268A21E66E15600FE8219 /* TodayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CE268A11E66E15600FE8219 /* TodayViewController.swift */; };
 		2CE268A51E66E15600FE8219 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2CE268A31E66E15600FE8219 /* MainInterface.storyboard */; };
 		2CE268A91E66E15600FE8219 /* Today.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 2CE2689D1E66E15600FE8219 /* Today.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -218,9 +214,6 @@
 		2C91E0731EACBB680067286B /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		2C91E0751EACCA0D0067286B /* LocationModel 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "LocationModel 3.xcdatamodel"; sourceTree = "<group>"; };
 		2C9423B21DFC6708003C4075 /* UIImageExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIImageExtensions.swift; path = Extensions/UIImageExtensions.swift; sourceTree = "<group>"; };
-		2CB634FD1FBD94AE005ABE27 /* PushKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PushKit.framework; path = System/Library/Frameworks/PushKit.framework; sourceTree = SDKROOT; };
-		2CB635761FBE20E9005ABE27 /* librtc_sdk_objc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = librtc_sdk_objc.a; sourceTree = "<group>"; };
-		2CB635781FBE20F2005ABE27 /* VideoToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VideoToolbox.framework; path = System/Library/Frameworks/VideoToolbox.framework; sourceTree = SDKROOT; };
 		2CB65ECF1DFD5CA7002A9D29 /* Watch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Watch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2CB65ED21DFD5CA7002A9D29 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Interface.storyboard; sourceTree = "<group>"; };
 		2CB65ED41DFD5CA7002A9D29 /* Watch-Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Watch-Assets.xcassets"; sourceTree = "<group>"; };
@@ -247,7 +240,6 @@
 		2CC50C341DECC8D900D27456 /* ActionSheet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ActionSheet.swift; path = CustomViews/ActionSheet.swift; sourceTree = "<group>"; };
 		2CDFA7F91E6AAC72007D9FF0 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		2CDFA7FD1E6ACC13007D9FF0 /* MKMapRectExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MKMapRectExtension.swift; path = Extensions/MKMapRectExtension.swift; sourceTree = "<group>"; };
-		2CE15FC11EB470AE0085915E /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		2CE2689D1E66E15600FE8219 /* Today.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = Today.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		2CE268A11E66E15600FE8219 /* TodayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayViewController.swift; sourceTree = "<group>"; };
 		2CE268A41E66E15600FE8219 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
@@ -267,10 +259,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2CB635791FBE20F3005ABE27 /* VideoToolbox.framework in Frameworks */,
-				2CB635771FBE20E9005ABE27 /* librtc_sdk_objc.a in Frameworks */,
-				2CB634FE1FBD94AE005ABE27 /* PushKit.framework in Frameworks */,
-				2CE15FC21EB470AE0085915E /* CoreTelephony.framework in Frameworks */,
 				2C91E0741EACBB680067286B /* CloudKit.framework in Frameworks */,
 				2CBE20211E8D8ACA002EF13C /* CoreLocation.framework in Frameworks */,
 				46811E5591FD9B65000FCF47 /* Pods_v_Space.framework in Frameworks */,
@@ -305,10 +293,6 @@
 		12915D74E6089C1BDDF892C9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				2CB635781FBE20F2005ABE27 /* VideoToolbox.framework */,
-				2CB635761FBE20E9005ABE27 /* librtc_sdk_objc.a */,
-				2CB634FD1FBD94AE005ABE27 /* PushKit.framework */,
-				2CE15FC11EB470AE0085915E /* CoreTelephony.framework */,
 				2C91E0731EACBB680067286B /* CloudKit.framework */,
 				2CBE20201E8D8ACA002EF13C /* CoreLocation.framework */,
 				2CBE20131E8D5EBB002EF13C /* NotificationCenter.framework */,
