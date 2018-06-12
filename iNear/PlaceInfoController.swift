@@ -153,7 +153,7 @@ class PlaceInfoController: UITableViewController {
                     self.performSegue(withIdentifier: "route", sender: nil)
                 }) {
                     SVProgressHUD.dismiss()
-                    showMessage("Location service disabled.", messageType: .information)
+                    showMessage("Location service disabled.".localized, messageType: .information)
                 }
             }
         case 2:

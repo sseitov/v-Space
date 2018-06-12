@@ -31,17 +31,17 @@ class TrackManager: NSObject, CLLocationManagerDelegate {
         self.manager.distanceFilter = 10.0
         self.manager.headingFilter = 5.0
         self.manager.pausesLocationUpdatesAutomatically = false
+        self.manager.allowsBackgroundLocationUpdates = true
     }
     
     func startInBackground() -> Bool {
         if CLLocationManager.locationServicesEnabled() {
             switch CLLocationManager.authorizationStatus() {
             case .notDetermined:
-                manager.requestAlwaysAuthorization()
+                self.manager.requestAlwaysAuthorization()
                 return true
             case .authorizedAlways:
-                manager.startUpdatingLocation()
-                manager.allowsBackgroundLocationUpdates = true
+                self.manager.startUpdatingLocation()
                 isRunning = true
                 return true
             default:
@@ -53,8 +53,8 @@ class TrackManager: NSObject, CLLocationManagerDelegate {
     }
     
     func stop() {
-        isRunning = false
-        manager.stopUpdatingLocation()
+        self.isRunning = false
+        self.manager.stopUpdatingLocation()
     }
     
     //MARK: CLLocationManager Delegate methods
@@ -62,15 +62,24 @@ class TrackManager: NSObject, CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         if status == .authorizedAlways {
             manager.startUpdatingLocation()
-            manager.allowsBackgroundLocationUpdates = true
-            isRunning = true
+            self.isRunning = true
         }
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if let location = locations.last {
             if isRunning && checkAccurancy(location) {
-                Model.shared.addCoordinate(location.coordinate, at:NSDate().timeIntervalSince1970)
+                if UIApplication.shared.applicationState == .background {
+                    if bgTask == UIBackgroundTaskInvalid {
+                        bgTask = UIApplication.shared.beginBackgroundTask(expirationHandler: {
+                            UIApplication.shared.endBackgroundTask(bgTask)
+                            bgTask = UIBackgroundTaskInvalid
+                        })
+                    }
+                    Model.shared.addCoordinate(location.coordinate, at:NSDate().timeIntervalSince1970)
+                } else {
+                    Model.shared.addCoordinate(location.coordinate, at:NSDate().timeIntervalSince1970)
+                }
             }
         }
     }
@@ -89,6 +98,7 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
         self.manager.desiredAccuracy = kCLLocationAccuracyBest
         self.manager.distanceFilter = 10.0
         self.manager.headingFilter = 5.0
+        self.manager.allowsBackgroundLocationUpdates = true
     }
     
     func getCurrentLocation(_ closure: @escaping((_ location: CLLocation) -> ())) -> Bool {
@@ -120,7 +130,7 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        if let location = locations.last, let closure = self.locationClosure {
+        if let location = locations.last, let closure = self.locationClosure, checkAccurancy(location) {
             closure(location)
             self.locationClosure = nil
             self.manager.stopUpdatingLocation()

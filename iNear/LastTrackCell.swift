@@ -47,7 +47,7 @@ class LastTrackCell: UITableViewCell {
             if TrackManager.shared.startInBackground() {
                 self.statusLabel.text = NSLocalizedString("Tracker starting", comment: "").uppercased()
             } else {
-                MainApp().window?.rootViewController?.showMessage("Location manager must be enabled always. Check your device settings.", messageType: .information)
+                MainApp().window?.rootViewController?.showMessage("Location service disabled.".localized, messageType: .information)
             }
         } else {
             TrackManager.shared.stop()

@@ -206,7 +206,7 @@ class TrustListController: UITableViewController, GIDSignInDelegate {
             ask?.show()
         }) {
             SVProgressHUD.dismiss()
-            showMessage("Location service disabled.", messageType: .information)
+            showMessage("Location service disabled.".localized, messageType: .information)
         }
     }
     

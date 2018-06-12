@@ -25,6 +25,8 @@ func MainApp() -> AppDelegate {
     return UIApplication.shared.delegate as! AppDelegate
 }
 
+var bgTask:UIBackgroundTaskIdentifier = UIBackgroundTaskInvalid
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDelegate {
 
@@ -139,7 +141,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
                 })
                 ask?.show()
             }) {
-                window?.rootViewController?.showMessage("Location service disabled", messageType: .information)
+                window?.rootViewController?.showMessage("Location service disabled.".localized, messageType: .information)
             }
         }
     }
