@@ -61,13 +61,13 @@ class TrackManager: NSObject, CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if let location = locations.last, isRunning {
             if UIApplication.shared.applicationState == .background {
-                if bgTask == UIBackgroundTaskInvalid {
-                    bgTask = UIApplication.shared.beginBackgroundTask(expirationHandler: {
-                        UIApplication.shared.endBackgroundTask(bgTask)
-                        bgTask = UIBackgroundTaskInvalid
-                    })
-                }
+                bgTask = UIApplication.shared.beginBackgroundTask(expirationHandler: {
+                    UIApplication.shared.endBackgroundTask(bgTask)
+                    bgTask = UIBackgroundTaskInvalid
+                })
                 Model.shared.addCoordinate(location.coordinate, at:NSDate().timeIntervalSince1970)
+                UIApplication.shared.endBackgroundTask(bgTask)
+                bgTask = UIBackgroundTaskInvalid
             } else {
                 Model.shared.addCoordinate(location.coordinate, at:NSDate().timeIntervalSince1970)
             }

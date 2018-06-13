@@ -32,9 +32,8 @@ class PushManager: NSObject {
                 "title" : "v-Space",
                 "sound" : "default",
                 "body" : "\(name) \("invite".localized)",
-                "command" : "invite",
                 "content_available": true]
-            let data:[String:Any] = ["requester" : Auth.auth().currentUser!.uid]
+            let data:[String:Any] = ["requester" : Auth.auth().currentUser!.uid, "command" : "invite"]
             let message:[String:Any] = ["to" : token, "priority" : "high", "notification" : notification, "data" : data]
             httpManager.post("send", parameters: message, progress: nil, success: { task, response in
                 success(true)
@@ -51,7 +50,8 @@ class PushManager: NSObject {
         let notification:[String:Any] = [
             "command" : command,
             "content_available": true]
-        let message:[String:Any] = ["to" : token, "priority" : "high", "notification" : notification]
+        let data:[String:Any] = ["requester" : Auth.auth().currentUser!.uid, "command" : command]
+        let message:[String:Any] = ["to" : token, "priority" : "high", "notification" : notification, "data" : data]
         httpManager.post("send", parameters: message, progress: nil, success: { task, response in
             success(true)
         }, failure: { task, error in

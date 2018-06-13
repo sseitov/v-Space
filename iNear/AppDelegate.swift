@@ -143,13 +143,45 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
         }
     }
     
+    private func sendCurrentLocation(_ complete: @escaping() -> ()) {
+        if !LocationManager.shared.getCurrentLocation({ location in
+            if currentUid() != nil {
+                let update = ["latitude" : location.coordinate.latitude,
+                              "longitude" : location.coordinate.longitude,
+                              "date" : Date().timeIntervalSince1970]
+                let ref = Database.database().reference()
+                ref.child("locations").child(currentUid()!).setValue(update, withCompletionBlock: { _, _ in
+                    complete()
+                })
+            } else {
+                complete()
+            }
+        }) {
+            complete()
+        }
+    }
+    
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any],
                      fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-//        if application.applicationState == .active {
-//            acceptInvite(userInfo)
-//        }
-        print(userInfo)
-        completionHandler(.newData)
+        if let command = userInfo["command"] as? String, command == "askLocaton" {
+            if application.applicationState == .active {
+                sendCurrentLocation {
+                    completionHandler(.newData)
+                }
+            } else {
+                bgTask = UIApplication.shared.beginBackgroundTask(expirationHandler: {
+                    UIApplication.shared.endBackgroundTask(bgTask)
+                    bgTask = UIBackgroundTaskInvalid
+                })
+                sendCurrentLocation {
+                    UIApplication.shared.endBackgroundTask(bgTask)
+                    bgTask = UIBackgroundTaskInvalid
+                    completionHandler(.newData)
+                }
+            }
+        } else {
+            completionHandler(.newData)
+        }
     }
     
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
@@ -236,14 +268,18 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
                                 willPresent notification: UNNotification,
                                 withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void)
     {
-        print("willPresent")
+        if let command = notification.request.content.userInfo["command"] as? String, command == "invite" {
+            acceptInvite(notification.request.content.userInfo)
+        }
     }
     
     func userNotificationCenter(_ center: UNUserNotificationCenter,
                                 didReceive response: UNNotificationResponse,
                                 withCompletionHandler completionHandler: @escaping () -> Void)
     {
-        acceptInvite(response.notification.request.content.userInfo)
+        if let command = response.notification.request.content.userInfo["command"] as? String, command == "invite" {
+            acceptInvite(response.notification.request.content.userInfo)
+        }
         completionHandler()
     }
 }
