@@ -272,6 +272,7 @@ class TrustListController: UITableViewController, GIDSignInDelegate {
             let next = segue.destination as! LocationController
             if let cell = sender as? UserCell {
                 next.friendUid = cell.uid
+                next.friendToken = cell.token
                 next.friendName = cell.userName.text
                 next.friendImage = cell.userImage.image
             }

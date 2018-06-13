@@ -17,6 +17,7 @@ class LocationController: UIViewController {
     var friendUid:String?
     var friendName:String?
     var friendImage:UIImage?
+    var friendToken:String?
 
     @IBOutlet weak var map: GMSMapView!
     
@@ -63,15 +64,21 @@ class LocationController: UIViewController {
     }
     
     @IBAction func refresh() {
-        SVProgressHUD.show(withStatus: "sendRequest".localized)
-        self.setupTitle("search".localized)
-        PushManager.shared.pushCommand(friendUid!, command:"askLocaton", success: { result in
-            SVProgressHUD.dismiss()
-            if !result {
-                self.showMessage("requestError".localized, messageType: .error, messageHandler: {
-                    self.goBack()
-                })
-            }
-        })
+        if let token = friendToken {
+            SVProgressHUD.show(withStatus: "sendRequest".localized)
+            self.setupTitle("search".localized)
+            PushManager.shared.pushCommand(token, command:"askLocaton", success: { result in
+                SVProgressHUD.dismiss()
+                if !result {
+                    self.showMessage("requestError".localized, messageType: .error, messageHandler: {
+                        self.goBack()
+                    })
+                }
+            })
+        } else {
+            self.showMessage("requestError".localized, messageType: .error, messageHandler: {
+                self.goBack()
+            })
+        }
     }
 }
