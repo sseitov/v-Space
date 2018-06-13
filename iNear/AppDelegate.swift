@@ -41,30 +41,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
         // Register_for_notifications
         UNUserNotificationCenter.current().delegate = self
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
-            
             guard error == nil else {
                 print("============ Display Error.. Handle Error.. etc..")
                 return
             }
-            
             if granted {
                 DispatchQueue.main.async {                    
                     //Register for RemoteNotifications. Your Remote Notifications can display alerts now :)
                     application.registerForRemoteNotifications()
                 }
-            }
-            else {
+            } else {
                 print("======== user denying permissions..")
             }
         }
         
         Messaging.messaging().delegate = self
-
+   
         // Initialize Google Maps
-        
         GMSServices.provideAPIKey(GoolgleMapAPIKey)
         GMSPlacesClient.provideAPIKey(GoolglePlacesAPIKey)
-        
+
         // connect iWatch
         
         if WCSession.isSupported() {
@@ -98,7 +94,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
         if currentUid() != nil {
             AuthModel.shared.startObservers()
         }
-
+        application.applicationIconBadgeNumber = 0
+        
         return true
     }
 
@@ -123,7 +120,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
             let body = alert["body"] as? String
         {
             if !LocationManager.shared.getCurrentLocation({location in
-                let ask = self.window?.topMostController?.createQuestion(body,
+                let ask = self.window?.rootViewController?.createQuestion(body,
                                                                                acceptTitle: "Accept",
                                                                                cancelTitle: "Reject",
                                                                                acceptHandler:
@@ -148,9 +145,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
     
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any],
                      fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-        if application.applicationState == .active {
-            acceptInvite(userInfo)
-        }
+//        if application.applicationState == .active {
+//            acceptInvite(userInfo)
+//        }
+        print(userInfo)
         completionHandler(.newData)
     }
     
@@ -159,6 +157,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
     }
     
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        let tokenParts = deviceToken.map { data -> String in
+            return String(format: "%02.2hhx", data)
+        }
+        
+        let token = tokenParts.joined()
+        print("=========== Device Token: \(token)")
+        
         #if DEBUG
             Messaging.messaging().setAPNSToken(deviceToken, type: .sandbox)
         #else
@@ -225,11 +230,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
 @available(iOS 10, *)
 extension AppDelegate : UNUserNotificationCenterDelegate {
     
+    
     // Receive displayed notifications for iOS 10 devices.
     func userNotificationCenter(_ center: UNUserNotificationCenter,
                                 willPresent notification: UNNotification,
                                 withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void)
     {
+        print("willPresent")
     }
     
     func userNotificationCenter(_ center: UNUserNotificationCenter,
